@@ -22,6 +22,14 @@
 (global-set-key "\C-h" 'backward-delete-char)
 (define-key global-map [?¥] [?\\])  ;;
 
+;; デフォルトのインデント
+(setq-default indent-line-function 'tab-to-tab-stop)
+(setq-default tab-width 2)
+(setq-default tab-stop-list '(2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36 38 40 42 44 46 48 50 52 54 56 58 60
+                                62 64 66 68 70 72 74 76 78 80 82 84 86 88 90 92 94 96 98 100 102 104 106 108 110 112 114 116 118 120))
+(setq-default indent-tabs-mode nil)
+
+;; 矩形モード
 (cua-mode t)
 (setq cua-enable-cua-keys nil) 
 
