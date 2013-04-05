@@ -1,0 +1,20 @@
+rm json_support.rb 
+exit
+cd ../
+mv object_extention.rb to_hash.rb
+exit
+cd ../../
+cd public/coffee/
+ll
+ls
+mv timeline-2.coffee timeline.coffee 
+ll
+ls
+exit
+cd template/
+ll
+ls
+mv twitter_timeline.erb _twitter_timeline.erb
+ls -a
+ls -al
+exit

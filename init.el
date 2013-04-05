@@ -5,6 +5,7 @@
 (setq ns-alternate-modifier (quote super))
 
 (setq backup-inhibited t)
+(setq make-backup-files nil)
 (setq inhibit-startup-message t)
 (setq initial-scratch-message "")
 (setq transient-mark-mode t)
@@ -77,3 +78,14 @@
 (global-set-key (kbd "C-M-/") 'redo)
 (setq undo-limit 600000)
 (setq undo-strong-limit 900000)
+
+;; rhmtl
+(add-to-list 'load-path "~/.emacs.d/elisp/rhtml")
+(require 'rhtml-mode)
+(defun rhtml-mode-hook ()
+  (autoload 'rhtml-mode "rhtml-mode" nil t)
+  (add-to-list 'auto-mode-alist '("\\.erb\\'" . rhtml-mode))
+  (add-to-list 'auto-mode-alist '("\\.rjs\\'" . rhtml-mode)))
+
+;; scratch-log
+(require 'scratch-log)
