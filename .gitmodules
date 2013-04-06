@@ -1,3 +1,6 @@
 [submodule "elisp/rhtml"]
 	path = elisp/rhtml
 	url = git@github.com:eschulte/rhtml.git
+[submodule "github/typescript"]
+	path = github/typescript
+	url = git@github.com:zakki/auto-complete-ts.git

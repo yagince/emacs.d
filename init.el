@@ -30,6 +30,9 @@
                                 62 64 66 68 70 72 74 76 78 80 82 84 86 88 90 92 94 96 98 100 102 104 106 108 110 112 114 116 118 120))
 (setq-default indent-tabs-mode nil)
 
+;; load-path
+(add-to-list 'load-path "~/.emacs.d/elisp")
+
 ;; 矩形モード
 (cua-mode t)
 (setq cua-enable-cua-keys nil) 
@@ -89,3 +92,17 @@
 
 ;; scratch-log
 (require 'scratch-log)
+
+;; TypeScript
+(add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode))
+(autoload 'typescript-mode "TypeScript" "Major mode for editing typescript." t)
+
+;; auto-complete
+(require 'auto-complete)
+(add-to-list 'ac-dictionary-directories "~/.emacs.d/elpa/auto-complete-20130209.651/dict")
+(require 'auto-complete-config)
+(ac-config-default)
+(add-hook 'auto-complete-mode-hook
+	  (lambda()
+	    (define-key ac-completing-map (kbd "C-n") 'ac-next)
+	    (define-key ac-completing-map (kbd "C-p") 'ac-previous)))
