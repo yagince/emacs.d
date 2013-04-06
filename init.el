@@ -94,7 +94,7 @@
 (require 'scratch-log)
 
 ;; TypeScript
-(add-to-list 'load-path "~/.emacs.d/typeScript")
+(add-to-list 'load-path "~/.emacs.d/elisp/typeScript")
 (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode))
 (autoload 'typescript-mode "TypeScript" "Major mode for editing typescript." t)
 
