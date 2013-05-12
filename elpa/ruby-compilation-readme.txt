@@ -7,4 +7,4 @@ The functions you will probably want to use are
 ruby-compilation-run
 ruby-compilation-rake
 ruby-compilation-this-buffer (C-x t)
-ruby-compilation-this-buffer (C-x C-t)
+ruby-compilation-this-test (C-x T)

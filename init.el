@@ -82,6 +82,16 @@
 (setq undo-limit 600000)
 (setq undo-strong-limit 900000)
 
+;; ruby-mode
+;; Rake files are ruby, too, as are gemspecs, rackup files, and gemfiles.
+(add-to-list 'auto-mode-alist '("\\.rake$" . ruby-mode))
+(add-to-list 'auto-mode-alist '("Rakefile$" . ruby-mode))
+(add-to-list 'auto-mode-alist '("\\.gemspec$" . ruby-mode))
+(add-to-list 'auto-mode-alist '("\\.ru$" . ruby-mode))
+(add-to-list 'auto-mode-alist '("Gemfile$" . ruby-mode))
+(add-to-list 'auto-mode-alist '("Guardfile$" . ruby-mode))
+(add-to-list 'auto-mode-alist '("\\.jbuilder$" . ruby-mode))
+
 ;; rhmtl
 (add-to-list 'load-path "~/.emacs.d/elisp/rhtml")
 (require 'rhtml-mode)
@@ -107,3 +117,10 @@
 	  (lambda()
 	    (define-key ac-completing-map (kbd "C-n") 'ac-next)
 	    (define-key ac-completing-map (kbd "C-p") 'ac-previous)))
+
+;; markdown-mode
+(autoload 'markdown-mode "markdown-mode"
+   "Major mode for editing Markdown files" t)
+(add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
