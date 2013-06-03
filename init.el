@@ -124,3 +124,7 @@
 (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+
+;; cperl-mode
+(defalias 'perl-mode 'cperl-mode)
+(setq auto-mode-alist (cons '("\\.t$" . cperl-mode) auto-mode-alist))
