@@ -128,3 +128,6 @@
 ;; cperl-mode
 (defalias 'perl-mode 'cperl-mode)
 (setq auto-mode-alist (cons '("\\.t$" . cperl-mode) auto-mode-alist))
+
+;; quickrun
+(global-set-key "\C-q" 'quickrun)
