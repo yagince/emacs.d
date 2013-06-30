@@ -127,7 +127,27 @@
 
 ;; cperl-mode
 (defalias 'perl-mode 'cperl-mode)
-(setq auto-mode-alist (cons '("\\.t$" . cperl-mode) auto-mode-alist))
+(setq auto-mode-alist
+    (append '(("\\.\\([pP][Llm]\\|al\\)$" . cperl-mode)) auto-mode-alist ))
+(add-hook 'cperl-mode-hook
+    '(lambda()
+        (setq indent-tabs-mode nil)
+        (setq cperl-tab-always-indent t)
+        (setq cperl-indent-parens-as-block t)
+        (setq cperl-close-paren-offset -4)
+        (setq cperl-continued-statement-offset 4)
+        (setq cperl-indent-level 4)
+        ))
+;; (setq auto-mode-alist (cons '("\\.t$" . cperl-mode) auto-mode-alist))
+;; '(cperl-close-paren-offset -4)
+;; '(cperl-continued-statement-offset 4)
+;; '(cperl-indent-level 4)
+;; '(cperl-indent-parens-as-block t)
+;; '(cperl-tab-always-indent t)
+
+;; perlbrew
+(require 'perlbrew)
+(perlbrew-use "perl-5.19.0")
 
 ;; quickrun
 (global-set-key "\C-q" 'quickrun)
