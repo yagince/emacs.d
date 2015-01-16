@@ -1,13 +1,14 @@
-;;; helm
+;; helm
 ;; (package-install 'helm)
 (require 'helm)
 
 ;; key settings
-(global-set-key (kbd "C-q") 'helm-mini)
-;; (global-set-key (kbd "M-x") 'helm-M-x)
+(global-set-key (kbd "C-;") 'helm-mini)
+(global-set-key (kbd "M-x") 'helm-M-x)
 (global-set-key (kbd "M-y") 'helm-show-kill-ring)
 (global-set-key (kbd "C-c i")   'helm-imenu)
 (global-set-key (kbd "C-x C-b") 'helm-buffers-list)
+;; (global-set-key (kbd "C-x C-f") 'helm-find-files)
 
 (define-key helm-map (kbd "C-h") 'delete-backward-char)
 
