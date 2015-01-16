@@ -1,6 +1,0 @@
-cd .emacs.d/
-ll
-cd init-loader/
-ll
-ls -al
-rm 00_moccur-edit.el 
