@@ -2,5 +2,7 @@ auto-save-list/*
 .scratch*
 ac-comphist.dat
 var/*
-
 url/*
+
+.cask/*
+Cask

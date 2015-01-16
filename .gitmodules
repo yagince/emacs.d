@@ -1,3 +1,0 @@
-[submodule "elisp/rhtml"]
-	path = elisp/rhtml
-	url = git@github.com:eschulte/rhtml.git
