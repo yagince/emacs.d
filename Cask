@@ -24,6 +24,11 @@
 (depends-on "scratch-log")
 (depends-on "undo-tree")
 
+;; grep
+(depends-on "ag")
+(depends-on "wgrep")
+(depends-on "wgrep-ag")
+
 ;; auto-complete.el
 (depends-on "auto-complete")
 
@@ -47,6 +52,8 @@
 
 ;; helm
 (depends-on "helm")
+(depends-on "helm-ag")
+(depends-on "wgrep-helm")
 
 ;; progmodes
 (depends-on "scala-mode2")
@@ -69,6 +76,7 @@
 (depends-on "ruby-block")
 (depends-on "ruby-end")
 (depends-on "rvm")
+(depends-on "slim-mode")
 
 ;; go
 (depends-on "go-mode")
@@ -76,3 +84,6 @@
 ;; perl
 (depends-on "cperl-mode")
 (depends-on "perlbrew")
+
+;;
+(depends-on "quickrun")

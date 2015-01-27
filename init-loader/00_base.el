@@ -33,3 +33,6 @@
 
 ;; M-x display-splash-screen で表示。
 (setq inhibit-startup-message t)
+
+;; default text mode
+(setq default-major-mode 'text-mode)

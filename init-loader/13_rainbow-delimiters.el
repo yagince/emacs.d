@@ -1,0 +1,5 @@
+(require 'rainbow-delimiters)
+(add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
+(add-hook 'cperl-mode-hook 'rainbow-delimiters-mode)
+(add-hook 'ruby-mode-hook 'rainbow-delimiters-mode)
+(add-hook 'js2-mode-hook 'rainbow-delimiters-mode)
