@@ -39,9 +39,6 @@
 (depends-on "flymake")
 (depends-on "flymake-go")
 
-;; Git
-(depends-on "magit")
-
 ;; File
 (depends-on "open-junk-file")
 (depends-on "recentf-ext")
