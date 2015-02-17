@@ -26,6 +26,7 @@
 (put 'upcase-region 'disabled nil)
 
 (setq scroll-step 1)
+;;(scroll-bar-mode -1)
 
 ;; disabled auto-save
 (setq auto-save-mode nil)
