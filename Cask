@@ -53,7 +53,6 @@
 (depends-on "wgrep-helm")
 
 ;; progmodes
-(depends-on "scala-mode2")
 (depends-on "coffee-mode")
 (depends-on "haskell-mode")
 
@@ -84,3 +83,7 @@
 
 ;;
 (depends-on "quickrun")
+
+;; scala
+(depends-on "ensime")
+(depends-on "scala-mode2")
