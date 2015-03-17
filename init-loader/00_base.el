@@ -37,3 +37,14 @@
 
 ;; default text mode
 (setq default-major-mode 'text-mode)
+(add-hook 'text-mode-hook 'turn-on-auto-fill)
+
+;; 自動インデント無効
+;; (electric-indent-mode -1)
+(add-hook 'text-mode-hook '(lambda ()
+                             (electric-indent-local-mode -1)))
+(add-hook 'lisp-mode-hook '(lambda ()
+                             (electric-indent-local-mode -1)))
+
+;; 自動改行をoffにする
+(setq text-mode-hook 'turn-off-auto-fill)
