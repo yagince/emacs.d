@@ -6,3 +6,7 @@
 
 (require 'ensime)
 (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
+
+(add-hook 'ensime-mode-hook
+          '(lambda ()
+             (define-key ensime-mode-map (kbd "M-.") 'ensime-import-type-at-point)))
