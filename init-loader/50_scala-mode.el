@@ -9,4 +9,4 @@
 
 (add-hook 'ensime-mode-hook
           '(lambda ()
-             (define-key ensime-mode-map (kbd "M-.") 'ensime-import-type-at-point)))
+             (define-key ensime-mode-map (kbd "M-/") 'ensime-import-type-at-point)))
