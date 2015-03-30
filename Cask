@@ -55,6 +55,7 @@
 ;; progmodes
 (depends-on "coffee-mode")
 (depends-on "haskell-mode")
+(depends-on "lua-mode")
 
 ;; web
 (depends-on "js2-mode")
