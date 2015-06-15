@@ -1,6 +1,7 @@
 ;; ruby-mode
 ;; Rake files are ruby, too, as are gemspecs, rackup files, and gemfiles.
 (defun ruby-mode-set-encoding () nil)
+(setq ruby-insert-encoding-magic-comment nil)
 (add-to-list 'auto-mode-alist '("\\.rake$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("Rakefile$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.gemspec$" . ruby-mode))

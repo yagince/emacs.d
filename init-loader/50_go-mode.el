@@ -3,8 +3,10 @@
   '(require 'flymake-go))
 
 (add-to-list 'load-path "~/go/src/github.com/nsf/gocode/emacs")
+(add-to-list 'load-path "~/go/src/github.com/golang/lint/misc/emacs")
 (require 'go-autocomplete)
 (require 'auto-complete-config)
+(require 'golint)
 
 (add-hook 'before-save-hook 'gofmt-before-save)
 
