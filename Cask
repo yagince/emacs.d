@@ -61,6 +61,7 @@
 (depends-on "js2-mode")
 (depends-on "web-mode")
 (depends-on "scss-mode")
+(depends-on "actionscript-mode")
 
 ;; text
 (depends-on "yaml-mode")
