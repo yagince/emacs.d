@@ -15,4 +15,6 @@
   (setq web-mode-code-indent-offset    2)
   (setq indent-tabs-mode               nil)
   )
+
 (add-hook 'web-mode-hook 'web-mode-setting-hook)
+(add-to-list 'auto-mode-alist '("\\.jsx$" . web-mode))

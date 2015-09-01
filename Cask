@@ -89,3 +89,10 @@
 ;; scala
 (depends-on "ensime")
 (depends-on "scala-mode2")
+
+;; php
+(depends-on "php-mode")
+(depends-on "php-completion"
+        :git "https://github.com/suzuki/php-completion.git"
+        :branch "develop"
+        :files ("*.el" "phpcmp-index-of-*"))
