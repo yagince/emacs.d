@@ -96,3 +96,8 @@
         :git "https://github.com/suzuki/php-completion.git"
         :branch "develop"
         :files ("*.el" "phpcmp-index-of-*"))
+
+;; elixir
+(depends-on "elixir-mode")
+(depends-on "alchemist")
+(depends-on "ac-alchemist" :git "git@github.com:syohex/emacs-ac-alchemist.git")
