@@ -25,8 +25,10 @@
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
 
+;; スクロールは１行ごとに
 (setq scroll-step 1)
 ;;(scroll-bar-mode -1)
+(setq scroll-conservatively 1)
 
 ;; disabled auto-save
 (setq auto-save-mode nil)
@@ -48,3 +50,9 @@
 
 ;; 自動改行をoffにする
 (setq text-mode-hook 'turn-off-auto-fill)
+
+;; 列数を表示する
+(column-number-mode t)
+
+;; "yes or no" の選択を "y or n" にする
+(fset 'yes-or-no-p 'y-or-n-p)

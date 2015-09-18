@@ -18,3 +18,13 @@
 
 (add-hook 'go-mode-hook (lambda ()
                           (local-set-key (kbd "C-c C-i") 'go-import-add)))
+
+;; go-eldoc
+;; (require 'go-eldoc)
+;; (add-hook 'go-mode-hook 'go-eldoc-setup)
+;; (set-face-attribute 'eldoc-highlight-function-argument nil
+;;                     :underline t :foreground "green"
+;;                     :weight 'bold)
+
+;; flycheck
+;; (add-hook 'go-mode-hook 'flycheck-mode)

@@ -78,6 +78,7 @@
 
 ;; go
 (depends-on "go-mode")
+(depends-on "go-eldoc")
 
 ;; perl
 (depends-on "cperl-mode")
