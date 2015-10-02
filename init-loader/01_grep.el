@@ -4,6 +4,7 @@
 (setq ag-reuse-buffers t)     ; 検索用バッファを使い回す (検索ごとに新バッファを作らない)
 
 ; wgrep
+(require 'wgrep)
 (add-hook 'ag-mode-hook '(lambda ()
                            (require 'wgrep-ag)
                            (setq wgrep-auto-save-buffer t)  ; 編集完了と同時に保存
