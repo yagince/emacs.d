@@ -27,10 +27,16 @@
       (indent-line-to indent)
       (when (> offset 0) (forward-char offset)))))
 
-(autoload 'robe-mode "robe" "Code navigation, documentation lookup and completion for Ruby" t nil)
-(autoload 'robe-ac-setup "robe-ac" "robe auto-complete" nil nil)
-(add-hook 'robe-mode-hook 'robe-ac-setup)
-
 ;; rvm
 (require 'rvm)
 (rvm-use-default)
+
+;; robe
+;; (autoload 'robe-mode "robe" "Code navigation, documentation lookup and completion for Ruby" t nil)
+;; (autoload 'robe-ac-setup "robe-ac" "robe auto-complete" nil nil)
+;; (add-hook 'robe-mode-hook 'robe-ac-setup)
+
+(add-hook 'ruby-mode-hook 'robe-mode)
+(autoload 'robe-mode "robe" "Code navigation, documentation lookup and completion for Ruby" t nil)
+(autoload 'ac-robe-setup "ac-robe" "auto-complete robe" nil nil)
+(add-hook 'robe-mode-hook 'ac-robe-setup)

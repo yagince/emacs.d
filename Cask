@@ -31,6 +31,8 @@
 
 ;; auto-complete.el
 (depends-on "auto-complete")
+(depends-on "fuzzy")
+(depends-on "popup")
 
 ;; Coding
 (depends-on "yasnippet")
@@ -75,6 +77,7 @@
 (depends-on "ruby-end")
 (depends-on "rvm")
 (depends-on "slim-mode")
+(depends-on "robe")
 
 ;; go
 (depends-on "go-mode")
