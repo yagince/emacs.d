@@ -78,6 +78,7 @@
 (depends-on "rvm")
 (depends-on "slim-mode")
 (depends-on "robe")
+(depends-on "rubocop")
 
 ;; go
 (depends-on "go-mode")
@@ -105,3 +106,12 @@
 (depends-on "elixir-mode")
 (depends-on "alchemist")
 (depends-on "ac-alchemist" :git "git@github.com:syohex/emacs-ac-alchemist.git")
+
+;; floobits
+(depends-on "floobits")
+
+;; codic
+(depends-on "emacs-codic")
+
+;; erlang
+(depends-on "erlang")

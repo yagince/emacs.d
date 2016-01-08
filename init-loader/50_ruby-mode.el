@@ -40,3 +40,26 @@
 (autoload 'robe-mode "robe" "Code navigation, documentation lookup and completion for Ruby" t nil)
 (autoload 'ac-robe-setup "ac-robe" "auto-complete robe" nil nil)
 (add-hook 'robe-mode-hook 'ac-robe-setup)
+
+;; rubocop
+(require 'rubocop)
+(add-hook 'ruby-mode-hook 'rubocop-mode)
+
+;; rbeautify
+;; required) gem install rbeautify
+(defun ruby-beautify-buffer ()
+  (interactive)
+  (let (p rb)
+      (setq p (point) rb (buffer-string))
+
+      (with-temp-buffer
+        (insert rb)
+        (call-process-region (point-min) (point-max) "rbeautify" t t)
+        (setq rb (buffer-string)))
+
+      (erase-buffer)
+      (insert rb)
+      (goto-char p)))
+
+(eval-after-load 'ruby-mode
+  '(define-key ruby-mode-map (kbd "C-c C-v f") 'ruby-beautify-buffer))
