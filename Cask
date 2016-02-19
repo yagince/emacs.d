@@ -17,6 +17,7 @@
 ;; Appearance
 (depends-on "color-theme-tango")
 (depends-on "rainbow-delimiters")
+(depends-on "rainbow-mode")
 (depends-on "popwin")
 (depends-on "yascroll")
 (depends-on "linum")
