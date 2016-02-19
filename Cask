@@ -116,3 +116,6 @@
 
 ;; erlang
 (depends-on "erlang")
+
+;; git
+(depends-on "magit")
