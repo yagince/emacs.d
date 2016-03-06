@@ -54,6 +54,7 @@
 (depends-on "helm")
 (depends-on "helm-ag")
 (depends-on "wgrep-helm")
+(depends-on "helm-open-github")
 
 ;; progmodes
 (depends-on "coffee-mode")
