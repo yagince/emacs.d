@@ -14,6 +14,26 @@
 (setq auto-save-default nil)
 (setq inhibit-startup-message t)
 (setq initial-scratch-message "")
+
+;; 現在行をハイライト
+(defface hlline-face
+  '((((class color)
+      (background dark))
+     (:background "dark slate gray"))
+    (((class color)
+      (background light))
+     (:background "#CCCCCC"))
+    (t
+     ()))
+  "*Face used by hl-line.")
+(setq hl-line-face 'hlline-face)
+;; (setq hl-line-face 'underline) ; 下線
+(global-hl-line-mode t)
+;; 対応する括弧をハイライト
+(show-paren-mode t)
+;; 括弧のハイライトの設定。
+(setq show-paren-style 'mixed)
+;; 選択範囲をハイライト
 (setq transient-mark-mode t)
 
 (setq backup-directory-alist
