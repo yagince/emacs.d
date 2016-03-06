@@ -83,7 +83,9 @@
 
 ;; go
 (depends-on "go-mode")
+(depends-on "go-autocomplete")
 (depends-on "go-eldoc")
+(depends-on "golint")
 
 ;; perl
 (depends-on "cperl-mode")
