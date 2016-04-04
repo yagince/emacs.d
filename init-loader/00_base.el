@@ -90,3 +90,6 @@
 ;; 半角と全角の比を1:2にしたければ
 (setq face-font-rescale-alist
       '((".*Hiragino_Kaku_Gothic_ProN.*" . 1.2)));; Mac用フォント設定
+
+;; 警告音もフラッシュも全て無効(警告音が完全に鳴らなくなるので注意)
+(setq ring-bell-function 'ignore)

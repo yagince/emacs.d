@@ -75,12 +75,14 @@
 
 ;; Ruby
 (depends-on "ruby-mode")
+(depends-on "enh-ruby-mode")
 (depends-on "ruby-block")
 (depends-on "ruby-end")
 (depends-on "rvm")
 (depends-on "slim-mode")
 (depends-on "robe")
 (depends-on "rubocop")
+(depends-on "ruby-hash-syntax")
 
 ;; go
 (depends-on "go-mode")
@@ -122,3 +124,9 @@
 
 ;; git
 (depends-on "magit")
+
+;; nginx
+(depends-on "nginx-mode")
+
+;; dockerfile
+(depends-on "dockerfile-mode")
