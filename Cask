@@ -80,6 +80,7 @@
 (depends-on "ruby-end")
 (depends-on "rvm")
 (depends-on "slim-mode")
+(depends-on "haml-mode")
 (depends-on "robe")
 (depends-on "rubocop")
 (depends-on "ruby-hash-syntax")
