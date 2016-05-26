@@ -117,9 +117,6 @@
 ;; floobits
 (depends-on "floobits")
 
-;; codic
-(depends-on "emacs-codic")
-
 ;; erlang
 (depends-on "erlang")
 
@@ -131,3 +128,6 @@
 
 ;; dockerfile
 (depends-on "dockerfile-mode")
+
+;; Rust
+(depends-on "rust-mode")
