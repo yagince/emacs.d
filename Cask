@@ -131,3 +131,4 @@
 
 ;; Rust
 (depends-on "rust-mode")
+(depends-on "flycheck-rust")
