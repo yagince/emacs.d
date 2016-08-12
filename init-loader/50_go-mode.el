@@ -1,6 +1,7 @@
 ;; go
-(eval-after-load "go-mode"
-  '(require 'flymake-go))
+;; (eval-after-load "go-mode"
+;;   '(require 'flymake-go))
+(add-hook 'go-mode-hook #'flycheck-mode)
 
 (add-to-list 'load-path "~/go/src/github.com/nsf/gocode/emacs")
 (add-to-list 'load-path "~/go/src/github.com/golang/lint/misc/emacs")

@@ -64,3 +64,6 @@
 
 (eval-after-load 'ruby-mode
   '(define-key ruby-mode-map (kbd "C-c C-v f") 'ruby-beautify-buffer))
+
+;; refactor-mode
+(add-hook 'ruby-mode-hook 'ruby-refactor-mode-launch)

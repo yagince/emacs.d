@@ -84,6 +84,7 @@
 (depends-on "robe")
 (depends-on "rubocop")
 (depends-on "ruby-hash-syntax")
+(depends-on "ruby-refactor")
 
 ;; go
 (depends-on "go-mode")
@@ -132,3 +133,6 @@
 ;; Rust
 (depends-on "rust-mode")
 (depends-on "flycheck-rust")
+
+;; Crystal
+(depends-on "emacs-crystal-mode" :git "git@github.com:jpellerin/emacs-crystal-mode.git")

@@ -33,7 +33,7 @@
                     '(mouse-color . "white")
                     '(cursor-color . "lightblue")
                     '(alpha . (80 70))
-                    '(width . 190)
+                    '(width . 250)
                     '(height . 80)
                     '(top . 10)
                     '(left . 40))
