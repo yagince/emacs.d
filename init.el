@@ -1,3 +1,5 @@
+(setq gc-cons-threshold (* 128 1024 1024))
+
 ;;cask
 (require 'cask "/usr/local/opt/cask/cask.el")
 (cask-initialize "~/.emacs.d")
