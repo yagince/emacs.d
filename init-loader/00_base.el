@@ -95,3 +95,6 @@
 
 ;; 警告音もフラッシュも全て無効(警告音が完全に鳴らなくなるので注意)
 (setq ring-bell-function 'ignore)
+
+;; 閉じる時に確認
+(setq confirm-kill-emacs 'y-or-n-p)
