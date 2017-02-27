@@ -46,9 +46,10 @@
 (put 'upcase-region 'disabled nil)
 
 ;; スクロールは１行ごとに
-(setq scroll-step 1)
+;; (setq scroll-step 1)
 ;;(scroll-bar-mode -1)
 (setq scroll-conservatively 1)
+(setq scroll-margin 3)
 
 ;; disabled auto-save
 (setq auto-save-mode nil)

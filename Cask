@@ -13,6 +13,9 @@
 (depends-on "multiple-cursors")
 (depends-on "wgrep")
 (depends-on "exec-path-from-shell")
+(depends-on "goto-chg")
+(depends-on "ripgrep")
+(depends-on "selected")
 
 ;; Appearance
 (depends-on "color-theme-tango")
@@ -101,7 +104,7 @@
 
 ;; scala
 (depends-on "ensime")
-(depends-on "scala-mode2")
+;;(depends-on "scala-mode2")
 
 ;; php
 (depends-on "php-mode")
