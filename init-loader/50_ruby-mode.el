@@ -11,6 +11,7 @@
 (add-to-list 'auto-mode-alist '("Gemfile$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("Guardfile$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.jbuilder$" . ruby-mode))
+(add-to-list 'auto-mode-alist '("Schemafile$" . ruby-mode))
 
 ;; ruby-modeのインデントを改良する
 (setq ruby-deep-indent-paren-style nil)
@@ -35,7 +36,7 @@
 
 ;; robe
 ;; (autoload 'robe-mode "robe" "Code navigation, documentation lookup and completion for Ruby" t nil)
-;; (autoload 'robe-ac-setup "robe-ac" "robe auto-complete" nil nil)
+ ;; (autoload 'robe-ac-setup "robe-ac" "robe auto-complete" nil nil)
 ;; (add-hook 'robe-mode-hook 'robe-ac-setup)
 
 (add-hook 'ruby-mode-hook 'robe-mode)
@@ -68,3 +69,24 @@
 
 ;; refactor-mode
 (add-hook 'ruby-mode-hook 'ruby-refactor-mode-launch)
+
+(require 'dumb-jump)
+(add-hook 'ruby-mode-hook 'dumb-jump-mode)
+(add-hook 'dumb-jump-mode-hook
+          '(lambda ()
+             (define-key dumb-jump-mode-map (kbd "C-M-p") nil)
+             (define-key dumb-jump-mode-map (kbd "C-M-g") 'dumb-jump-go)
+             (define-key dumb-jump-mode-map (kbd "C-M-b") 'dumb-jump-back)
+             (define-key dumb-jump-mode-map (kbd "C-M-q") 'dumb-jump-quick-look)
+             ))
+
+
+;; key-bindings
+(add-hook 'ruby-mode-hook
+          '(lambda ()
+             (define-key ruby-mode-map (kbd "C-M-n") 'ruby-end-of-block)
+             (define-key ruby-mode-map (kbd "C-M-p") 'ruby-beginning-of-block)
+             ))
+
+;; (define-key ruby-mode-map (kbd "C-M-p") 'ruby-beginning-of-block)
+;; (define-key ruby-mode-map (kbd "C-M-n") 'ruby-end-of-block)

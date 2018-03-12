@@ -15,7 +15,9 @@
 (depends-on "exec-path-from-shell")
 (depends-on "goto-chg")
 (depends-on "ripgrep")
+(depends-on "rg")
 (depends-on "selected")
+(depends-on "fzf")
 
 ;; Appearance
 (depends-on "color-theme-tango")
@@ -27,6 +29,7 @@
 (depends-on "powerline")
 (depends-on "scratch-log")
 (depends-on "undo-tree")
+(depends-on "splitjoin")
 
 ;; grep
 (depends-on "ag")
@@ -38,12 +41,17 @@
 (depends-on "fuzzy")
 (depends-on "popup")
 
+;; company-mode
+(depends-on "company")
+
+
 ;; Coding
 (depends-on "yasnippet")
 (depends-on "flycheck")
 (depends-on "flycheck-pos-tip")
 (depends-on "flymake")
 (depends-on "flymake-go")
+(depends-on "dumb-jump")
 
 ;; File
 (depends-on "open-junk-file")
@@ -58,6 +66,8 @@
 (depends-on "helm-ag")
 (depends-on "wgrep-helm")
 (depends-on "helm-open-github")
+(depends-on "helm-smex")
+(depends-on "helm-tramp")
 
 ;; progmodes
 (depends-on "coffee-mode")
@@ -104,7 +114,7 @@
 
 ;; scala
 (depends-on "ensime")
-;;(depends-on "scala-mode2")
+(depends-on "scala-mode")
 
 ;; php
 (depends-on "php-mode")
@@ -136,6 +146,18 @@
 ;; Rust
 (depends-on "rust-mode")
 (depends-on "flycheck-rust")
+(depends-on "racer")
+(depends-on "toml-mode")
 
 ;; Crystal
 (depends-on "emacs-crystal-mode" :git "git@github.com:jpellerin/emacs-crystal-mode.git")
+
+;; C#
+(depends-on "csharp-mode")
+
+;; Theme
+;; (depends-on "color-theme-sanityinc-tomorrow")
+(depends-on "cyberpunk-theme")
+
+;; Docker
+(depends-on "docker")

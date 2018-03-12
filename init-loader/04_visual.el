@@ -25,16 +25,15 @@
 
 ;; theme
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
-;;(load-theme 'pastels-on-dark t)
+;; (load-theme 'pastels-on-dark t)
+;; (load-theme 'manoj-dark t)
+(load-theme 'cyberpunk t)
+
 (setq initial-frame-alist
-      (append (list '(foreground-color . "white")
-                    '(background-color . "black")
-                    '(border-color . "gray")
-                    '(mouse-color . "white")
-                    '(cursor-color . "lightblue")
-                    '(alpha . (80 70))
-                    '(width . 250)
+      (append (list '(width . 250)
                     '(height . 80)
                     '(top . 10)
-                    '(left . 40))
-              default-frame-alist))
+                    '(left . 40)
+                    '(alpha . 85))
+              initial-frame-alist))
+(setq default-frame-alist initial-frame-alist)

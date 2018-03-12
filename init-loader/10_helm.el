@@ -54,3 +54,8 @@
 ;;   ;;                       ;; and not required because the directory name is prepended
 ;;   ;;                       (substring input-pattern 1)
 ;;   ;;                     (concat ".*" input-pattern)))))))
+
+;; helm-smex
+(require 'helm-smex)
+(global-set-key [remap execute-extended-command] #'helm-smex)
+(global-set-key (kbd "M-X") #'helm-smex-major-mode-commands)

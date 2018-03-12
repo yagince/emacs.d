@@ -4,7 +4,7 @@
   '("$BOS" "$EOS"
     "DUMMY" "DUMMY%"
     "記号" "読点" "句点" "一般" "括弧閉" "括弧開"
-    "名詞" "サ変接続" "接頭詞" "数" "アルファベット" "接尾" "固有名詞" "組織" "助数詞" "名詞-固有名詞-製品"
+    "名詞" "サ変接続" "接頭詞" "数" "アルファベット" "接尾" "固有名詞" "組織" "助数詞" "名詞-固有名詞-製品" "地域"
     "動詞"
     "助詞" "助動詞"
     "形容詞" "副詞" "自立"
@@ -54,7 +54,7 @@
   ;; I just updated the variable to have the proper nesting (as noted above)
   ;; and use the value directly here
   (use-local-map roka-mode-map)
-  
+
   (setq font-lock-defaults
         `((
            ("'.+?'" . roka-mode-single-morpheme-face)

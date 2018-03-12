@@ -12,4 +12,10 @@ eshell
 ido.last
 ensime/
 
+
+*.elc
+
 recentf
+tramp
+places
+smex-items
