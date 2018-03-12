@@ -1,1 +1,1 @@
-Emacs24の設定
+# Configurations for Emacs
