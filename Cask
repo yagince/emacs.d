@@ -118,15 +118,15 @@
 
 ;; php
 (depends-on "php-mode")
-(depends-on "php-completion"
-        :git "https://github.com/suzuki/php-completion.git"
-        :branch "develop"
-        :files ("*.el" "phpcmp-index-of-*"))
+;; (depends-on "php-completion"
+;;         :git "https://github.com/suzuki/php-completion.git"
+;;         :branch "develop"
+;;         :files ("*.el" "phpcmp-index-of-*"))
 
 ;; elixir
 (depends-on "elixir-mode")
 (depends-on "alchemist")
-(depends-on "ac-alchemist" :git "git@github.com:syohex/emacs-ac-alchemist.git")
+;; (depends-on "ac-alchemist" :git "git@github.com:syohex/emacs-ac-alchemist.git")
 
 ;; floobits
 (depends-on "floobits")
@@ -150,7 +150,7 @@
 (depends-on "toml-mode")
 
 ;; Crystal
-(depends-on "emacs-crystal-mode" :git "git@github.com:jpellerin/emacs-crystal-mode.git")
+;;(depends-on "emacs-crystal-mode" :git "git@github.com:jpellerin/emacs-crystal-mode.git")
 
 ;; C#
 (depends-on "csharp-mode")
@@ -161,3 +161,6 @@
 
 ;; Docker
 (depends-on "docker")
+
+;; Ansible
+(depends-on "ansible")

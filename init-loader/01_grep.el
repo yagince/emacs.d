@@ -12,8 +12,8 @@
                            (wgrep-ag-setup)))
 ; ripgrep
 (require 'ripgrep)
-;;; rgに渡すオプション
-(setq ripgrep-arguments '("-i"))
+;; rgに渡すオプション
+(setq ripgrep-arguments '(""))
 ; rg
 (require 'rg)
 (rg-enable-default-bindings (kbd "M-s"))

@@ -1,4 +1,3 @@
-
 ;; Added by Package.el.  This must come before configurations of
 ;; installed packages.  Don't delete this line.  If you don't want it,
 ;; just comment it out by adding a semicolon to the start of the line.
@@ -11,7 +10,7 @@
 (require 'cask "/usr/local/opt/cask/cask.el")
 (cask-initialize "~/.emacs.d")
 
-(let ((envs '("PATH" "VIRTUAL_ENV" "GOROOT" "GOPATH" "RUST_SRC_PATH")))
+(let ((envs '("PATH" "RUST_SRC_PATH")))
   (exec-path-from-shell-copy-envs envs))
 
 (require 'init-loader)
