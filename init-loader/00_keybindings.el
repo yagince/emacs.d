@@ -16,3 +16,10 @@
 (require 'goto-chg)
 (global-set-key (kbd "<f8>") 'goto-last-change)
 (global-set-key (kbd "M-<f8>") 'goto-last-change-reverse)
+
+(use-package goto-chg
+  :bind (("<f8>" . goto-last-change)
+         ("M-<f8>" . goto-last-change-reverse))
+  :config
+  ;; any settings...
+  )

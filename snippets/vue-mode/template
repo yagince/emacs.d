@@ -1,0 +1,23 @@
+# -*- mode: snippet -*-
+# name: template
+# key: template
+# --
+<template>
+</template>
+<script>
+export default {
+  name: '$0',
+  data () {
+    return {
+    }
+  },
+  methods: {
+  },
+  computed: {
+  },
+  watch: {
+  },
+  mounted() {
+  }
+}
+</script>

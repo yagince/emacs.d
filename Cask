@@ -6,6 +6,7 @@
 ;; Setup
 (depends-on "cask")
 (depends-on "init-loader")
+(depends-on "use-package")
 
 (depends-on "anzu")
 (depends-on "expand-region")
@@ -30,6 +31,8 @@
 (depends-on "scratch-log")
 (depends-on "undo-tree")
 (depends-on "splitjoin")
+(depends-on "ivy-rich")
+(depends-on "swiper")
 
 ;; grep
 (depends-on "ag")
@@ -52,6 +55,9 @@
 (depends-on "flymake")
 (depends-on "flymake-go")
 (depends-on "dumb-jump")
+(depends-on "lsp-mode")
+(depends-on "eglot")
+(depends-on "neotree")
 
 ;; File
 (depends-on "open-junk-file")
@@ -79,6 +85,8 @@
 (depends-on "web-mode")
 (depends-on "scss-mode")
 (depends-on "actionscript-mode")
+(depends-on "vue-mode")
+(depends-on "add-node-modules-path")
 
 ;; text
 (depends-on "yaml-mode")
@@ -144,11 +152,13 @@
 (depends-on "dockerfile-mode")
 
 ;; Rust
-(depends-on "rust-mode")
-(depends-on "flycheck-rust")
-(depends-on "racer")
 (depends-on "toml-mode")
+(depends-on "rustic")
+(depends-on "racer")
+(depends-on "flycheck-rust")
 
+;; Crystal
+;;(depends-on "emacs-crystal-mode" :git "git@github.com:jpellerin/emacs-crystal-mode.git")
 ;; Crystal
 ;;(depends-on "emacs-crystal-mode" :git "git@github.com:jpellerin/emacs-crystal-mode.git")
 

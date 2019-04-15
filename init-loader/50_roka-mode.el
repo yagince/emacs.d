@@ -78,6 +78,8 @@
   ;; they're made buffer local when you set them
   (setq comment-start "#")
   (setq comment-end "")
+  (setq comment-start "//")
+  (setq comment-end "")
 
   (modify-syntax-entry ?# "< b" roka-mode-syntax-table)
   (modify-syntax-entry ?\n "> b" roka-mode-syntax-table)
