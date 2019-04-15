@@ -1,2 +1,4 @@
-(require 'alchemist)
-(add-hook 'elixir-mode-hook 'ac-alchemist-setup)
+(use-package elixir-mode
+  :mode (("\\.elixir2\\'" . web-mode))
+  :config
+  )
