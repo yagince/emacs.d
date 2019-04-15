@@ -133,8 +133,6 @@
 
 ;; elixir
 (depends-on "elixir-mode")
-(depends-on "alchemist")
-;; (depends-on "ac-alchemist" :git "git@github.com:syohex/emacs-ac-alchemist.git")
 
 ;; floobits
 (depends-on "floobits")
@@ -156,11 +154,6 @@
 (depends-on "rustic")
 (depends-on "racer")
 (depends-on "flycheck-rust")
-
-;; Crystal
-;;(depends-on "emacs-crystal-mode" :git "git@github.com:jpellerin/emacs-crystal-mode.git")
-;; Crystal
-;;(depends-on "emacs-crystal-mode" :git "git@github.com:jpellerin/emacs-crystal-mode.git")
 
 ;; C#
 (depends-on "csharp-mode")
