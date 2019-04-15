@@ -1,2 +1,6 @@
-;; Xslate
-(add-to-list 'auto-mode-alist '("\\.tt$" . html-mode))
+(use-package html-mode
+  :mode (
+         ;; Xslate
+         ("\\.tt$" . html-mode)
+         )
+  )
