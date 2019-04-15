@@ -94,4 +94,4 @@
 (add-to-list 'auto-mode-alist '("\\.rul$" . roka-mode))
 
 (add-hook 'roka-mode-hook '(lambda ()
-			      (electric-indent-local-mode -1)))
+			                       (electric-indent-local-mode -1)))
