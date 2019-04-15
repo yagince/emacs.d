@@ -122,7 +122,6 @@
 
 ;; scala
 (depends-on "ensime")
-(depends-on "scala-mode")
 
 ;; php
 (depends-on "php-mode")
