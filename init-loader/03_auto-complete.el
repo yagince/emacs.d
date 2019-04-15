@@ -1,12 +1,12 @@
 ;; auto-complete
-(require 'auto-complete)
-(require 'auto-complete-config)
-(ac-config-default)
-(setq ac-use-menu-map t)       ;; 補完メニュー表示時にC-n/C-pで補完候補選択
-(setq ac-use-fuzzy t)
-(add-to-list 'ac-modes 'text-mode)         ;; text-modeでも自動的に有効にする
-(add-to-list 'ac-modes 'elixir-mode)
-(add-to-list 'ac-modes 'go-mode)
+;; (require 'auto-complete)
+;; (require 'auto-complete-config)
+;; (ac-config-default)
+;; (setq ac-use-menu-map t)       ;; 補完メニュー表示時にC-n/C-pで補完候補選択
+;; (setq ac-use-fuzzy t)
+;; (add-to-list 'ac-modes 'text-mode)         ;; text-modeでも自動的に有効にする
+;; (add-to-list 'ac-modes 'elixir-mode)
+;; (add-to-list 'ac-modes 'go-mode)
 
 ;; (defun load-auto-complete ()
 ;;   (require 'auto-complete-config)
