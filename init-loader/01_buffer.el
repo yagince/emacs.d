@@ -1,5 +1,7 @@
 (ido-mode 1)
-;; (require 'ido)
+(ido-everywhere 1)
+(ido-vertical-mode 1)
+(setq ido-enable-flex-matching t)
 
 ;; バッファ名変更
 (use-package uniquify
