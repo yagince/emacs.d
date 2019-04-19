@@ -12,6 +12,9 @@
   (setq rustic-rls-pkg 'eglot)
   :mode ("\\.rs$" . rustic-mode)
   :config
+  (bind-keys :map rustic-mode-map
+             ("C-c i" . swiper)
+             )
   (use-package quickrun
     :defer t
     :ensure t)
