@@ -31,7 +31,6 @@
 (depends-on "scratch-log")
 (depends-on "undo-tree")
 (depends-on "splitjoin")
-(depends-on "ivy-rich")
 (depends-on "swiper")
 
 ;; grep
@@ -76,6 +75,7 @@
 (depends-on "helm-tramp")
 
 ;; progmodes
+(depends-on "quickrun")
 (depends-on "coffee-mode")
 (depends-on "haskell-mode")
 (depends-on "lua-mode")
@@ -102,7 +102,6 @@
 (depends-on "rvm")
 (depends-on "slim-mode")
 (depends-on "haml-mode")
-(depends-on "robe")
 (depends-on "rubocop")
 (depends-on "ruby-hash-syntax")
 (depends-on "ruby-refactor")
@@ -114,11 +113,8 @@
 (depends-on "golint")
 
 ;; perl
-(depends-on "cperl-mode")
-(depends-on "perlbrew")
-
-;;
-(depends-on "quickrun")
+;; (depends-on "cperl-mode")
+;; (depends-on "perlbrew")
 
 ;; scala
 (depends-on "ensime")
