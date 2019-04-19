@@ -31,6 +31,8 @@
 (depends-on "scratch-log")
 (depends-on "undo-tree")
 (depends-on "splitjoin")
+(depends-on "ivy-rich")
+(depends-on "counsel")
 (depends-on "swiper")
 
 ;; grep
