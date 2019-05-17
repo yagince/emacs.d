@@ -106,7 +106,6 @@
          ("Schemafile$" . ruby-mode)
          )
   :init
-  (defun ruby-mode-set-encoding () nil)
   (defun ruby-beautify-buffer ()
     (interactive)
     (let (p rb)
@@ -130,6 +129,7 @@
   :config
   (rvm-use-default)
   (yas-reload-all)
+  (setq ruby-insert-encoding-magic-comment nil)
   (setq ruby-deep-indent-paren-style nil)
   (setq ruby-deep-indent-paren-style nil)
   (defadvice ruby-indent-line (after unindent-closing-paren activate)
