@@ -95,6 +95,7 @@
          )
   :mode (
          ("\\.rb$" . ruby-mode)
+         ("\\.jb$" . ruby-mode)
          ("\\.ruby$" . ruby-mode)
          ("\\.rake$" . ruby-mode)
          ("Rakefile$" . ruby-mode)

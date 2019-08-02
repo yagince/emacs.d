@@ -1,5 +1,8 @@
 (use-package js2-mode
-  :mode (("\\.js$" . js2-mode))
+  :mode (
+         ("\\.js$" . js2-mode)
+         ("\\.mjs$" . js2-mode)
+         )
   :config
   (add-hook 'js2-mode-hook
             '(lambda ()

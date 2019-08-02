@@ -88,6 +88,7 @@
 (depends-on "scss-mode")
 (depends-on "actionscript-mode")
 (depends-on "vue-mode")
+(depends-on "pug-mode")
 (depends-on "add-node-modules-path")
 
 ;; text
@@ -164,3 +165,9 @@
 
 ;; Ansible
 (depends-on "ansible")
+
+;; ProtoBuf
+(depends-on "protobuf-mode")
+
+;; Terafform
+(depends-on "terraform-mode")
