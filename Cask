@@ -32,6 +32,7 @@
 (depends-on "undo-tree")
 (depends-on "splitjoin")
 (depends-on "ivy-rich")
+(depends-on "ivy-hydra")
 (depends-on "counsel")
 (depends-on "swiper")
 
@@ -68,13 +69,13 @@
 (depends-on "sequential-command")
 (depends-on "smartrep")
 
-;; helm
-(depends-on "helm")
-(depends-on "helm-ag")
-(depends-on "wgrep-helm")
-(depends-on "helm-open-github")
-(depends-on "helm-smex")
-(depends-on "helm-tramp")
+;; ;; helm
+;; (depends-on "helm")
+;; (depends-on "helm-ag")
+;; (depends-on "wgrep-helm")
+;; (depends-on "helm-open-github")
+;; (depends-on "helm-smex")
+;; (depends-on "helm-tramp")
 
 ;; progmodes
 (depends-on "quickrun")
