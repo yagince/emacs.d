@@ -172,3 +172,6 @@
 
 ;; Terafform
 (depends-on "terraform-mode")
+
+;; FLuentd
+(depends-on "fluentd-mode" :git "git@github.com:syohex/emacs-fluentd-mode.git")
