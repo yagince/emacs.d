@@ -6,7 +6,6 @@
          ("\\.as[cp]x$"   . web-mode)
          ("\\.erb$"       . web-mode)
          ("\\.html?$"     . web-mode)
-         ("\\.js?$"       . web-mode)
          ("\\.css?$"      . web-mode)
          ("\\.jsx$"       . web-mode)
          )

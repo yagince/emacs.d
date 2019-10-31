@@ -31,6 +31,9 @@
 (depends-on "scratch-log")
 (depends-on "undo-tree")
 (depends-on "splitjoin")
+(depends-on "all-the-icons")
+
+;; Ivy
 (depends-on "ivy-rich")
 (depends-on "ivy-hydra")
 (depends-on "counsel")
@@ -91,6 +94,7 @@
 (depends-on "vue-mode")
 (depends-on "pug-mode")
 (depends-on "add-node-modules-path")
+(depends-on "typescript-mode")
 
 ;; text
 (depends-on "yaml-mode")
@@ -175,3 +179,6 @@
 
 ;; FLuentd
 (depends-on "fluentd-mode" :git "git@github.com:syohex/emacs-fluentd-mode.git")
+
+;; CSV
+(depends-on "csv-mode")

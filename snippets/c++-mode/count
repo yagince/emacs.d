@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: cout
+# key: count
+# --
+
+std::cout << "$0" << "\n"s ;
