@@ -1,4 +1,7 @@
 (use-package neotree
+  :bind (
+         ("C-x n" . neotree-show)
+         )
   :init
   :config
   ;; 隠しファイルをデフォルトで表示

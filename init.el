@@ -43,3 +43,4 @@
  '(magit-diff-removed ((t (:background "black" :foreground "blue"))))
  '(magit-diff-removed-hightlight ((t (:background "white" :foreground "blue"))))
  '(magit-hash ((t (:foreground "red")))))
+(put 'set-goal-column 'disabled nil)

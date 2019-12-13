@@ -182,3 +182,6 @@
 
 ;; CSV
 (depends-on "csv-mode")
+
+;; GraphQL
+(depends-on "graphql-mode")

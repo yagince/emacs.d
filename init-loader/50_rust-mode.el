@@ -14,7 +14,10 @@
   :config
   (bind-keys :map rustic-mode-map
              ("C-c i" . swiper)
+             ("C-M-n" . rustic-end-of-defun)
+             ("C-M-p" . rustic-beginning-of-defun)
              )
+  (setq rustic-format-trigger 'on-save)
   (use-package quickrun
     :defer t
     :ensure t)

@@ -59,12 +59,6 @@
         (indent-line-to indent)
         (when (> offset 0) (forward-char offset)))))
 
-  (add-hook 'ruby-mode-hook
-            '(lambda ()
-               (define-key ruby-mode-map (kbd "C-M-n") 'ruby-end-of-block)
-               (define-key ruby-mode-map (kbd "C-M-p") 'ruby-beginning-of-block)
-               ))
-
   (use-package quickrun
     :defer t
     :ensure t)

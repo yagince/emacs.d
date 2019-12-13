@@ -8,5 +8,6 @@
                (dumb-jump-mode t)
                (yas-minor-mode t)
                (setq tab-width 2)
+               (terraform-format-on-save-mode t)
                ))
   )
