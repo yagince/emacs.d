@@ -78,24 +78,51 @@
 ;; "yes or no" の選択を "y or n" にする
 (fset 'yes-or-no-p 'y-or-n-p)
 
-;; 英語
-(set-face-attribute 'default nil
-                    :family "Menlo" ;; font
-                    )    ;; font size
+;; ;; 英語
+;; (set-face-attribute 'default nil
+;;                     :family "Menlo" ;; font
+;;                     )    ;; font size
 
-;; 日本語
-(set-fontset-font
- nil 'japanese-jisx0208
- (font-spec :family "Hiragino Kaku Gothic ProN")) ;; font
+;; ;; 日本語
+;; (set-fontset-font
+;;  nil 'japanese-jisx0208
+;;  (font-spec :family "Hiragino Kaku Gothic ProN")) ;; font
 
-;; 半角と全角の比を1:2にしたければ
-;; (setq face-font-rescale-alist
-;;       '((".*Hiragino_Kaku_Gothic_ProN.*" . 1.2)));; Mac用フォント設定
-(add-to-list 'face-font-rescale-alist
-             '(".*Hiragino Kaku Gothic ProN.*" . 1.2))
+;; ;; 半角と全角の比を1:2にしたければ
+;; ;; (setq face-font-rescale-alist
+;; ;;       '((".*Hiragino_Kaku_Gothic_ProN.*" . 1.2)));; Mac用フォント設定
+;; (add-to-list 'face-font-rescale-alist
+;;              '(".*Hiragino Kaku Gothic ProN.*" . 1.2))
+
+;; font
+;; (set-default-font "Noto Sans Mono CJK JP-11")
+(set-default-font "Migu 2M-11")
+;; (set-default-font "Ricty Diminished-11")
+;; (set-default-font "MigMix 1M-11")
+
+;; (set-default-font "Fira Code-11")
+;; (set-default-font "Myrica M-11")
+;; あいうえおあいうえおあいうえお
+;; aaiiuueeooaaiiuueeooaaiiuueeoo
 
 ;; 警告音もフラッシュも全て無効(警告音が完全に鳴らなくなるので注意)
 (setq ring-bell-function 'ignore)
 
 ;; 閉じる時に確認
 (setq confirm-kill-emacs 'y-or-n-p)
+
+(use-package all-the-icons
+  :custom
+  (all-the-icons-scale-factor 1.0))
+
+(use-package doom-modeline
+  :commands (doom-modeline-def-modeline)
+  :custom
+  (doom-modeline-buffer-file-name-style 'truncate-with-project)
+  (doom-modeline-icon t)
+  (doom-modeline-major-mode-icon nil)
+  (doom-modeline-minor-modes nil)
+  :hook
+  (after-init . doom-modeline-mode)
+  :config
+  )

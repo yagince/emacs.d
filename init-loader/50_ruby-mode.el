@@ -18,6 +18,7 @@
          ("Schemafile$" . ruby-mode)
          )
   :init
+  (global-rbenv-mode)
   (defun ruby-beautify-buffer ()
     (interactive)
     (let (p rb)

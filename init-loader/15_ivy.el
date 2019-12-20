@@ -17,7 +17,7 @@
   )
 
 (use-package counsel
-  :bind* (
+  :bind (
          ("M-x" . counsel-M-x)
          ("M-y" . counsel-yank-pop)
          ("C-M-z" . counsel-fzf)

@@ -10,3 +10,10 @@
              ("M-/" . company-complete-selection)
              )
   )
+
+(use-package company-box
+  :after (company all-the-icons)
+  :hook ((company-mode . company-box-mode))
+  :custom
+  (company-box-icons-alist 'company-box-icons-all-the-icons)
+  (company-box-doc-enable nil))

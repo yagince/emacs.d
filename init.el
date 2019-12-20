@@ -7,14 +7,17 @@
 (setq gc-cons-threshold (* 128 1024 1024))
 
 ;;cask
-(require 'cask "/usr/local/opt/cask/cask.el")
+;;(require 'cask "/usr/local/opt/cask/cask.el")
+(require 'cask "~/.cask/cask.el")
 (cask-initialize "~/.emacs.d")
 
 (let ((envs '("PATH" "RUST_SRC_PATH")))
   (exec-path-from-shell-copy-envs envs))
 
-(yas-global-mode 1)
+(setenv "PATH" (concat (expand-file-name "~/.rbenv/shims/ruby") (getenv "PATH")))
 
+(yas-global-mode 1)
+ 
 (require 'init-loader)
 (init-loader-load "~/.emacs.d/init-loader")
 (setq init-loader-byte-compile t)

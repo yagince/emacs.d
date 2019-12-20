@@ -7,6 +7,7 @@
 (depends-on "cask")
 (depends-on "init-loader")
 (depends-on "use-package")
+(depends-on "mozc")
 
 (depends-on "anzu")
 (depends-on "expand-region")
@@ -32,6 +33,7 @@
 (depends-on "undo-tree")
 (depends-on "splitjoin")
 (depends-on "all-the-icons")
+(depends-on "doom-modeline")
 
 ;; Ivy
 (depends-on "ivy-rich")
@@ -51,7 +53,7 @@
 
 ;; company-mode
 (depends-on "company")
-
+(depends-on "company-box")
 
 ;; Coding
 (depends-on "yasnippet")
@@ -108,6 +110,7 @@
 (depends-on "ruby-block")
 (depends-on "ruby-end")
 (depends-on "rvm")
+(depends-on "rbenv")
 (depends-on "slim-mode")
 (depends-on "haml-mode")
 (depends-on "rubocop")
