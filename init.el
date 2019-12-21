@@ -16,7 +16,7 @@
 (let ((envs '("PATH" "RUST_SRC_PATH")))
   (exec-path-from-shell-copy-envs envs))
 
-(setenv "PATH" (concat (expand-file-name "~/.rbenv/shims/ruby") (getenv "PATH")))
+;; (setenv "PATH" (concat (expand-file-name "~/.rbenv/shims/ruby") (getenv "PATH")))
 
 (yas-global-mode 1)
  
