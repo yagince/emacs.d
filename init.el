@@ -11,6 +11,8 @@
 ;;(require 'cask "~/.cask/cask.el")
 (cask-initialize "~/.emacs.d")
 
+(require 'use-package)
+
 (let ((envs '("PATH" "RUST_SRC_PATH")))
   (exec-path-from-shell-copy-envs envs))
 
