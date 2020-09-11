@@ -20,5 +20,5 @@
           js-indent-level 2
           typescript-indent-level 2)
     (add-hook 'vue-mode-hook #'add-node-modules-path)
-    (add-hook 'vue-mode-hook 'yas-minor-mode)
+p    (add-hook 'vue-mode-hook 'yas-minor-mode)
     (add-hook 'vue-mode-hook 'flycheck-mode)))
