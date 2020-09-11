@@ -5,11 +5,9 @@
 ;;   )
 (leaf rg
   :ensure t
-  :init
-  (rg-enable-default-bindings
-   (kbd "M-s"))
-  :require t)
+  :bind (("M-s" . rg))
+  )
 
 (leaf wgrep
   :ensure t
-  :require t)
+  )

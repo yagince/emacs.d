@@ -7,8 +7,11 @@
     :config
     (with-eval-after-load 'ivy-rich
       (ivy-rich-mode 1)
-      (require 'ivy-hydra)
       (setq ivy-use-virtual-buffers t)))
+
+  (leaf ivy-hydra
+    :ensure t
+    )
 
   (leaf swiper
     :ensure t
