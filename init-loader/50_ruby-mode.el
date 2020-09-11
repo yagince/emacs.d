@@ -77,17 +77,3 @@
   :defer t
   :commands (rvm-use-default)
   )
-
-(use-package dumb-jump
-  :defer t
-  :bind (
-         ("C-M-g" . dumb-jump-go)
-         ("C-M-b" . dumb-jump-back)
-         ("C-M-q" . dumb-jump-quick-look)
-         )
-  :config
-  (setq dumb-jump-selector 'ivy)
-  (bind-keys :map dumb-jump-mode-map
-             ("C-M-p" . nil)
-             )
-  )

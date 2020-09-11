@@ -47,7 +47,6 @@
 (depends-on "flycheck")
 (depends-on "flycheck-pos-tip")
 (depends-on "flymake-go")
-(depends-on "dumb-jump")
 (depends-on "lsp-mode")
 (depends-on "eglot")
 
