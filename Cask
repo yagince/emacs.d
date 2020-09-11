@@ -42,10 +42,6 @@
 (depends-on "fuzzy")
 (depends-on "popup")
 
-;; company-mode
-(depends-on "company")
-(depends-on "company-box")
-
 ;; Coding
 (depends-on "yasnippet")
 (depends-on "flycheck")
@@ -54,7 +50,6 @@
 (depends-on "dumb-jump")
 (depends-on "lsp-mode")
 (depends-on "eglot")
-(depends-on "neotree")
 
 ;; Key
 (depends-on "sequential-command")
@@ -66,20 +61,15 @@
 (depends-on "lua-mode")
 
 ;; web
-(depends-on "js2-mode")
 (depends-on "web-mode")
 (depends-on "scss-mode")
 (depends-on "actionscript-mode")
 (depends-on "vue-mode")
 (depends-on "pug-mode")
 (depends-on "add-node-modules-path")
-(depends-on "typescript-mode")
 
 ;; text
 (depends-on "yaml-mode")
-(depends-on "json-mode")
-(depends-on "markdown-mode")
-(depends-on "textile-mode")
 
 ;; Ruby
 (depends-on "ruby-mode")
@@ -93,30 +83,6 @@
 (depends-on "rubocop")
 (depends-on "ruby-hash-syntax")
 (depends-on "ruby-refactor")
-
-;; go
-(depends-on "go-mode")
-(depends-on "company-go")
-(depends-on "go-eldoc")
-(depends-on "golint")
-
-;; perl
-;; (depends-on "cperl-mode")
-;; (depends-on "perlbrew")
-
-;; scala
-(depends-on "ensime")
-
-;; php
-(depends-on "php-mode")
-;; (depends-on "php-completion"
-;;         :git "https://github.com/suzuki/php-completion.git"
-;;         :branch "develop"
-;;         :files ("*.el" "phpcmp-index-of-*"))
-
-;; elixir
-(depends-on "elixir-mode")
-(depends-on "alchemist")
 
 ;; floobits
 (depends-on "floobits")
@@ -163,6 +129,3 @@
 
 ;; CSV
 (depends-on "csv-mode")
-
-;; GraphQL
-(depends-on "graphql-mode")
