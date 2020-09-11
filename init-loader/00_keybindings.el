@@ -3,6 +3,9 @@
 (define-key global-map [?¥] [?\\])
 (define-key global-map (kbd "C-z") nil)
 
+(leaf bind-key
+  :ensure t)
+
 (leaf goto-chg
   :ensure t
   :bind (("<f8>" . goto-last-change)

@@ -130,6 +130,7 @@
 ;;   )
 
 (leaf doom-modeline
+  :ensure t
   :commands doom-modeline-def-modeline
   :hook (after-init-hook)
   :custom ((doom-modeline-buffer-file-name-style quote truncate-with-project)

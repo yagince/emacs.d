@@ -34,7 +34,7 @@
          "Schemafile$")
   :setq ((lsp-diagnostic-package . :none))
   :config
-  (global-rbenv-mode)
+  ;; (global-rbenv-mode)
   (rvm-use-default)
   (add-hook 'ruby-mode-hook
             '(lambda nil
@@ -68,6 +68,17 @@
           (indent-line-to indent)
           (when (> offset 0)
             (forward-char offset)))))))
+
+(leaf ruby-end
+  :ensure t)
+(leaf slim-mode
+  :ensure t)
+(leaf haml-mode
+  :ensure t)
+(leaf ruby-hash-syntax
+  :ensure t)
+(leaf ruby-refactor
+  :ensure t)
 
 (leaf rvm
   :ensure t
