@@ -1,34 +1,61 @@
-(use-package web-mode
-  :mode (
-         ("\\.phtml$"     . web-mode)
-         ("\\.tpl\\.php$" . web-mode)
-         ("\\.jsp$"       . web-mode)
-         ("\\.as[cp]x$"   . web-mode)
-         ("\\.erb$"       . web-mode)
-         ("\\.html?$"     . web-mode)
-         ("\\.css?$"      . web-mode)
-         ("\\.jsx$"       . web-mode)
-         ("\\.js$"        . web-mode)
-         ("\\.tsx$"       . web-mode)
-         ("\\.ts$"        . web-mode)
+(leaf web-mode
+  :mode ("\\.phtml$"
+         "\\.tpl\\.php$"
+         "\\.jsp$"
+         "\\.as[cp]x$"
+         "\\.erb$"
+         "\\.html?$"
+         "\\.css?$"
+         "\\.jsx$"
+         "\\.js$"
+         "\\.tsx$"
+         "\\.ts$"
          )
-  :init
+  :config
   (add-hook 'web-mode-hook
-            '(lambda ()
+            '(lambda nil
                (company-mode t)
                (dumb-jump-mode t)
-               (yas-minor-mode t)
-               ))
+               (yas-minor-mode t)))
+  (with-eval-after-load 'web-mode
+    (setq auto-save-default nil)
+    (setq web-mode-markup-indent-offset 2)
+    (setq web-mode-css-indent-offset 2)
+    (setq web-mode-code-indent-offset 2)
+    (setq indent-tabs-mode nil)
+    (setq web-mode-enable-auto-pairing t)
+    (setq web-mode-enable-auto-closing t)))
+;; (use-package web-mode
+;;   :mode (
+;;          ("\\.phtml$"     . web-mode)
+;;          ("\\.tpl\\.php$" . web-mode)
+;;          ("\\.jsp$"       . web-mode)
+;;          ("\\.as[cp]x$"   . web-mode)
+;;          ("\\.erb$"       . web-mode)
+;;          ("\\.html?$"     . web-mode)
+;;          ("\\.css?$"      . web-mode)
+;;          ("\\.jsx$"       . web-mode)
+;;          ("\\.js$"        . web-mode)
+;;          ("\\.tsx$"       . web-mode)
+;;          ("\\.ts$"        . web-mode)
+;;          )
+;;   :init
+;;   (add-hook 'web-mode-hook
+;;             '(lambda ()
+;;                (company-mode t)
+;;                (dumb-jump-mode t)
+;;                (yas-minor-mode t)
+;;                ))
 
-  :config
-  (setq auto-save-default nil)
-  (setq web-mode-markup-indent-offset  2)
-  (setq web-mode-css-indent-offset     2)
-  (setq web-mode-code-indent-offset    2)
-  (setq indent-tabs-mode               nil)
-  (setq web-mode-enable-auto-pairing t)
-  (setq web-mode-enable-auto-closing t)
-  )
+;;   :config
+;;   (setq auto-save-default nil)
+;;   (setq web-mode-markup-indent-offset  2)
+;;   (setq web-mode-css-indent-offset     2)
+;;   (setq web-mode-code-indent-offset    2)
+;;   (setq indent-tabs-mode               nil)
+;;   (setq web-mode-enable-auto-pairing t)
+;;   (setq web-mode-enable-auto-closing t)
+;;   )
 
 ;; (use-package typescript-mode
 ;;   :mode (
