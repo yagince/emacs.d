@@ -61,9 +61,6 @@
 
 ;; web
 (depends-on "web-mode")
-(depends-on "actionscript-mode")
-(depends-on "vue-mode")
-(depends-on "pug-mode")
 (depends-on "add-node-modules-path")
 
 ;; text
