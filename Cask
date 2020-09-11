@@ -61,7 +61,6 @@
 
 ;; web
 (depends-on "web-mode")
-(depends-on "scss-mode")
 (depends-on "actionscript-mode")
 (depends-on "vue-mode")
 (depends-on "pug-mode")
@@ -89,9 +88,6 @@
 ;; erlang
 (depends-on "erlang")
 
-;; git
-(depends-on "magit")
-
 ;; nginx
 (depends-on "nginx-mode")
 
@@ -100,12 +96,6 @@
 
 ;; Rust
 (depends-on "toml-mode")
-(depends-on "rustic")
-(depends-on "racer")
-(depends-on "flycheck-rust")
-
-;; C#
-(depends-on "csharp-mode")
 
 ;; Theme
 ;; (depends-on "color-theme-sanityinc-tomorrow")
@@ -116,9 +106,6 @@
 
 ;; Ansible
 (depends-on "ansible")
-
-;; Terafform
-(depends-on "terraform-mode")
 
 ;; FLuentd
 (depends-on "fluentd-mode" :git "git@github.com:syohex/emacs-fluentd-mode.git")

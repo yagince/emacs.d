@@ -16,6 +16,7 @@
 ;;   )
 
 (leaf terraform-mode
+  :ensure t
   :mode ("\\.tf\\'" "\\.hcl\\'")
   :config
   (with-eval-after-load 'terraform-mode
