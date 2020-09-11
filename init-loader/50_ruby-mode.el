@@ -1,79 +1,147 @@
-(use-package ruby-mode
-  :bind (
-         ("C-c C-v f" . ruby-beautify-buffer)
-         ("C-M-n" . ruby-end-of-block)
-         ("C-M-p" . ruby-beginning-of-block)
-         )
-  :mode (
-         ("\\.rb$" . ruby-mode)
-         ("\\.jb$" . ruby-mode)
-         ("\\.ruby$" . ruby-mode)
-         ("\\.rake$" . ruby-mode)
-         ("Rakefile$" . ruby-mode)
-         ("\\.gemspec$" . ruby-mode)
-         ("\\.ru$" . ruby-mode)
-         ("Gemfile$" . ruby-mode)
-         ("Guardfile$" . ruby-mode)
-         ("\\.jbuilder$" . ruby-mode)
-         ("Schemafile$" . ruby-mode)
-         )
-  :init
-  (global-rbenv-mode)
-  (rvm-use-default)
-  (setq lsp-diagnostic-package :none)
-  (defun ruby-beautify-buffer ()
+(leaf ruby-mode
+  :ensure t
+  :preface
+  (defun ruby-beautify-buffer nil
     (interactive)
-    (let (p rb)
-      (setq p (point) rb (buffer-string))
-
+    (let (p
+          rb)
+      (setq p (point)
+            rb (buffer-string))
       (with-temp-buffer
         (insert rb)
-        (call-process-region (point-min) (point-max) "rbeautify" t t)
+        (call-process-region
+         (point-min)
+         (point-max)
+         "rbeautify" t t)
         (setq rb (buffer-string)))
-
       (erase-buffer)
       (insert rb)
       (goto-char p)))
+
+  :bind (("C-c C-v f" . ruby-beautify-buffer)
+         ("C-M-n" . ruby-end-of-block)
+         ("C-M-p" . ruby-beginning-of-block))
+  :mode ("\\.rb$"
+         "\\.jb$"
+         "\\.ruby$"
+         "\\.rake$"
+         "Rakefile$"
+         "\\.gemspec$"
+         "\\.ru$"
+         "Gemfile$"
+         "Guardfile$"
+         "\\.jbuilder$"
+         "Schemafile$")
+  :setq ((lsp-diagnostic-package . :none))
+  :config
+  (global-rbenv-mode)
+  (rvm-use-default)
   (add-hook 'ruby-mode-hook
-            '(lambda ()
+            '(lambda nil
                (company-mode t)
                (dumb-jump-mode t)
-               (yas-minor-mode t)
-               ))
+               (yas-minor-mode t)))
+  (with-eval-after-load 'ruby-mode
+    (rvm-use-default)
+    (yas-reload-all)
+    (setq ruby-insert-encoding-magic-comment nil)
+    (setq ruby-deep-indent-paren-style nil)
+    (setq ruby-deep-indent-paren-style nil)
+    (defadvice ruby-indent-line (after unindent-closing-paren activate)
+      (let ((column (current-column))
+            indent
+            offset)
+        (save-excursion
+          (back-to-indentation)
+          (let ((state (syntax-ppss)))
+            (setq offset (- column
+                            (current-column)))
+            (when (and
+                   (eq
+                    (char-after)
+                    41)
+                   (not (zerop
+                         (car state))))
+              (goto-char (cadr state))
+              (setq indent (current-indentation)))))
+        (when indent
+          (indent-line-to indent)
+          (when (> offset 0)
+            (forward-char offset)))))))
 
-  :config
-  (rvm-use-default)
-  (yas-reload-all)
-  (setq ruby-insert-encoding-magic-comment nil)
-  (setq ruby-deep-indent-paren-style nil)
-  (setq ruby-deep-indent-paren-style nil)
+(leaf rvm
+  :ensure t
+  :commands rvm-use-default)
 
-  (defadvice ruby-indent-line (after unindent-closing-paren activate)
-    (let ((column (current-column))
-          indent offset)
-      (save-excursion
-        (back-to-indentation)
-        (let ((state (syntax-ppss)))
-          (setq offset (- column (current-column)))
-          (when (and (eq (char-after) ?\))
-                     (not (zerop (car state))))
-            (goto-char (cadr state))
-            (setq indent (current-indentation)))))
-      (when indent
-        (indent-line-to indent)
-        (when (> offset 0) (forward-char offset)))))
+;; (use-package ruby-mode
+;;   :bind (
+;;          ("C-c C-v f" . ruby-beautify-buffer)
+;;          ("C-M-n" . ruby-end-of-block)
+;;          ("C-M-p" . ruby-beginning-of-block)
+;;          )
+;;   :mode (
+;;          ("\\.rb$" . ruby-mode)
+;;          ("\\.jb$" . ruby-mode)
+;;          ("\\.ruby$" . ruby-mode)
+;;          ("\\.rake$" . ruby-mode)
+;;          ("Rakefile$" . ruby-mode)
+;;          ("\\.gemspec$" . ruby-mode)
+;;          ("\\.ru$" . ruby-mode)
+;;          ("Gemfile$" . ruby-mode)
+;;          ("Guardfile$" . ruby-mode)
+;;          ("\\.jbuilder$" . ruby-mode)
+;;          ("Schemafile$" . ruby-mode)
+;;          )
+;;   :init
+;;   (global-rbenv-mode)
+;;   (rvm-use-default)
+;;   (setq lsp-diagnostic-package :none)
+;;   (defun ruby-beautify-buffer ()
+;;     (interactive)
+;;     (let (p rb)
+;;       (setq p (point) rb (buffer-string))
 
-  (use-package quickrun
-    :defer t
-    :ensure t)
-  (use-package lsp-mode
-    :defer t
-    :init
-    (add-hook 'ruby-mode-hook #'lsp)
-    )
-  )
+;;       (with-temp-buffer
+;;         (insert rb)
+;;         (call-process-region (point-min) (point-max) "rbeautify" t t)
+;;         (setq rb (buffer-string)))
 
-(use-package rvm
-  :defer t
-  :commands (rvm-use-default)
-  )
+;;       (erase-buffer)
+;;       (insert rb)
+;;       (goto-char p)))
+;;   (add-hook 'ruby-mode-hook
+;;             '(lambda ()
+;;                (company-mode t)
+;;                (dumb-jump-mode t)
+;;                (yas-minor-mode t)
+;;                ))
+
+;;   :config
+;;   (rvm-use-default)
+;;   (yas-reload-all)
+;;   (setq ruby-insert-encoding-magic-comment nil)
+;;   (setq ruby-deep-indent-paren-style nil)
+;;   (setq ruby-deep-indent-paren-style nil)
+
+;;   (defadvice ruby-indent-line (after unindent-closing-paren activate)
+;;     (let ((column (current-column))
+;;           indent offset)
+;;       (save-excursion
+;;         (back-to-indentation)
+;;         (let ((state (syntax-ppss)))
+;;           (setq offset (- column (current-column)))
+;;           (when (and (eq (char-after) ?\))
+;;                      (not (zerop (car state))))
+;;             (goto-char (cadr state))
+;;             (setq indent (current-indentation)))))
+;;       (when indent
+;;         (indent-line-to indent)
+;;         (when (> offset 0) (forward-char offset)))))
+
+;;   )
+
+;; (use-package rvm
+;;   :ensure t
+;;   :defer t
+;;   :commands (rvm-use-default)
+;;   )
