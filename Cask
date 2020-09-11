@@ -118,9 +118,6 @@
 ;; Ansible
 (depends-on "ansible")
 
-;; ProtoBuf
-(depends-on "protobuf-mode")
-
 ;; Terafform
 (depends-on "terraform-mode")
 
