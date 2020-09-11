@@ -27,3 +27,4 @@ elpa
 .cache
 .lsp-session*
 transient/*
+network-security.*

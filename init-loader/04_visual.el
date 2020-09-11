@@ -24,10 +24,14 @@
 (setq-default indent-tabs-mode nil)
 
 ;; theme
-(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
+;; (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
 ;; (load-theme 'pastels-on-dark t)
 ;; (load-theme 'manoj-dark t)
-(load-theme 'cyberpunk t)
+(leaf cyberpunk-theme
+  :ensure t
+  :config
+  (load-theme 'cyberpunk t)
+  )
 
 (setq initial-frame-alist
       (append (list '(width . 250)

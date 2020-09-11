@@ -29,3 +29,8 @@
     (add-hook 'scss-mode-hook
               '(lambda nil
                  (scss-custom)))))
+
+(leaf rainbow-mode
+  :ensure t
+  :require t
+  )

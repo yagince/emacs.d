@@ -65,12 +65,15 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(all-the-icons-scale-factor 1.0)
+ '(ansi-color-names-vector
+   ["#000000" "#8b0000" "#00ff00" "#ffa500" "#7b68ee" "#dc8cc3" "#93e0e3" "#dcdccc"])
  '(custom-safe-themes
-   '("d6922c974e8a78378eacb01414183ce32bc8dbf2de78aabcc6ad8172547cb074" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" "211bb9b24001d066a646809727efb9c9a2665c270c753aa125bace5e899cb523" default))
+   '("b89a4f5916c29a235d0600ad5a0849b1c50fab16c2c518e1d98f0412367e7f97" "d6922c974e8a78378eacb01414183ce32bc8dbf2de78aabcc6ad8172547cb074" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" "211bb9b24001d066a646809727efb9c9a2665c270c753aa125bace5e899cb523" default))
  '(doom-modeline-buffer-file-name-style 'truncate-with-project t)
  '(doom-modeline-icon t t)
  '(doom-modeline-major-mode-icon nil t)
  '(doom-modeline-minor-modes nil t)
+ '(fci-rule-color "#383838")
  '(help-at-pt-display-when-idle '(flymake-overlay) nil (help-at-pt))
  '(help-at-pt-timer-delay 0.9)
  '(imenu-list-position 'left t)
@@ -80,7 +83,7 @@
      ("melpa" . "https://melpa.org/packages/")
      ("gnu" . "https://elpa.gnu.org/packages/")))
  '(package-selected-packages
-   '(uniquify blackout el-get dumb-jump-mode yascroll yaml-mode wgrep-helm wgrep-ag web-mode vue-mode use-package toml-mode textile-mode swiper splitjoin smartrep slim-mode sequential-command selected scss-mode scratch-log rvm rustic ruby-refactor ruby-hash-syntax ruby-end rubocop robe ripgrep rg recentf-ext rainbow-mode rainbow-delimiters racer popwin php-mode perlbrew open-junk-file nginx-mode neotree multiple-cursors magit lua-mode lsp-mode js2-mode ivy-rich init-loader highlight-symbol helm-tramp helm-smex helm-open-github helm-ag haskell-mode haml-mode goto-chg golint go-eldoc go-autocomplete fzf fuzzy flymake-go flycheck-rust flycheck-pos-tip floobits exec-path-from-shell erlang ensime enh-ruby-mode eglot dumb-jump dockerfile-mode docker cyberpunk-theme csharp-mode coffee-mode cask anzu ansible alchemist ag add-node-modules-path actionscript-mode))
+   '(blackout el-get yaml-mode use-package toml-mode textile-mode slim-mode sequential-command scss-mode scratch-log rvm ruby-refactor ruby-hash-syntax ruby-end rubocop rainbow-delimiters nginx-mode neotree multiple-cursors magit lua-mode lsp-mode js2-mode ivy-rich init-loader highlight-symbol helm-tramp helm-smex helm-open-github helm-ag haskell-mode haml-mode goto-chg golint go-eldoc go-autocomplete fzf fuzzy flymake-go flycheck-rust flycheck-pos-tip floobits exec-path-from-shell erlang ensime enh-ruby-mode eglot dockerfile-mode docker cyberpunk-theme csharp-mode coffee-mode cask ansible alchemist ag add-node-modules-path actionscript-mode))
  '(safe-local-variable-values '((encoding . utf-8)))
  '(send-mail-function 'mailclient-send-it))
 (custom-set-faces

@@ -9,3 +9,7 @@
   (rg-enable-default-bindings
    (kbd "M-s"))
   :require t)
+
+(leaf wgrep
+  :ensure t
+  :require t)
