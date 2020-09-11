@@ -19,6 +19,8 @@
          )
   :init
   (global-rbenv-mode)
+  (rvm-use-default)
+  (setq lsp-diagnostic-package :none)
   (defun ruby-beautify-buffer ()
     (interactive)
     (let (p rb)
@@ -45,6 +47,7 @@
   (setq ruby-insert-encoding-magic-comment nil)
   (setq ruby-deep-indent-paren-style nil)
   (setq ruby-deep-indent-paren-style nil)
+
   (defadvice ruby-indent-line (after unindent-closing-paren activate)
     (let ((column (current-column))
           indent offset)
@@ -63,10 +66,10 @@
   (use-package quickrun
     :defer t
     :ensure t)
-  (use-package eglot
+  (use-package lsp-mode
     :defer t
     :init
-    (add-hook 'ruby-mode-hook 'eglot-ensure)
+    (add-hook 'ruby-mode-hook #'lsp)
     )
   )
 

@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: lcm
+# key: lcm
+# --
+fn gcd(a: ${1:u64}, b: $1) -> $1 {
+    match a {
+        0 => b,
+        _ => gcd(b % a, a),
+    }
+}
+fn lcm(a: $1, b: $1) -> $1 {
+    a / gcd(a, b) * b
+}
+$0

@@ -1,6 +1,9 @@
 (use-package terraform-mode
   :defer t
-  :mode (("\\.tf\\'" . terraform-mode))
+  :mode (
+         ("\\.tf\\'" . terraform-mode)
+         ("\\.hcl\\'" . terraform-mode)
+         )
   :config
   (add-hook 'terraform-mode-hook
             '(lambda ()

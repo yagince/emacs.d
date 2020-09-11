@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: puts
+# key: puts
+# --
+|> inspect(pretty: true) |> IO.puts()

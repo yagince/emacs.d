@@ -10,8 +10,9 @@
 
 (setq backup-inhibited t)
 (setq make-backup-files nil)
-(setq delete-auto-save-files t)
+(setq create-lockfiles nil)
 (setq auto-save-default nil)
+(setq delete-auto-save-files t)
 (setq inhibit-startup-message t)
 (setq initial-scratch-message "")
 
@@ -22,7 +23,7 @@
      (:background "dark slate gray"))
     (((class color)
       (background light))
-     (:background "#CCCCCC"))
+     (:background "#AAAAAA"))
     (t
      ()))
   "*Face used by hl-line.")
@@ -96,7 +97,7 @@
 
 ;; font
 ;; (set-default-font "Noto Sans Mono CJK JP-11")
-(set-default-font "Migu 2M-11")
+(set-frame-font "Migu 2M-15")
 ;; (set-default-font "Ricty Diminished-11")
 ;; (set-default-font "MigMix 1M-11")
 
@@ -111,18 +112,29 @@
 ;; 閉じる時に確認
 (setq confirm-kill-emacs 'y-or-n-p)
 
-(use-package all-the-icons
-  :custom
-  (all-the-icons-scale-factor 1.0))
+(leaf all-the-icons
+  :ensure t
+  :custom ((all-the-icons-scale-factor . 1.0))
+  :require t)
 
-(use-package doom-modeline
-  :commands (doom-modeline-def-modeline)
-  :custom
-  (doom-modeline-buffer-file-name-style 'truncate-with-project)
-  (doom-modeline-icon t)
-  (doom-modeline-major-mode-icon nil)
-  (doom-modeline-minor-modes nil)
-  :hook
-  (after-init . doom-modeline-mode)
-  :config
-  )
+;; (use-package doom-modeline
+;;   :commands (doom-modeline-def-modeline)
+;;   :custom
+;;   (doom-modeline-buffer-file-name-style 'truncate-with-project)
+;;   (doom-modeline-icon t)
+;;   (doom-modeline-major-mode-icon nil)
+;;   (doom-modeline-minor-modes nil)
+;;   :hook
+;;   (after-init . doom-modeline-mode)
+;;   :config
+;;   )
+
+(leaf doom-modeline
+  :commands doom-modeline-def-modeline
+  :hook (after-init-hook)
+  :custom ((doom-modeline-buffer-file-name-style quote truncate-with-project)
+           (doom-modeline-icon . t)
+           (doom-modeline-major-mode-icon)
+           (doom-modeline-minor-modes)))
+;; tramp
+(setq tramp-default-method "sshx")

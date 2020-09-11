@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: gcd
+# key: gcd
+# --
+fn gcd(a: ${1:u64}, b: $1) -> $1 {
+    match a {
+        0 => b,
+        _ => gcd(b % a, a),
+    }
+}
+$0

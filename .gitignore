@@ -24,3 +24,6 @@ bookmarks
 *.log
 
 elpa
+.cache
+.lsp-session*
+transient/*

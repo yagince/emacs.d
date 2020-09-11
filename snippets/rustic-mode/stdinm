@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: stdin multiple
+# key: stdinm
+# --
+let mut input = String::new();
+let _ = std::io::stdin().read_line(&mut input).unwrap();
+let mut input = input
+    .trim()
+    .split_whitespace()
+    .map(|x| x.parse::<$0>().unwrap());

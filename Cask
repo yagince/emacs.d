@@ -10,36 +10,27 @@
 (depends-on "mozc")
 
 (depends-on "anzu")
-(depends-on "expand-region")
 (depends-on "highlight-symbol")
 (depends-on "multiple-cursors")
 (depends-on "wgrep")
 (depends-on "exec-path-from-shell")
-(depends-on "goto-chg")
-(depends-on "ripgrep")
-(depends-on "rg")
 (depends-on "selected")
 (depends-on "fzf")
 
 ;; Appearance
 (depends-on "color-theme-tango")
-(depends-on "rainbow-delimiters")
 (depends-on "rainbow-mode")
 (depends-on "popwin")
 (depends-on "yascroll")
-(depends-on "linum")
-(depends-on "powerline")
 (depends-on "scratch-log")
-(depends-on "undo-tree")
 (depends-on "splitjoin")
-(depends-on "all-the-icons")
-(depends-on "doom-modeline")
 
 ;; Ivy
-(depends-on "ivy-rich")
-(depends-on "ivy-hydra")
-(depends-on "counsel")
-(depends-on "swiper")
+;; (depends-on "ivy-rich")
+;; (depends-on "ivy-hydra")
+;; (depends-on "counsel")
+;; ;; (depends-on "counsel-tramp")
+;; (depends-on "swiper")
 
 ;; grep
 (depends-on "ag")
@@ -59,31 +50,17 @@
 (depends-on "yasnippet")
 (depends-on "flycheck")
 (depends-on "flycheck-pos-tip")
-(depends-on "flymake")
 (depends-on "flymake-go")
 (depends-on "dumb-jump")
 (depends-on "lsp-mode")
 (depends-on "eglot")
 (depends-on "neotree")
 
-;; File
-(depends-on "open-junk-file")
-(depends-on "recentf-ext")
-
 ;; Key
 (depends-on "sequential-command")
 (depends-on "smartrep")
 
-;; ;; helm
-;; (depends-on "helm")
-;; (depends-on "helm-ag")
-;; (depends-on "wgrep-helm")
-;; (depends-on "helm-open-github")
-;; (depends-on "helm-smex")
-;; (depends-on "helm-tramp")
-
 ;; progmodes
-(depends-on "quickrun")
 (depends-on "coffee-mode")
 (depends-on "haskell-mode")
 (depends-on "lua-mode")
@@ -139,6 +116,7 @@
 
 ;; elixir
 (depends-on "elixir-mode")
+(depends-on "alchemist")
 
 ;; floobits
 (depends-on "floobits")

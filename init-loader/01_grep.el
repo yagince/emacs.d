@@ -1,5 +1,11 @@
 ;; rg
-(use-package rg
+;; (use-package rg
+;;   :init
+;;   (rg-enable-default-bindings (kbd "M-s"))
+;;   )
+(leaf rg
+  :ensure t
   :init
-  (rg-enable-default-bindings (kbd "M-s"))
-  )
+  (rg-enable-default-bindings
+   (kbd "M-s"))
+  :require t)
