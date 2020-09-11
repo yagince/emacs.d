@@ -21,3 +21,8 @@
     (setq dumb-jump-selector 'ivy)
     (bind-keys :map dumb-jump-mode-map
                ("C-M-p" . nil))))
+
+(leaf smart-jump
+  :ensure t
+  :config
+  (smart-jump-setup-default-registers))
