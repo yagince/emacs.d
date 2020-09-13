@@ -1,11 +1,13 @@
 (leaf ivy
   :config
+  (leaf all-the-icons-ivy-rich :ensure t)
   (leaf ivy-rich
     :ensure t
     :bind (("C-x b" . ivy-switch-buffer)
            ("C-;" . ivy-switch-buffer))
     :config
     (with-eval-after-load 'ivy-rich
+      (all-the-icons-ivy-rich-mode 1)
       (ivy-rich-mode 1)
       (setq ivy-use-virtual-buffers t)))
 
