@@ -3,18 +3,28 @@
   (leaf company
     :ensure t
     :after t
-    :config
-    (bind-key "C-n" #'company-select-next company-active-map nil)
-    (bind-key "C-p" #'company-select-previous company-active-map nil)
-    (bind-key "C-s" #'company-filter-candidates company-active-map nil)
-    (bind-key "M-/" #'company-complete-selection company-active-map nil))
+    :bind ((company-active-map
+            ("M-n" . nil)
+            ("M-p" . nil)
+            ("C-s" . company-filter-candidates)
+            ("C-n" . company-select-next)
+            ("C-p" . company-select-previous)
+            ("<tab>" . company-complete-selection))
+           (company-search-map
+            ("C-n" . company-select-next)
+            ("C-p" . company-select-previous)))
+    :custom ((company-idle-delay . 0)
+             (company-minimum-prefix-length . 1)
+             (company-transformers . '(company-sort-by-occurrence)))
+    :global-minor-mode global-company-mode)
 
   (leaf company-box
     :ensure t
     :after all-the-icons company
     :hook (company-mode-hook)
     :custom ((company-box-icons-alist quote company-box-icons-all-the-icons)
-             (company-box-doc-enable))))
+             (company-box-doc-enable)))
+  )
 
 
 ;; (use-package company
