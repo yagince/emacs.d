@@ -40,7 +40,10 @@
             '(lambda nil
                (company-mode t)
                (dumb-jump-mode t)
-               (yas-minor-mode t)))
+               (yas-minor-mode t)
+               (ruby-end-mode t)
+               (rainbow-delimiters-mode t)
+               ))
   (with-eval-after-load 'ruby-mode
     (rvm-use-default)
     (yas-reload-all)
