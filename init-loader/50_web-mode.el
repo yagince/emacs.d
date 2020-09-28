@@ -1,4 +1,5 @@
 (leaf web-mode
+  :ensure t
   :mode ("\\.phtml$"
          "\\.tpl\\.php$"
          "\\.jsp$"
