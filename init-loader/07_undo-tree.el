@@ -8,6 +8,9 @@
 ;;   )
 (leaf undo-tree
   :ensure t
-  :bind (("C-S-/" . undo-tree-redo))
+  :bind (
+         ("C-M-/" . undo-tree-redo)
+         ("C-/" . undo-tree-undo)
+         )
   :config
   (global-undo-tree-mode t))

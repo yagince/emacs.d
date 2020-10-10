@@ -50,3 +50,17 @@
   :config
   (init-loader-load "~/.emacs.d/init-loader")
   )
+
+(leaf ace
+  :config
+  (leaf ace-jump-mode
+    :ensure t
+    )
+  (leaf ace-window
+    :ensure t
+    :bind (
+           ("C-x a" . ace-window)
+           )
+    :custom
+    )
+  )
