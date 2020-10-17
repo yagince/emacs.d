@@ -26,12 +26,12 @@
   :hook
   (web-mode-hook . lsp-deferred)
   ;; (ruby-mode-hook . lsp-deferred)
-  ;; (go-mode-hook . lsp-deferred)
+  (go-mode-hook . lsp-deferred)
 )
 
 (leaf eglot
   :ensure t
   :config
   :hook
-  (ruby-mode-hook . 'eglot-ensure)
+  (ruby-mode-hook . eglot-ensure)
   )
