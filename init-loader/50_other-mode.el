@@ -48,3 +48,6 @@
                . ,(format "%s" (all-the-icons-octicon "git-merge"))))
   :bind ("C-x G" . global-git-gutter+-mode)
   )
+
+(leaf ansible
+  :ensure t)

@@ -26,12 +26,17 @@
   :hook
   (web-mode-hook . lsp-deferred)
   ;; (ruby-mode-hook . lsp-deferred)
-  (go-mode-hook . lsp-deferred)
+  ;; (go-mode-hook . lsp-deferred)
+  ;; (terraform-mode-hook . lsp-deferred)
 )
 
 (leaf eglot
   :ensure t
   :config
+  (add-to-list 'eglot-server-programs
+             `(terraform-mode . ("terraform-ls" "serve" "--port" :autoport)))
   :hook
   (ruby-mode-hook . eglot-ensure)
+  (go-mode-hook   . eglot-ensure)
+  (terraform-mode-hook   . eglot-ensure)
   )
