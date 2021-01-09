@@ -38,5 +38,5 @@
   :hook
   (ruby-mode-hook . eglot-ensure)
   (go-mode-hook   . eglot-ensure)
-  (terraform-mode-hook   . eglot-ensure)
+  ;; (terraform-mode-hook   . eglot-ensure)
   )

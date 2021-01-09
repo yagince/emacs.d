@@ -26,7 +26,16 @@
     (setq indent-tabs-mode nil)
     (setq web-mode-enable-auto-pairing t)
     (setq web-mode-enable-auto-closing t)
-    ))
+    )
+  (leaf prettier
+    :ensure t
+    :hook
+    (
+     (web-mode-hook . prettier-mode)
+     )
+    )
+  )
+
 ;; (use-package web-mode
 ;;   :mode (
 ;;          ("\\.phtml$"     . web-mode)
