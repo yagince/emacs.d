@@ -34,8 +34,7 @@
          "Schemafile$")
   :setq ((lsp-diagnostic-package . :none))
   :config
-  ;; (global-rbenv-mode)
-  (rvm-use-default)
+
   (add-hook 'ruby-mode-hook
             '(lambda nil
                (company-mode t)
@@ -45,7 +44,6 @@
                (rainbow-delimiters-mode t)
                ))
   (with-eval-after-load 'ruby-mode
-    (rvm-use-default)
     (yas-reload-all)
     (setq ruby-insert-encoding-magic-comment nil)
     (setq ruby-deep-indent-paren-style nil)
@@ -85,7 +83,21 @@
 
 (leaf rvm
   :ensure t
-  :commands rvm-use-default)
+  :if (eq system-type 'darwin)
+  :commands rvm-use-default
+  :config
+  (rvm-use-default)
+  )
+
+(leaf rbenv
+  :ensure t
+  :if (eq system-type 'gnu/linux)
+  :config
+  (global-rbenv-mode)
+  :custom (
+           (rbenv-installation-dir . "~/.rbenv")
+           )
+  )
 
 ;; (use-package ruby-mode
 ;;   :bind (
