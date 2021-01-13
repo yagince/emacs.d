@@ -3,7 +3,7 @@ auto-save-list/*
 ac-comphist.dat
 var/*
 url/*
-
+el-get/*
 .cask/*
 
 eshell
@@ -30,3 +30,6 @@ transient/*
 network-security.*
 prescient
 projects
+
+session.*
+kkcrc
