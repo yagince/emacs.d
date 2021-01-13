@@ -41,7 +41,6 @@
 ;;   :config
 ;;   )
 
-
 (leaf mozc
   :ensure t
   :if (eq system-type 'gnu/linux)
@@ -70,7 +69,7 @@
   :init
   (leaf mozc-temp
     :ensure t
-    :bind* ("<henkan>" . mozc-temp-convert))
+    :bind* ("M-n" . mozc-temp-convert))
   (leaf mozc-cursor-color
     :el-get iRi-E/mozc-el-extensions
     :require t
