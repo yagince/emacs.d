@@ -36,7 +36,7 @@
            (rustic-format-on-save    . t)
            (rustic-lsp-format        . t)
            (rustic-format-trigger    . nil)
-           (rustic-rls-pkg           . 'eglot)
+           ;; (rustic-rls-pkg           . 'eglot)
            )
   :config
   (yas-reload-all)

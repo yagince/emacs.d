@@ -34,10 +34,10 @@
   )
 
 (setq initial-frame-alist
-      (append (list '(width . 250)
-                    '(height . 80)
+      (append (list '(width . 310)
+                    '(height . 73)
                     '(top . 10)
-                    '(left . 40)
+                    '(left . 10)
                     '(alpha . 85))
               initial-frame-alist))
 (setq default-frame-alist initial-frame-alist)

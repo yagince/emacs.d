@@ -48,6 +48,7 @@
   :config
   (setq default-input-method "japanese-mozc"
         mozc-helper-program-name "mozc_emacs_helper"
+        mozc-leim-title "Mozc"
         )
   :preface
   (defadvice toggle-input-method (around toggle-input-method-around activate)
@@ -67,9 +68,9 @@
               (define-key mozc-mode-map "," '(lambda () (interactive) (mozc-insert-str "、")))
               (define-key mozc-mode-map "." '(lambda () (interactive) (mozc-insert-str "。")))))
   :init
-  (leaf mozc-temp
-    :ensure t
-    :bind* ("M-n" . mozc-temp-convert))
+  ;; (leaf mozc-temp
+  ;;   :ensure t
+  ;;   :bind* ("C-M-n" . mozc-temp-convert))
   (leaf mozc-cursor-color
     :el-get iRi-E/mozc-el-extensions
     :require t

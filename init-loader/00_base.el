@@ -97,7 +97,9 @@
 
 ;; font
 ;; (set-default-font "Noto Sans Mono CJK JP-11")
-(set-frame-font "Migu 2M-12")
+(set-frame-font "Migu 2M-17")
+(set-fontset-font t 'japanese-jisx0208 "Migu 2M-17")
+
 (set-fontset-font nil '(#x1F000 . #x1FAFF) "Noto Color Emoji")
 ;; (set-default-font "Ricty Diminished-11")
 ;; (set-default-font "MigMix 1M-11")

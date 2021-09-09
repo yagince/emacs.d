@@ -5,7 +5,7 @@
     :ensure t
     :custom
     (
-     (lsp-ui-doc-enable            . nil)
+     ;; (lsp-ui-doc-enable            . nil)
      (lsp-ui-doc-header            . t)
      (lsp-ui-doc-include-signature . t)
      (lsp-ui-doc-position          . 'at-point)
@@ -13,7 +13,7 @@
      (lsp-ui-doc-max-height        . 30)
      (lsp-ui-doc-use-childframe    . nil)
      (lsp-ui-doc-use-webkit        . t)
-     (lsp-ui-flycheck-enable       . nil)
+     ;; (lsp-ui-flycheck-enable       . nil)
      (lsp-ui-peek-enable           . t)
      (lsp-ui-peek-peek-height      . 20)
      (lsp-ui-peek-list-width       . 50)

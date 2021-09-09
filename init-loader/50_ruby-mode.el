@@ -34,6 +34,8 @@
          "Schemafile$")
   :setq ((lsp-diagnostic-package . :none))
   :config
+  (leaf rspec-mode
+    :ensure t)
 
   (add-hook 'ruby-mode-hook
             '(lambda nil
@@ -73,6 +75,8 @@
 (leaf ruby-end
   :ensure t)
 (leaf slim-mode
+  :mode ("\\.slim$"
+         "\\.slime$")
   :ensure t)
 (leaf haml-mode
   :ensure t)

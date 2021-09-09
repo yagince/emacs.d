@@ -12,7 +12,19 @@
   (xref-backend-functions . dumb-jump-xref-activate)
   )
 
+;; (leaf smart-jump
+;;   :ensure t
+;;   :config
+;;   (smart-jump-setup-default-registers))
+
 (leaf smart-jump
-  :ensure t
+  :ensure t ivy
+  :bind
+  ("M-." . smart-jump-go)
+  :custom
+  (dumb-jump-mode . t)
+  (dumb-jump-selector . 'ivy) ;; 候補選択をivyに任せます
+  (dumb-jump-use-visible-window . nil)
   :config
-  (smart-jump-setup-default-registers))
+  (smart-jump-setup-default-registers)
+  )

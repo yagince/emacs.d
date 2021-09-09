@@ -18,6 +18,7 @@
                (company-mode t)
                (dumb-jump-mode t)
                (yas-minor-mode t)))
+
   (with-eval-after-load 'web-mode
     (setq auto-save-default nil)
     (setq web-mode-markup-indent-offset 2)
@@ -26,6 +27,13 @@
     (setq indent-tabs-mode nil)
     (setq web-mode-enable-auto-pairing t)
     (setq web-mode-enable-auto-closing t)
+    )
+  (leaf add-node-modules-path
+    :ensure t
+    :hook
+    (
+     (web-mode-hook . add-node-modules-path)
+     )
     )
   (leaf prettier
     :ensure t

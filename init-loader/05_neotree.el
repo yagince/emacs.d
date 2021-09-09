@@ -22,4 +22,8 @@
     (setq neo-smart-open t)
     (setq neo-create-file-auto-open t)
     (setq neo-theme (if (display-graphic-p)
-                        'icons 'arrow))))
+                        'icons 'arrow)))
+  :custom
+  ;; ((neo-window-fixed-size . nil))
+  ((projectile-switch-project-action . 'neotree-projectile-action))
+  )
