@@ -98,9 +98,9 @@
  '(imenu-list-size 30 t)
  '(ivy-prescient-retain-classic-highlighting t)
  '(lsp-prefer-flymake 'flymake t)
- '(lsp-print-io nil)
- '(lsp-print-performance nil)
- '(lsp-response-timeout 5)
+ '(lsp-print-io nil t)
+ '(lsp-print-performance nil t)
+ '(lsp-response-timeout 5 t)
  '(lsp-trace nil t)
  '(lsp-ui-doc-header t)
  '(lsp-ui-doc-include-signature t)
@@ -121,13 +121,13 @@
      ("melpa" . "https://melpa.org/packages/")
      ("gnu" . "https://elpa.gnu.org/packages/")))
  '(package-selected-packages
-   '(projectile rspec-mode add-node-modules-path prettier pretiier ansible ansible-mode yasnippet yaml-mode web-mode vue-mode volatile-highlights undo-tree toml-mode terraform-mode smart-jump slim-mode scss-mode scratch-log rvm rustic ruby-refactor ruby-hash-syntax ruby-end rg rainbow-mode rainbow-delimiters quickrun protobuf-mode open-junk-file nginx-mode neotree multiple-cursors mozc magit macrostep lsp-ui leaf-tree leaf-convert json-mode ivy-prescient ivy-hydra init-loader highlight-symbol highlight-indent-guides haml-mode graphql-mode goto-chg go-eldoc git-gutter+ fzf flycheck expand-region exec-path-from-shell erlang elixir-mode el-get eglot doom-modeline dockerfile-mode cyberpunk-theme csharp-mode counsel company-box blackout bind-key anzu all-the-icons-ivy-rich all-the-icons-ivy ace-window ace-jump-mode))
+   '(flymake-eslint projectile rspec-mode add-node-modules-path prettier pretiier ansible ansible-mode yasnippet yaml-mode web-mode vue-mode volatile-highlights undo-tree toml-mode terraform-mode smart-jump slim-mode scss-mode scratch-log rvm rustic ruby-refactor ruby-hash-syntax ruby-end rg rainbow-mode rainbow-delimiters quickrun protobuf-mode open-junk-file nginx-mode neotree multiple-cursors mozc magit macrostep lsp-ui leaf-tree leaf-convert json-mode ivy-prescient ivy-hydra init-loader highlight-symbol highlight-indent-guides haml-mode graphql-mode goto-chg go-eldoc git-gutter+ fzf flycheck expand-region exec-path-from-shell erlang elixir-mode el-get eglot doom-modeline dockerfile-mode cyberpunk-theme csharp-mode counsel company-box blackout bind-key anzu all-the-icons-ivy-rich all-the-icons-ivy ace-window ace-jump-mode))
  '(prescient-aggressive-file-save t)
  '(prescient-save-file "~/.emacs.d/prescient")
  '(rbenv-installation-dir "~/.rbenv")
  '(rustic-format-on-save t t)
- '(rustic-format-trigger nil)
- '(rustic-lsp-format t))
+ '(rustic-format-trigger nil t)
+ '(rustic-lsp-format t t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -135,3 +135,4 @@
  ;; If there is more than one, they won't work right.
  )
 (put 'set-goal-column 'disabled nil)
+(put 'scroll-left 'disabled nil)

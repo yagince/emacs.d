@@ -1,5 +1,9 @@
 (leaf lsp-mode
   :ensure t
+  ;; :custom
+  ;; (
+  ;;  (lsp-eslint-auto-fix-on-save . t)
+  ;;  )
   :config
   (leaf lsp-ui
     :ensure t
