@@ -28,8 +28,14 @@
     (setq web-mode-enable-auto-pairing t)
     (setq web-mode-enable-auto-closing t)
     )
+  (leaf nvm
+    :ensure t
+    :config
+    (nvm-use "16.13.0")
+    )
   (leaf add-node-modules-path
     :ensure t
+    :after nvm
     :hook
     (
      (web-mode-hook . add-node-modules-path)
@@ -37,6 +43,7 @@
     )
   (leaf prettier
     :ensure t
+    :after nvm add-node-modules-path
     :hook
     (
      (web-mode-hook . prettier-mode)
