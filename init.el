@@ -554,10 +554,10 @@
 ;; 14_open-junk-file.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(leaf open-junk-file
-  :ensure t
-  :bind (("C-x C-j" . open-junk-file))
-  :setq ((open-junk-file-format . "~/.emacs.d/junk/%Y/%m/%Y-%m-%d-%H%M%S.")))
+;; (leaf open-junk-file
+;;   :ensure t
+;;   :bind (("C-x C-j" . open-junk-file))
+;;   :setq ((open-junk-file-format . "~/.emacs.d/junk/%Y/%m/%Y-%m-%d-%H%M%S.")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 15_ivy.el
@@ -700,6 +700,35 @@
                     (make-variable-buffer-local 'ruby-end-check-statement-modifiers)
                     nil)
                    (ruby-end-mode 1)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 50_go-mode.el
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(leaf go-mode
+  :ensure t
+  :mode ("\\.go\\'")
+  :config
+  (with-eval-after-load 'go-mode
+    (add-hook 'go-mode-hook
+              '(lambda nil
+                 (company-mode t)
+                 (dumb-jump-mode t)
+                 (yas-minor-mode t)
+                 (setq tab-width 2)))
+    (setq gofmt-command "goimports")
+    (progn
+      (bind-key "C-c C-r" #'go-remove-unused-imports go-mode-map nil)
+      (bind-key "M-." #'godef-jump go-mode-map nil)
+      (bind-key "M-," #'pop-tag-mark go-mode-map nil)
+      (bind-key "C-c C-i" #'go-import-add go-mode-map nil)
+      )
+
+    (add-hook 'before-save-hook 'gofmt-before-save)
+    (leaf go-eldoc
+      :ensure t
+      :config
+      (add-hook 'go-mode-hook 'go-eldoc-setup))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 50_web-mode.el
