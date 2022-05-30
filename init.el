@@ -47,12 +47,6 @@
   (exec-path-from-shell-initialize)
   )
 
-(leaf init-loader
-  :ensure t
-  :config
-  (init-loader-load "~/.emacs.d/init-loader")
-  )
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 00_base.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -416,6 +410,12 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(leaf init-loader
+  :ensure t
+  :config
+  (init-loader-load "~/.emacs.d/init-loader")
+  )
 
 (leaf ace
   :config
