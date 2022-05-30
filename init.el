@@ -408,6 +408,156 @@
 
 (setq default-frame-alist initial-frame-alist)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 05_dumb_jump.el
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(leaf dumb-jump
+  :ensure t
+  :bind (("C-M-g" . dumb-jump-go)
+         ("C-M-b" . dumb-jump-back)
+         ("C-M-q" . dumb-jump-quick-look))
+  :config
+  (with-eval-after-load 'dumb-jump
+    (setq dumb-jump-selector 'ivy)
+    (bind-keys :map dumb-jump-mode-map
+               ("C-M-p" . nil)))
+  :hook
+  (xref-backend-functions . dumb-jump-xref-activate)
+  )
+
+(leaf smart-jump
+  :ensure t ivy
+  :bind
+  ("M-." . smart-jump-go)
+  :custom
+  (dumb-jump-mode . t)
+  (dumb-jump-selector . 'ivy) ;; 候補選択をivyに任せます
+  (dumb-jump-use-visible-window . nil)
+  :config
+  (smart-jump-setup-default-registers)
+  )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 05_linum.el
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(leaf linum
+  :ensure t
+  :require t
+  :config
+  (global-linum-mode t)
+  (setq linum-format "%4d ")
+  )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 05_neotree.el
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(leaf neotree
+  :ensure t
+  :bind (("C-x n" . neotree-show))
+  :config
+  (with-eval-after-load 'neotree
+    (setq neo-show-hidden-files t) ;; 隠しファイルをデフォルトで表示
+    (setq neo-keymap-style 'concise)
+    (setq neo-smart-open t)
+    (setq neo-create-file-auto-open t)
+    (setq neo-theme (if (display-graphic-p)
+                        'icons 'arrow)))
+  :custom
+  ;; ((neo-window-fixed-size . nil))
+  ((projectile-switch-project-action . 'neotree-projectile-action))
+  )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 05_scratch-log.el
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(leaf scratch-log
+  :ensure t
+  :require t)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 05_yasnippet.el
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(leaf yasnippet
+  :ensure t
+  :require t
+  :init (yas-global-mode t)
+  )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 07_undo-tree.el
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(leaf undo-tree
+  :ensure t
+  :bind (
+         ("C-M-/" . undo-tree-redo)
+         ("C-/" . undo-tree-undo)
+         )
+  :custom
+  (
+   (undo-tree-auto-save-history . nil)
+   )
+  :config
+  (global-undo-tree-mode t))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 08_flycheck.el
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(leaf flycheck
+  :ensure t
+  :config
+  )
+
+;; (leaf flycheck-pos-tip
+;;   :ensure t
+;;   :require t
+;;   :after flycheck
+;;   :config
+;;   (flycheck-pos-tip-mode)
+;;   )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 08_quickrun.el
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(leaf quickrun
+  :ensure t
+  :bind (("C-q" . quickrun)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 11_expand-region.el
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(leaf expand-region
+  :ensure t
+  :bind (("C-," . er/expand-region)
+         ("C-<" . er/contract-region))
+  :config
+  (transient-mark-mode t))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 13_rainbow-delimiter.el
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(leaf rainbow-delimiters
+  :ensure t
+  :hook (emacs-lisp-mode-hook cperl-mode-hook ruby-mode-hook js2-mode-hook)
+  :require t)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 14_open-junk-file.el
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(leaf open-junk-file
+  :ensure t
+  :bind (("C-x C-j" . open-junk-file))
+  :setq ((open-junk-file-format . "~/.emacs.d/junk/%Y/%m/%Y-%m-%d-%H%M%S.")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 50_web-mode.el

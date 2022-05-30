@@ -1,5 +1,5 @@
-(leaf yasnippet
-  :ensure t
-  :require t
-  :init (yas-global-mode t)
-  )
+;; (leaf yasnippet
+;;   :ensure t
+;;   :require t
+;;   :init (yas-global-mode t)
+;;   )

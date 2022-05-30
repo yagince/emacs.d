@@ -1,7 +1,7 @@
-(leaf flycheck
-  :ensure t
-  :config
-  )
+;; (leaf flycheck
+;;   :ensure t
+;;   :config
+;;   )
 
 ;; (leaf flycheck-pos-tip
 ;;   :ensure t
