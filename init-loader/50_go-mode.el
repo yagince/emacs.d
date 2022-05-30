@@ -37,7 +37,8 @@
       (bind-key "C-c C-r" #'go-remove-unused-imports go-mode-map nil)
       (bind-key "M-." #'godef-jump go-mode-map nil)
       (bind-key "M-," #'pop-tag-mark go-mode-map nil)
-      (bind-key "C-c C-i" #'go-import-add go-mode-map nil))
+      (bind-key "C-c C-i" #'go-import-add go-mode-map nil)
+      )
 
     (add-hook 'before-save-hook 'gofmt-before-save)
     (leaf go-eldoc

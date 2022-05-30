@@ -57,7 +57,14 @@
     :ensure t
     :after prescient ivy
     :custom ((ivy-prescient-retain-classic-highlighting . t))
-    :global-minor-mode t))
+    :global-minor-mode t)
+
+  (leaf ivy-yasnippet
+    :ensure t
+    :after (yasnippet)
+    :bind (("C-c y" . ivy-yasnippet)
+           ("C-c C-y" . ivy-yasnippet)))
+  )
 ;; (use-package ivy-rich
 ;;   :ensure t
 ;;   :bind (

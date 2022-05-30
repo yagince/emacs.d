@@ -97,13 +97,26 @@
 
 ;; font
 ;; (set-default-font "Noto Sans Mono CJK JP-11")
-(set-frame-font "Migu 2M-17")
-(set-fontset-font t 'japanese-jisx0208 "Migu 2M-17")
+;; (set-frame-font "Migu 2M-17")
+;; (set-fontset-font t 'japanese-jisx0208 "Migu 2M-17")
 ;; (set-frame-font "Migu 2M-20")
 ;; (set-fontset-font t 'japanese-jisx0208 "Migu 2M-20")
+(set-frame-font "Ricty-17")
+(set-fontset-font t 'japanese-jisx0208 "Ricty Diminished-17")
+(add-to-list 'face-font-rescale-alist
+             '(".*Ricty Diminished.*" . 1.1))
 
-(set-fontset-font
- t 'symbol (font-spec :family "Apple Color Emoji") nil 'prepend)
+(when (eq system-type 'darwin) ; Mac OS X
+  (set-fontset-font
+   t 'symbol (font-spec :family "Apple Color Emoji") nil 'prepend)
+
+  (add-to-list 'face-font-rescale-alist
+               '(".*Apple Color Emoji.*" . 0.8))
+)
+
+(when (eq system-type 'gnu/linux) ; linux
+  (set-fontset-font nil '(#x1F000 . #x1FAFF) "Noto Color Emoji")
+)
 
 ;; (set-fontset-font nil '(#x1F000 . #x1FAFF) "Apple Color Emoji")
 ;; (set-default-font "Ricty Diminished-11")
@@ -111,8 +124,19 @@
 
 ;; (set-default-font "Fira Code-11")
 ;; (set-default-font "Myrica M-11")
-;; あいうえおあいうえおあいうえお
-;; aaiiuueeooaaiiuueeooaaiiuueeoo
+
+;;; ずれ確認用 半角40字、全角20字
+;;; AIfUEaiueoAIUEOaiueoAIUEOaiueoAIUEOaiueo ASCII英字
+;;; 0123456789012345678901234567890123456789 ASCII数字
+;;; ｱｲｳｴｵｱｲｳｴｵｱｲｳｴｵｱｲｳｴｵｱｲｳｴｵｱｲｳｴｵｱｲｳｴｵｱｲｳｴｵ JIS X 0201ｶﾅ
+;;; あいうえおあいうえおあいうえおあいうえお JIS X 0208ひらがな
+;;; アイウエオアイウエオアイウエオアイウエオ 同カタカナ
+;;; ＡＢＣＤＥＡＢＣＤＥＡＢＣＤＥＡＢＣＤＥ 同英字
+;;; 亜唖娃阿哀亜唖娃阿哀亜唖娃阿哀亜唖娃阿哀 同漢字
+;;; 𠀋𡈽𡌛𡑮𡢽𠀋𡈽𡌛𡑮𡢽𠀋𡈽𡌛𡑮𡢽𠀋𡈽𡌛𡑮𡢽 JIS X 0213漢字
+;; 🀄🀅🀆🀇🀈🀄🀅🀆🀇🀈🀄🀅🀆🀇🀈🀄🀅🀆🀇🀈 絵文字
+;; あいうえおあいうえおあいうえおあいうえおあいうえおあいうえお
+;; aaiiuueeooaaiiuueeooaaiiuueeooaaiiuueeooaaiiuueeooaaiiuueeoo
 
 ;; 警告音もフラッシュも全て無効(警告音が完全に鳴らなくなるので注意)
 (setq ring-bell-function 'ignore)

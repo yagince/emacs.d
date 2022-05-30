@@ -1,3 +1,5 @@
 (leaf yasnippet
   :ensure t
-  :require t)
+  :require t
+  :init (yas-global-mode t)
+  )

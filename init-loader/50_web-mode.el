@@ -1,5 +1,22 @@
+(leaf nvm
+  :ensure t
+  :config
+  (nvm-use "16.13.0")
+  )
+
+(leaf add-node-modules-path
+  :ensure t
+  ;; :after nvm
+  )
+
+(leaf prettier
+  :ensure t
+  ;; :after nvm add-node-modules-path
+  )
+
 (leaf web-mode
   :ensure t
+  :after nvm add-node-modules-path prettier
   :mode ("\\.phtml$"
          "\\.tpl\\.php$"
          "\\.jsp$"
@@ -11,6 +28,11 @@
          "\\.js$"
          "\\.tsx$"
          "\\.ts$"
+         )
+  :hook (
+         (web-mode-hook . add-node-modules-path)
+         (web-mode-hook . prettier-mode)
+         (web-mode-hook . flycheck-mode)
          )
   :config
   (add-hook 'web-mode-hook
@@ -28,39 +50,26 @@
     (setq web-mode-enable-auto-pairing t)
     (setq web-mode-enable-auto-closing t)
     )
-  (leaf nvm
-    :ensure t
-    :config
-    (nvm-use "16.13.0")
-    )
-  (leaf add-node-modules-path
-    :ensure t
-    :after nvm
-    :hook
-    (
-     (web-mode-hook . add-node-modules-path)
-     )
-    )
-  (leaf prettier
-    :ensure t
-    :after nvm add-node-modules-path
-    :hook
-    (
-     (web-mode-hook . prettier-mode)
-     )
-    )
-  ;; (leaf nvm
-  ;;   :ensure t
-  ;;   :config
-  ;;   (
-  ;;    nvm-use "v14.17.1"
-  ;;    )
-  ;;  )
-  ;; (leaf flymake-eslint
-  ;;   :ensure t
-  ;;   :hook
-  ;;   (
-  ;;    (web-mode-hook . flymake-eslint-enable)
-  ;;    )
-  ;;   )
   )
+
+;; (leaf typescript-mode
+;;   :ensure t
+;;   :after nvm add-node-modules-path prettier
+;;   ;; :mode (
+;;   ;;        "\\.tsx$"
+;;   ;;        "\\.ts$"
+;;   ;;        )
+;;   :hook (
+;;          (typescript-mode-hook . company-mode)
+;;          (typescript-mode-hook . dumb-jump-mode)
+;;          (typescript-mode-hook . yas-minor-mode)
+;;          (typescript-mode-hook . flycheck-mode)
+;;          (typescript-mode-hook . prettier-mode)
+;;          )
+;;   :custom
+;;   (
+;;    (typescript-indent-level . 2)
+;;    )
+;;   ;; :config
+;;   )
+

@@ -85,17 +85,17 @@
 (leaf ruby-refactor
   :ensure t)
 
-(leaf rvm
-  :ensure t
-  :if (eq system-type 'darwin)
-  :commands rvm-use-default
-  :config
-  (rvm-use-default)
-  )
+;; (leaf rvm
+;;   :ensure t
+;;   :if (eq system-type 'darwin)
+;;   :commands rvm-use-default
+;;   :config
+;;   (rvm-use-default)
+;;   )
 
 (leaf rbenv
   :ensure t
-  :if (eq system-type 'gnu/linux)
+  ;; :if (eq system-type 'gnu/linux)
   :config
   (global-rbenv-mode)
   :custom (

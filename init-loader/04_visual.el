@@ -33,11 +33,22 @@
   (load-theme 'cyberpunk t)
   )
 
-(setq initial-frame-alist
-      (append (list '(width . 190)
-                    '(height . 60)
-                    '(top . 10)
-                    '(left . 10)
-                    '(alpha . 85))
-              initial-frame-alist))
+(when (equal system-type 'darwin)
+  (setq initial-frame-alist
+        (append (list '(width . 170)
+                      '(height . 60)
+                      '(top . 10)
+                      '(left . 10)
+                      '(alpha . 85))
+                initial-frame-alist)))
+
+(when (equal system-type 'gnu/linux)
+  (setq initial-frame-alist
+        (append (list '(width . 310)
+                      '(height . 67)
+                      '(top . 10)
+                      '(left . 10)
+                      '(alpha . 85))
+                initial-frame-alist)))
+
 (setq default-frame-alist initial-frame-alist)
