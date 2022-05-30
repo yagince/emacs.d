@@ -12,5 +12,9 @@
          ("C-M-/" . undo-tree-redo)
          ("C-/" . undo-tree-undo)
          )
+  :custom
+  (
+   (undo-tree-auto-save-history . nil)
+   )
   :config
   (global-undo-tree-mode t))
