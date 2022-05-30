@@ -408,6 +408,10 @@
 
 (setq default-frame-alist initial-frame-alist)
 
+(leaf highlight-symbol
+  :hook (prog-mode-hook
+         (prog-mode-hook . highlight-symbol-nav-mode)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 05_dumb_jump.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
