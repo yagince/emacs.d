@@ -819,6 +819,322 @@
 ;;                               (lsp-deferred))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 50_magit.el
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(leaf magit
+  :ensure t
+  :bind (("C-x m" . magit-status))
+  :config
+  (with-eval-after-load 'magit
+    (setq-default magit-auto-revert-mode nil)
+    (setq vc-handled-backends 'nil)
+    (eval-after-load "vc"
+      '(remove-hook 'find-file-hooks 'vc-find-file-hook))
+    ))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 50_markdown-mode.el
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(leaf markdown-mode
+  :ensure t
+  :mode ("\\.markdown\\'" "\\.md\\'"
+         ("README\\.md\\'" . gfm-mode))
+  :config
+  (with-eval-after-load 'markdown-mode
+    (add-hook 'markdown-mode-hook
+              '(lambda nil
+                 (electric-indent-local-mode -1)))
+    (setq markdown-preview-stylesheets (list "https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/3.0.1/github-markdown.min.css"))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 50_other-mode.el
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+ (leaf fzf
+  :ensure t)
+
+(leaf highlight-symbol
+  :ensure t)
+
+(leaf erlang
+  :ensure t)
+
+(leaf nginx-mode
+  :ensure t)
+
+(leaf dockerfile-mode
+  :ensure t)
+
+(leaf toml-mode
+  :ensure t)
+
+(leaf yaml-mode
+  :ensure t)
+
+(leaf highlight-indent-guides
+  :ensure t
+  :hook
+  (yaml-mode . highlight-indent-guides-mode)
+  :custom
+  (highlight-indent-guides-auto-enabled . t)
+  (highlight-indent-guides-responsive . t)
+  (highlight-indent-guides-method . 'character)
+  )
+
+(leaf volatile-highlights
+  :ensure t
+  :config
+  (volatile-highlights-mode)
+  (with-no-warnings
+    (when (fboundp 'pulse-momentary-highlight-region)
+      (defun my-vhl-pulse (beg end &optional _buf face)
+        "Pulse the changes."
+        (pulse-momentary-highlight-region beg end face))
+      (advice-add #'vhl/.make-hl :override #'my-vhl-pulse)))
+  )
+
+(leaf git-gutter+
+  :if (>= emacs-major-version 25)
+  :ensure t
+  :blackout `((git-gutter+-mode
+               . ,(format "%s" (all-the-icons-octicon "git-merge"))))
+  :bind ("C-x G" . global-git-gutter+-mode)
+  )
+
+(leaf ansible
+  :ensure t)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 50_protobuf-mode.el
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(leaf protobuf-mode
+  :ensure t
+  :mode ("\\.proto\\'")
+  :config
+  (add-hook 'protobuf-mode-hook
+            '(lambda nil
+               (company-mode t)
+               (dumb-jump-mode t)
+               (yas-minor-mode t)
+               (setq tab-width 2)
+               ))
+  )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 50_ruby-mode.el
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(leaf ruby-mode
+  :ensure t
+  :preface
+  (defun ruby-beautify-buffer nil
+    (interactive)
+    (let (p
+          rb)
+      (setq p (point)
+            rb (buffer-string))
+      (with-temp-buffer
+        (insert rb)
+        (call-process-region
+         (point-min)
+         (point-max)
+         "rbeautify" t t)
+        (setq rb (buffer-string)))
+      (erase-buffer)
+      (insert rb)
+      (goto-char p)))
+
+  :bind (("C-c C-v f" . ruby-beautify-buffer)
+         ("C-M-n" . ruby-end-of-block)
+         ("C-M-p" . ruby-beginning-of-block))
+  :mode ("\\.rb$"
+         "\\.jb$"
+         "\\.ruby$"
+         "\\.rake$"
+         "Rakefile$"
+         "\\.gemspec$"
+         "\\.ru$"
+         "Gemfile$"
+         "Guardfile$"
+         "\\.jbuilder$"
+         "Schemafile$")
+  :setq ((lsp-diagnostic-package . :none))
+  :config
+  (leaf rspec-mode
+    :ensure t)
+
+  (add-hook 'ruby-mode-hook
+            '(lambda nil
+               (company-mode t)
+               (dumb-jump-mode t)
+               (yas-minor-mode t)
+               (ruby-end-mode t)
+               (rainbow-delimiters-mode t)
+               ))
+  (with-eval-after-load 'ruby-mode
+    (yas-reload-all)
+    (setq ruby-insert-encoding-magic-comment nil)
+    (setq ruby-deep-indent-paren-style nil)
+    (setq ruby-deep-indent-paren-style nil)
+    (defadvice ruby-indent-line (after unindent-closing-paren activate)
+      (let ((column (current-column))
+            indent
+            offset)
+        (save-excursion
+          (back-to-indentation)
+          (let ((state (syntax-ppss)))
+            (setq offset (- column
+                            (current-column)))
+            (when (and
+                   (eq
+                    (char-after)
+                    41)
+                   (not (zerop
+                         (car state))))
+              (goto-char (cadr state))
+              (setq indent (current-indentation)))))
+        (when indent
+          (indent-line-to indent)
+          (when (> offset 0)
+            (forward-char offset)))))))
+
+(leaf ruby-end
+  :ensure t)
+(leaf slim-mode
+  :mode ("\\.slim$"
+         "\\.slime$")
+  :ensure t)
+(leaf haml-mode
+  :ensure t)
+(leaf ruby-hash-syntax
+  :ensure t)
+(leaf ruby-refactor
+  :ensure t)
+
+;; (leaf rvm
+;;   :ensure t
+;;   :if (eq system-type 'darwin)
+;;   :commands rvm-use-default
+;;   :config
+;;   (rvm-use-default)
+;;   )
+
+(leaf rbenv
+  :ensure t
+  ;; :if (eq system-type 'gnu/linux)
+  :config
+  (global-rbenv-mode)
+  :custom (
+           (rbenv-installation-dir . "~/.rbenv")
+           )
+  )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 50_rust-mode.el
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(leaf rustic
+  :ensure t
+  :mode ("\\.rs$")
+  :custom (;; debug
+           (lsp-print-io          . nil)
+           (lsp-trace             . nil)
+           (lsp-print-performance . nil)
+           ;; general
+           ;; (lsp-auto-guess-root      . t)
+           ;; (lsp-document-sync-method . 'incremental) ;; always send incremental document
+           (lsp-response-timeout     . 5)
+           (lsp-prefer-flymake       . 'flymake)
+           ;; (lsp-enable-completion-at-point . nil)
+           (rustic-format-on-save    . t)
+           (rustic-lsp-format        . t)
+           (rustic-format-trigger    . nil)
+           ;; (rustic-rls-pkg           . 'eglot)
+           )
+  :config
+  (yas-reload-all)
+  (add-hook 'rustic-mode-hook
+            '(lambda nil
+               (company-mode t)
+               (dumb-jump-mode t)
+               (yas-minor-mode t)))
+  (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
+  (with-eval-after-load 'rustic
+    (progn
+      (bind-key "C-M-n" #'rustic-end-of-defun rustic-mode-map nil)
+      (bind-key "C-M-p" #'rustic-beginning-of-defun rustic-mode-map nil))
+
+    ;; (setq rustic-rls-pkg 'eglot)
+    ;; (setq rustic-format-on-save nil)
+    ;; (setq rustic-lsp-format nil)
+    ;; (setq rustic-format-trigger nil)
+    )
+  )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 50_scss-mode.el
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(leaf scss-mode
+  :ensure t
+  :preface
+  (defun scss-custom nil
+    "scss-mode-hook"
+    (and
+     (set (make-local-variable 'css-indent-offset) 2)
+     (set (make-local-variable 'scss-compile-at-save) nil)
+     )
+    )
+
+  :mode ("\\.scss$")
+  :config
+  (with-eval-after-load 'scss-mode
+    (add-hook 'scss-mode-hook
+              '(lambda nil
+                 (scss-custom)))))
+
+(leaf rainbow-mode
+  :ensure t
+  :require t
+  )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 50_terraform-mode.el
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(leaf terraform-mode
+  :ensure t
+  :mode ("\\.tf\\'" "\\.hcl\\'")
+  :config
+  (with-eval-after-load 'terraform-mode
+    (add-hook 'terraform-mode-hook
+              '(lambda nil
+                 (company-mode t)
+                 (dumb-jump-mode t)
+                 (yas-minor-mode t)
+                 (setq tab-width 2)
+                 (terraform-format-on-save-mode t)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 50_vue-mode.el
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(leaf vue-mode
+  :ensure t
+  :mode ("\\.vue\\'")
+  :config
+  (with-eval-after-load 'vue-mode
+    (setq mmm-submode-decoration-level 0)
+    (setq indent-tabs-mode nil
+          js-indent-level 2
+          typescript-indent-level 2)
+    (add-hook 'vue-mode-hook #'add-node-modules-path)
+    (add-hook 'vue-mode-hook 'yas-minor-mode)
+    (add-hook 'vue-mode-hook 'flycheck-mode)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 50_web-mode.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -832,7 +1148,7 @@
          "\\.html?$"
          "\\.css?$"
          "\\.jsx$"
-         "\\.js$"
+         "\\.m?js$"
          "\\.tsx$"
          "\\.ts$"
          )
@@ -852,6 +1168,8 @@
     (setq web-mode-enable-auto-pairing t)
     (setq web-mode-enable-auto-closing t)
     )
+  (setq-default web-mode-comment-formats (remove '("javascript" . "/*") web-mode-comment-formats))
+  (add-to-list 'web-mode-comment-formats '("javascript" . "//"))
 
   (leaf nvm
     :ensure t
