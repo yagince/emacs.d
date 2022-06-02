@@ -1198,12 +1198,6 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(leaf init-loader
-  :ensure t
-  :config
-  (init-loader-load "~/.emacs.d/init-loader")
-  )
-
 (leaf ace
   :config
   (leaf ace-jump-mode
@@ -1265,3 +1259,9 @@
   :hook
   :preface
 )
+
+;; (leaf init-loader
+;;   :ensure t
+;;   :config
+;;   (init-loader-load "~/.emacs.d/init-loader")
+;;   )
