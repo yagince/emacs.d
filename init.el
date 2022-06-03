@@ -976,8 +976,7 @@
   (leaf rubocop
     :ensure t
     :custom
-    ((rubocop-format-on-save . t)
-     (rubocop-autocorrect-on-save . t))
+    ((rubocop-prefer-system-executable . t))
     :hook
     ((ruby-mode-hook . rubocop-mode))
     )
