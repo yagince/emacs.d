@@ -876,7 +876,7 @@
 (leaf highlight-indent-guides
   :ensure t
   :hook
-  (yaml-mode . highlight-indent-guides-mode)
+  (yaml-mode-hook . highlight-indent-guides-mode)
   :custom
   (highlight-indent-guides-auto-enabled . t)
   (highlight-indent-guides-responsive . t)
@@ -961,18 +961,27 @@
          "\\.jbuilder$"
          "Schemafile$")
   :setq ((lsp-diagnostic-package . :none))
+  :hook
+  ((ruby-mode-hook . company-mode)
+   (ruby-mode-hook . dumb-jump-mode)
+   (ruby-mode-hook . ruby-end-mode)
+   (ruby-mode-hook . yas-minor-mode)
+   (ruby-mode-hook . rainbow-delimiters-mode)
+   )
   :config
   (leaf rspec-mode
     :ensure t)
 
-  (add-hook 'ruby-mode-hook
-            '(lambda nil
-               (company-mode t)
-               (dumb-jump-mode t)
-               (yas-minor-mode t)
-               (ruby-end-mode t)
-               (rainbow-delimiters-mode t)
-               ))
+
+  (leaf rubocop
+    :ensure t
+    :custom
+    ((rubocop-format-on-save . t)
+     (rubocop-autocorrect-on-save . t))
+    :hook
+    ((ruby-mode-hook . rubocop-mode))
+    )
+
   (with-eval-after-load 'ruby-mode
     (yas-reload-all)
     (setq ruby-insert-encoding-magic-comment nil)
