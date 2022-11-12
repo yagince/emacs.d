@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: async test
+# key: async-test
+# --
+
+#[tokio::test]
+async fn test() -> anyhow::Result<()> {
+  $0
+  Ok(())
+}

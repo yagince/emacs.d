@@ -341,6 +341,7 @@
 
 (leaf wgrep
   :ensure t
+  :custom ((wgrep-auto-save-buffer . t))
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -508,7 +509,7 @@
 
 (when (equal system-type 'darwin)
   (setq initial-frame-alist
-        (append (list '(alpha . 85))
+        (append (list '(alpha . 80))
                 initial-frame-alist)))
 
 (when (equal system-type 'gnu/linux)
@@ -517,7 +518,7 @@
                       '(height . 67)
                       '(top . 10)
                       '(left . 10)
-                      '(alpha . 85))
+                      '(alpha . 80))
                 initial-frame-alist)))
 (setq default-frame-alist initial-frame-alist)
 (set-frame-parameter nil 'fullscreen 'maximized)
@@ -1179,7 +1180,6 @@
   :hook
   ((rustic-mode-hook . company-mode)
    (rustic-mode-hook . dumb-jump-mode)
-   (rustic-mode-hook . ruby-end-mode)
    (rustic-mode-hook . yas-minor-mode)
    (rustic-mode-hook . rainbow-delimiters-mode)
    )
@@ -1276,24 +1276,32 @@
          "\\.tsx$"
          "\\.ts$"
          )
+  :custom
+  (
+   (auto-save-default . nil)
+   (web-mode-markup-indent-offset . 2)
+   (web-mode-css-indent-offset . 2)
+   (web-mode-code-indent-offset . 2)
+   (web-mode-attr-indent-offset . 2)
+   (web-mode-enable-auto-pairing . t)
+   (web-mode-enable-auto-closing . t)
+   )
+  :hook
+  (
+   (web-mode-hook . company-mode)
+   (web-mode-hook . dumb-jump-mode)
+   (web-mode-hook . yas-minor-mode)
+   )
   :config
-  (add-hook 'web-mode-hook
-            '(lambda nil
-               (company-mode t)
-               (dumb-jump-mode t)
-               (yas-minor-mode t)))
-
-  (with-eval-after-load 'web-mode
-    (setq auto-save-default nil)
-    (setq web-mode-markup-indent-offset 2)
-    (setq web-mode-css-indent-offset 2)
-    (setq web-mode-code-indent-offset 2)
-    (setq indent-tabs-mode nil)
-    (setq web-mode-enable-auto-pairing t)
-    (setq web-mode-enable-auto-closing t)
-    )
-  (setq-default web-mode-comment-formats (remove '("javascript" . "/*") web-mode-comment-formats))
+  (setq-default indent-tabs-mode nil)
+  ;; (setq-default web-mode-comment-formats (remove '("javascript" . "/*") web-mode-comment-formats))
   (add-to-list 'web-mode-comment-formats '("javascript" . "//"))
+  (add-to-list 'web-mode-comment-formats '("jsx" . "//" ))
+  (add-to-list 'web-mode-comment-formats '("tsx" . "//" ))
+  (add-to-list 'web-mode-indentation-params '("lineup-args" . nil))
+  (add-to-list 'web-mode-indentation-params '("lineup-calls" . nil))
+  (add-to-list 'web-mode-indentation-params '("lineup-concats" . nil))
+  (add-to-list 'web-mode-indentation-params '("lineup-ternary" . nil))
 
   (leaf nvm
     :ensure t
@@ -1318,6 +1326,7 @@
      (web-mode-hook . prettier-mode)
      )
     )
+
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1382,10 +1391,12 @@
   :custom
   :hook
   :preface
-)
+  )
 
-;; (leaf init-loader
-;;   :ensure t
-;;   :config
-;;   (init-loader-load "~/.emacs.d/init-loader")
-;;   )
+
+(leaf atomic-chrome
+  :ensure t
+  :bind
+  :init
+  (atomic-chrome-start-server)
+  )
