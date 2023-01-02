@@ -882,6 +882,11 @@
   ;;  (lsp-eslint-auto-fix-on-save . t)
   ;;  )
   :config
+  ;; (lsp-register-client
+  ;;   (make-lsp-client :new-connection (lsp-tramp-connection "/home/natsuki/.cargo/bin/rust-analyzer")
+  ;;                    :major-modes '(rustic-mode)
+  ;;                    :remote? t
+  ;;                    :server-id 'rust-analyzer-remote))
   (leaf lsp-ui
     :ensure t
     :custom
@@ -898,6 +903,8 @@
      (lsp-ui-imenu-enable          . nil)
      (lsp-ui-imenu-kind-position   . 'top)
      (lsp-ui-sideline-enable       . nil)
+     (lsp-typescript-format-enable . nil)
+     (lsp-typescript-format-insert-space-after-semicolon-in-for-statements . nil)
      )
     )
   :hook
@@ -1400,3 +1407,16 @@
   :init
   (atomic-chrome-start-server)
   )
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(warning-suppress-log-types '((comp)))
+ '(warning-suppress-types '((comp))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
