@@ -1049,7 +1049,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 50_ruby-mode.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(leaf ruby-mode
+(leaf enh-ruby-mode
   :ensure t
   :preface
   (defun ruby-beautify-buffer nil
@@ -1085,11 +1085,11 @@
          "Schemafile$")
   :setq ((lsp-diagnostic-package . :none))
   :hook
-  ((ruby-mode-hook . company-mode)
-   (ruby-mode-hook . dumb-jump-mode)
-   (ruby-mode-hook . ruby-end-mode)
-   (ruby-mode-hook . yas-minor-mode)
-   (ruby-mode-hook . rainbow-delimiters-mode)
+  ((enh-ruby-mode-hook . company-mode)
+   (enh-ruby-mode-hook . dumb-jump-mode)
+   (enh-ruby-mode-hook . ruby-end-mode)
+   (enh-ruby-mode-hook . yas-minor-mode)
+   (enh-ruby-mode-hook . rainbow-delimiters-mode)
    )
   :config
   (leaf rspec-mode
@@ -1101,10 +1101,10 @@
     :custom
     ((rubocop-prefer-system-executable . t))
     :hook
-    ((ruby-mode-hook . rubocop-mode))
+    ((enh-ruby-mode-hook . rubocop-mode))
     )
 
-  (with-eval-after-load 'ruby-mode
+  (with-eval-after-load 'enh-ruby-mode
     (yas-reload-all)
     (setq ruby-insert-encoding-magic-comment nil)
     (setq ruby-deep-indent-paren-style nil)
