@@ -1260,11 +1260,12 @@
   (aw-keys . '(?a ?b ?k ?l ?g ?h ?j ?k))
   )
 
-;; (leaf projectile
-;;   :ensure t
-;;   :custom
-;;   ((projectile-mode . +1))
-;;   )
+(leaf projectile
+  :ensure t
+  :require t
+  :custom
+  (projectile-mode . +1)
+  )
 
 (leaf ddskk
   :ensure t
