@@ -21,16 +21,16 @@
     ;; initialize leaf-keywords.el
     (leaf-keywords-init)))
 ;; </leaf-install-code>
+
 (setq gc-cons-threshold (* 128 1024 1024))
 (setq ring-bell-function 'ignore)
 
-(leaf leaf
-  :config
-  (leaf leaf-convert :ensure t)
-  (leaf leaf-tree
-    :ensure t
-    :custom ((imenu-list-size . 30)
-             (imenu-list-position . 'left))))
+;; Now you can use leaf!
+(leaf leaf-convert :ensure t)
+(leaf leaf-tree
+  :ensure t
+  :custom ((imenu-list-size . 30)
+           (imenu-list-position . 'left)))
 
 (leaf macrostep
   :ensure t
@@ -38,6 +38,7 @@
 
 (leaf exec-path-from-shell
   :ensure t
+  :require t
   :defun (exec-path-from-shell-initialize)
   :custom
   ((exec-path-from-shell-variables           . '("RUST_SRC_PATH"
@@ -394,117 +395,8 @@
   :ensure t
   :bind ("<f5>" . modus-themes-toggle)
   :init
-  (setq modus-themes-italic-constructs t
-        modus-themes-bold-constructs nil
-        modus-themes-mixed-fonts nil
-        modus-themes-subtle-line-numbers nil
-        modus-themes-intense-mouseovers nil
-        modus-themes-deuteranopia t
-        modus-themes-tabs-accented t
-        modus-themes-variable-pitch-ui nil
-        modus-themes-inhibit-reload t ; only applies to `customize-set-variable' and related
-
-        modus-themes-fringes nil ; {nil,'subtle,'intense}
-
-        ;; Options for `modus-themes-lang-checkers' are either nil (the
-        ;; default), or a list of properties that may include any of those
-        ;; symbols: `straight-underline', `text-also', `background',
-        ;; `intense' OR `faint'.
-        modus-themes-lang-checkers nil
-
-        ;; Options for `modus-themes-mode-line' are either nil, or a list
-        ;; that can combine any of `3d' OR `moody', `borderless',
-        ;; `accented', a natural number for extra padding (or a cons cell
-        ;; of padding and NATNUM), and a floating point for the height of
-        ;; the text relative to the base font size (or a cons cell of
-        ;; height and FLOAT)
-        modus-themes-mode-line '(accented borderless (padding . 4) (height . 0.9))
-
-        ;; Same as above:
-        ;; modus-themes-mode-line '(accented borderless 4 0.9)
-
-        ;; Options for `modus-themes-markup' are either nil, or a list
-        ;; that can combine any of `bold', `italic', `background',
-        ;; `intense'.
-        modus-themes-markup '(background italic)
-
-        ;; Options for `modus-themes-syntax' are either nil (the default),
-        ;; or a list of properties that may include any of those symbols:
-        ;; `faint', `yellow-comments', `green-strings', `alt-syntax'
-        modus-themes-syntax nil
-
-        ;; Options for `modus-themes-hl-line' are either nil (the default),
-        ;; or a list of properties that may include any of those symbols:
-        ;; `accented', `underline', `intense'
-        modus-themes-hl-line '(underline accented)
-
-        ;; Options for `modus-themes-paren-match' are either nil (the
-        ;; default), or a list of properties that may include any of those
-        ;; symbols: `bold', `intense', `underline'
-        modus-themes-paren-match '(bold intense)
-
-        ;; Options for `modus-themes-links' are either nil (the default),
-        ;; or a list of properties that may include any of those symbols:
-        ;; `neutral-underline' OR `no-underline', `faint' OR `no-color',
-        ;; `bold', `italic', `background'
-        modus-themes-links '(neutral-underline background)
-
-        ;; Options for `modus-themes-box-buttons' are either nil (the
-        ;; default), or a list that can combine any of `flat', `accented',
-        ;; `faint', `variable-pitch', `underline', `all-buttons', the
-        ;; symbol of any font weight as listed in `modus-themes-weights',
-        ;; and a floating point number (e.g. 0.9) for the height of the
-        ;; button's text.
-        modus-themes-box-buttons '(variable-pitch flat faint 0.9)
-
-        ;; Options for `modus-themes-prompts' are either nil (the
-        ;; default), or a list of properties that may include any of those
-        ;; symbols: `background', `bold', `gray', `intense', `italic'
-        modus-themes-prompts '(intense bold)
-
-        ;; The `modus-themes-completions' is an alist that reads three
-        ;; keys: `matches', `selection', `popup'.  Each accepts a nil
-        ;; value (or empty list) or a list of properties that can include
-        ;; any of the following (for WEIGHT read further below):
-        ;;
-        ;; `matches' - `background', `intense', `underline', `italic', WEIGHT
-        ;; `selection' - `accented', `intense', `underline', `italic', `text-also' WEIGHT
-        ;; `popup' - same as `selected'
-        ;; `t' - applies to any key not explicitly referenced (check docs)
-        ;;
-        ;; WEIGHT is a symbol such as `semibold', `light', or anything
-        ;; covered in `modus-themes-weights'.  Bold is used in the absence
-        ;; of an explicit WEIGHT.
-        modus-themes-completions '((matches . (extrabold))
-                                   (selection . (semibold accented))
-                                   (popup . (accented intense)))
-
-        modus-themes-mail-citations nil ; {nil,'intense,'faint,'monochrome}
-
-        ;; Options for `modus-themes-region' are either nil (the default),
-        ;; or a list of properties that may include any of those symbols:
-        ;; `no-extend', `bg-only', `accented'
-        modus-themes-region '(bg-only no-extend accented)
-
-        ;; Options for `modus-themes-diffs': nil, 'desaturated, 'bg-only
-        modus-themes-diffs 'desaturated
-
-        modus-themes-org-blocks 'gray-background ; {nil,'gray-background,'tinted-background}
-
-        modus-themes-org-agenda ; this is an alist: read the manual or its doc string
-        '((header-block . (variable-pitch 1.3))
-          (header-date . (grayscale workaholic bold-today 1.1))
-          (event . (accented varied))
-          (scheduled . uniform)
-          (habit . traffic-light))
-
-        modus-themes-headings ; this is an alist: read the manual or its doc string
-        '((1 . (overline background variable-pitch 1.3))
-          (2 . (rainbow overline 1.1))
-          (t . (semibold))))
-  (modus-themes-load-themes)
+  (load-theme 'modus-vivendi :no-confirm)
   :config
-  (modus-themes-load-vivendi)
   )
 
 (when (equal system-type 'darwin)
@@ -524,6 +416,7 @@
 (set-frame-parameter nil 'fullscreen 'maximized)
 
 (leaf highlight-symbol
+  :ensure t
   :hook (prog-mode-hook
          (prog-mode-hook . highlight-symbol-nav-mode)))
 
@@ -561,13 +454,16 @@
 ;; 05_linum.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(leaf linum
-  :ensure t
-  :require t
-  :config
-  (global-linum-mode t)
-  (setq linum-format "%4d ")
-  )
+;; (leaf linum
+;;   :ensure t
+;;   :require t
+;;   :config
+;;   (global-linum-mode t)
+;;   (setq linum-format "%4d ")
+;;   )
+
+(when (version<= "26.0.50" emacs-version )
+  (global-display-line-numbers-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 05_neotree.el
@@ -604,7 +500,8 @@
 (leaf yasnippet
   :ensure t
   :require t
-  :init (yas-global-mode t)
+  :config
+  (yas-global-mode 1)
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -666,7 +563,7 @@
 
 (leaf rainbow-delimiters
   :ensure t
-  :hook (emacs-lisp-mode-hook cperl-mode-hook ruby-mode-hook js2-mode-hook)
+  :hook (prog-mode-hook)
   :require t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -745,11 +642,12 @@
     :custom ((ivy-prescient-retain-classic-highlighting . t))
     :global-minor-mode t)
 
-  (leaf ivy-yasnippet
-    :ensure t
-    :after (yasnippet)
-    :bind (("C-c y" . ivy-yasnippet)
-           ("C-c C-y" . ivy-yasnippet)))
+  ;; (leaf ivy-yasnippet
+  ;;   :ensure t
+  ;;   :require t
+  ;;   :after (yasnippet)
+  ;;   :bind (("C-c y" . ivy-yasnippet)
+  ;;          ("C-c C-y" . ivy-yasnippet)))
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -804,7 +702,6 @@
   :ensure t
   :mode ("\\.elixir2\\'" "\\.ex$" "\\.exs$")
   :config
-  (yas-reload-all)
   (add-hook 'elixir-mode-hook
             '(lambda nil
                (company-mode t)
@@ -975,7 +872,7 @@
 ;; 50_other-mode.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
- (leaf fzf
+(leaf fzf
   :ensure t)
 
 (leaf highlight-symbol
@@ -1008,6 +905,7 @@
 
 (leaf volatile-highlights
   :ensure t
+  :require t
   :config
   (volatile-highlights-mode)
   (with-no-warnings
@@ -1049,8 +947,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 50_ruby-mode.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(leaf enh-ruby-mode
+(leaf ruby-mode
   :ensure t
+  :require t
   :preface
   (defun ruby-beautify-buffer nil
     (interactive)
@@ -1085,64 +984,75 @@
          "Schemafile$")
   :setq ((lsp-diagnostic-package . :none))
   :hook
-  ((enh-ruby-mode-hook . company-mode)
-   (enh-ruby-mode-hook . dumb-jump-mode)
-   (enh-ruby-mode-hook . ruby-end-mode)
-   (enh-ruby-mode-hook . yas-minor-mode)
-   (enh-ruby-mode-hook . rainbow-delimiters-mode)
+  ((ruby-mode-hook . company-mode)
+   (ruby-mode-hook . dumb-jump-mode)
+   (ruby-mode-hook . ruby-end-mode)
+   (ruby-mode-hook . yas-minor-mode)
+   (ruby-mode-hook . rainbow-delimiters-mode)
    )
   :config
-  (leaf rspec-mode
-    :ensure t)
+)
 
+(leaf rspec-mode
+  :ensure t
+  :require t
+  )
 
-  (leaf rubocop
-    :ensure t
-    :custom
-    ((rubocop-prefer-system-executable . t))
-    :hook
-    ((enh-ruby-mode-hook . rubocop-mode))
-    )
+(leaf rubocop
+  :ensure t
+  :require t
+  :custom
+  ((rubocop-prefer-system-executable . t))
+  :hook
+  ((ruby-mode-hook . rubocop-mode))
+  )
 
-  (with-eval-after-load 'enh-ruby-mode
-    (yas-reload-all)
-    (setq ruby-insert-encoding-magic-comment nil)
-    (setq ruby-deep-indent-paren-style nil)
-    (setq ruby-deep-indent-paren-style nil)
-    (defadvice ruby-indent-line (after unindent-closing-paren activate)
-      (let ((column (current-column))
-            indent
-            offset)
-        (save-excursion
-          (back-to-indentation)
-          (let ((state (syntax-ppss)))
-            (setq offset (- column
-                            (current-column)))
-            (when (and
-                   (eq
-                    (char-after)
-                    41)
-                   (not (zerop
-                         (car state))))
-              (goto-char (cadr state))
-              (setq indent (current-indentation)))))
-        (when indent
-          (indent-line-to indent)
-          (when (> offset 0)
-            (forward-char offset)))))))
+(with-eval-after-load 'ruby-mode
+  (setq ruby-insert-encoding-magic-comment nil)
+  (setq ruby-deep-indent-paren-style nil)
+  (setq ruby-deep-indent-paren-style nil)
+  (defadvice ruby-indent-line (after unindent-closing-paren activate)
+    (let ((column (current-column))
+          indent
+          offset)
+      (save-excursion
+        (back-to-indentation)
+        (let ((state (syntax-ppss)))
+          (setq offset (- column
+                          (current-column)))
+          (when (and
+                 (eq
+                  (char-after)
+                  41)
+                 (not (zerop
+                       (car state))))
+            (goto-char (cadr state))
+            (setq indent (current-indentation)))))
+      (when indent
+        (indent-line-to indent)
+        (when (> offset 0)
+          (forward-char offset))))))
 
 (leaf ruby-end
-  :ensure t)
+  :ensure t
+  :require t
+  )
 (leaf slim-mode
   :mode ("\\.slim$"
          "\\.slime$")
   :ensure t)
 (leaf haml-mode
-  :ensure t)
+  :ensure t
+  :require t
+  )
 (leaf ruby-hash-syntax
-  :ensure t)
+  :ensure t
+  :require t
+  )
 (leaf ruby-refactor
-  :ensure t)
+  :ensure t
+  :require t
+  )
 
 ;; (leaf rvm
 ;;   :ensure t
@@ -1154,6 +1064,7 @@
 
 (leaf rbenv
   :ensure t
+  :require t
   ;; :if (eq system-type 'gnu/linux)
   :config
   (global-rbenv-mode)
@@ -1191,7 +1102,6 @@
    (rustic-mode-hook . rainbow-delimiters-mode)
    )
   :config
-  (yas-reload-all)
   (with-eval-after-load 'rustic
     (progn
       (bind-key "C-M-n" #'rustic-end-of-defun rustic-mode-map nil)
@@ -1252,18 +1162,18 @@
 ;; 50_vue-mode.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(leaf vue-mode
-  :ensure t
-  :mode ("\\.vue\\'")
-  :config
-  (with-eval-after-load 'vue-mode
-    (setq mmm-submode-decoration-level 0)
-    (setq indent-tabs-mode nil
-          js-indent-level 2
-          typescript-indent-level 2)
-    (add-hook 'vue-mode-hook #'add-node-modules-path)
-    (add-hook 'vue-mode-hook 'yas-minor-mode)
-    (add-hook 'vue-mode-hook 'flycheck-mode)))
+;; (leaf vue-mode
+;;   :ensure t
+;;   :mode ("\\.vue\\'")
+;;   :config
+;;   (with-eval-after-load 'vue-mode
+;;     (setq mmm-submode-decoration-level 0)
+;;     (setq indent-tabs-mode nil
+;;           js-indent-level 2
+;;           typescript-indent-level 2)
+;;     (add-hook 'vue-mode-hook #'add-node-modules-path)
+;;     (add-hook 'vue-mode-hook 'yas-minor-mode)
+;;     (add-hook 'vue-mode-hook 'flycheck-mode)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 50_web-mode.el
@@ -1338,26 +1248,23 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(leaf ace
-  :config
-  (leaf ace-jump-mode
-    :ensure t
-    )
-  (leaf ace-window
-    :ensure t
-    :bind (
-           ("C-x a" . ace-window)
-           )
-    :custom
-    (aw-keys . '(?a ?b ?k ?l ?g ?h ?j ?k))
-    )
+(leaf ace-jump-mode
+  :ensure t
+  )
+(leaf ace-window
+  :ensure t
+  :bind (
+         ("C-x a" . ace-window)
+         )
+  :custom
+  (aw-keys . '(?a ?b ?k ?l ?g ?h ?j ?k))
   )
 
-(leaf projectile
-  :ensure t
-  :custom
-  ((projectile-mode . +1))
-  )
+;; (leaf projectile
+;;   :ensure t
+;;   :custom
+;;   ((projectile-mode . +1))
+;;   )
 
 (leaf ddskk
   :ensure t
@@ -1407,13 +1314,37 @@
   :init
   (atomic-chrome-start-server)
   )
+
+(leaf tree-sitter
+  :ensure t
+  :hook
+  (tree-sitter-after-on-hook . tree-sitter-hl-mode)
+  :config
+  (global-tree-sitter-mode)
+  ;; (tree-sitter-require 'tsx)
+  :custom
+  (treesit-extra-load-path . '("~/.emacs.d/tree-sitter/"))
+  )
+
+;; (leaf tree-sitter-langs
+;;   :ensure t
+;;   :after tree-sitter
+;;   :config
+;;   )
+
+;; (leaf treesit-auto
+;;   :ensure t
+;;   :config
+;;   (setq treesit-auto-install t)
+;;   (global-treesit-auto-mode)
+;;   )
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(warning-suppress-log-types '((comp)))
- '(warning-suppress-types '((comp))))
+ '(custom-safe-themes
+   '("69f7e8101867cfac410e88140f8c51b4433b93680901bb0b52014144366a08c8" default)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
