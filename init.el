@@ -784,26 +784,6 @@
   ;;                    :major-modes '(rustic-mode)
   ;;                    :remote? t
   ;;                    :server-id 'rust-analyzer-remote))
-  (leaf lsp-ui
-    :ensure t
-    :custom
-    (
-     (lsp-ui-doc-enable            . t)
-     (lsp-ui-doc-header            . t)
-     (lsp-ui-doc-include-signature . t)
-     (lsp-ui-doc-position          . 'at-point)
-     (lsp-ui-doc-use-childframe    . nil)
-     (lsp-ui-doc-use-webkit        . t)
-     ;; (lsp-ui-flycheck-enable       . nil)
-     (lsp-ui-peek-enable           . t)
-     (lsp-ui-peek-fontify          . 'on-demand) ;; never, on-demand, or always
-     (lsp-ui-imenu-enable          . nil)
-     (lsp-ui-imenu-kind-position   . 'top)
-     (lsp-ui-sideline-enable       . nil)
-     (lsp-typescript-format-enable . nil)
-     (lsp-typescript-format-insert-space-after-semicolon-in-for-statements . nil)
-     )
-    )
   :hook
   (web-mode-hook . lsp-deferred)
   (go-mode-hook . lsp-deferred)
@@ -813,8 +793,31 @@
   ;; (terraform-mode-hook . lsp-deferred)
 )
 
+(leaf lsp-ui
+  :ensure t
+  :require t
+  :custom
+  (
+   (lsp-ui-doc-enable            . t)
+   (lsp-ui-doc-header            . t)
+   (lsp-ui-doc-include-signature . t)
+   (lsp-ui-doc-position          . 'at-point)
+   (lsp-ui-doc-use-childframe    . nil)
+   (lsp-ui-doc-use-webkit        . t)
+   ;; (lsp-ui-flycheck-enable       . nil)
+   (lsp-ui-peek-enable           . t)
+   (lsp-ui-peek-fontify          . 'on-demand) ;; never, on-demand, or always
+   (lsp-ui-imenu-enable          . nil)
+   (lsp-ui-imenu-kind-position   . 'top)
+   (lsp-ui-sideline-enable       . nil)
+   (lsp-typescript-format-enable . nil)
+   (lsp-typescript-format-insert-space-after-semicolon-in-for-statements . nil)
+   )
+  )
+
 (leaf eglot
   :ensure t
+  :require t
   :config
   ;; (add-to-list 'eglot-server-programs
   ;;            `(terraform-mode . ("terraform-ls" "serve" "--port" :autoport)))
@@ -844,6 +847,7 @@
 
 (leaf magit
   :ensure t
+  :require t
   :bind (("C-x m" . magit-status))
   :config
   (with-eval-after-load 'magit
@@ -1233,19 +1237,19 @@
     (nvm-use "16.13.0")
     )
 
-  (leaf add-node-modules-path
-    :ensure t
-    :after nvm
-    :require t
-    :hook
-    (
-     (web-mode-hook . add-node-modules-path)
-     )
-    )
+  ;; (leaf add-node-modules-path
+  ;;   :ensure t
+  ;;   :after nvm
+  ;;   :require t
+  ;;   :hook
+  ;;   ;; (
+  ;;   ;;  (web-mode-hook . add-node-modules-path)
+  ;;   ;;  )
+  ;;   )
 
   (leaf prettier
     :ensure t
-    :after nvm add-node-modules-path
+    :after nvm ;;add-node-modules-path
     :require t
     :hook
     (
@@ -1321,13 +1325,13 @@
   )
 
 
-(leaf atomic-chrome
-  :ensure t
-  :require t
-  :bind
-  :init
-  (atomic-chrome-start-server)
-  )
+;; (leaf atomic-chrome
+;;   :ensure t
+;;   :require t
+;;   :bind
+;;   :init
+;;   (atomic-chrome-start-server)
+;;   )
 
 (leaf tree-sittter
   ;; :hook
