@@ -1179,8 +1179,14 @@
 ;; 50_web-mode.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(leaf typescript-mode
+  :ensure t
+  :require t
+  )
+
 (leaf web-mode
   :ensure t
+  :require t
   :mode ("\\.phtml$"
          "\\.tpl\\.php$"
          "\\.jsp$"
@@ -1222,6 +1228,7 @@
 
   (leaf nvm
     :ensure t
+    :require t
     :config
     (nvm-use "16.13.0")
     )
@@ -1229,6 +1236,7 @@
   (leaf add-node-modules-path
     :ensure t
     :after nvm
+    :require t
     :hook
     (
      (web-mode-hook . add-node-modules-path)
@@ -1238,6 +1246,7 @@
   (leaf prettier
     :ensure t
     :after nvm add-node-modules-path
+    :require t
     :hook
     (
      (web-mode-hook . prettier-mode)
@@ -1250,9 +1259,11 @@
 
 (leaf ace-jump-mode
   :ensure t
+  :require t
   )
 (leaf ace-window
   :ensure t
+  :require t
   :bind (
          ("C-x a" . ace-window)
          )
@@ -1301,6 +1312,7 @@
                          (skk-del-alist "tU" skk-rom-kana-rule-list)))))
 (leaf csv-mode
   :ensure t
+  :require t
   :bind
   :init
   :custom
@@ -1311,17 +1323,17 @@
 
 (leaf atomic-chrome
   :ensure t
+  :require t
   :bind
   :init
   (atomic-chrome-start-server)
   )
 
-(leaf tree-sitter
-  :ensure t
-  :hook
-  (tree-sitter-after-on-hook . tree-sitter-hl-mode)
-  :config
-  (global-tree-sitter-mode)
+(leaf tree-sittter
+  ;; :hook
+  ;; (tree-sitter-after-on-hook . tree-sitter-hl-mode)
+  ;; :config
+  ;; (global-tree-sitter-mode)
   ;; (tree-sitter-require 'tsx)
   :custom
   (treesit-extra-load-path . '("~/.emacs.d/tree-sitter/"))
@@ -1339,16 +1351,3 @@
 ;;   (setq treesit-auto-install t)
 ;;   (global-treesit-auto-mode)
 ;;   )
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   '("69f7e8101867cfac410e88140f8c51b4433b93680901bb0b52014144366a08c8" default)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
