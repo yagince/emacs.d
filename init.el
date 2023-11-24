@@ -395,9 +395,15 @@
   :ensure t
   :bind ("<f5>" . modus-themes-toggle)
   :init
-  (load-theme 'modus-vivendi :no-confirm)
+  (load-theme 'modus-vivendi-deuteranopia :no-confirm)
   :config
   )
+
+;; (leaf timu-macos-theme
+;;   :ensure t
+;;   :config
+;;   (load-theme 'timu-macos :no-confirm)
+;;   )
 
 (when (equal system-type 'darwin)
   (setq initial-frame-alist
@@ -478,11 +484,12 @@
     (setq neo-keymap-style 'concise)
     (setq neo-smart-open t)
     (setq neo-create-file-auto-open t)
+    (setq neo-create-file-auto-open t)
     (setq neo-theme (if (display-graphic-p)
                         'icons 'arrow)))
   :custom
-  ;; ((neo-window-fixed-size . nil))
-  ((projectile-switch-project-action . 'neotree-projectile-action))
+  (projectile-switch-project-action . 'neotree-projectile-action)
+  (neo-window-fixed-size . nil)
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -642,12 +649,12 @@
     :custom ((ivy-prescient-retain-classic-highlighting . t))
     :global-minor-mode t)
 
-  ;; (leaf ivy-yasnippet
-  ;;   :ensure t
-  ;;   :require t
-  ;;   :after (yasnippet)
-  ;;   :bind (("C-c y" . ivy-yasnippet)
-  ;;          ("C-c C-y" . ivy-yasnippet)))
+  (leaf ivy-yasnippet
+    :ensure t
+    :require t
+    :after (yasnippet)
+    :bind (("C-c y" . ivy-yasnippet)
+           ("C-c C-y" . ivy-yasnippet)))
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -889,7 +896,8 @@
   :ensure t)
 
 (leaf dockerfile-mode
-  :ensure t)
+  :ensure t
+  :require t)
 
 (leaf toml-mode
   :ensure t)
@@ -993,6 +1001,7 @@
    (ruby-mode-hook . ruby-end-mode)
    (ruby-mode-hook . yas-minor-mode)
    (ruby-mode-hook . rainbow-delimiters-mode)
+   (ruby-mode-hook . copilot-mode)
    )
   :config
 )
@@ -1000,16 +1009,35 @@
 (leaf rspec-mode
   :ensure t
   :require t
+  :config
+  (defun rspec-specize-file-name-advice (args)
+    "controller からテストファイルを探索する時に request spec に移動するパッチ"
+    (let ((file-name (nth 0 args)))
+      (setq file-name (string-replace "/controllers/" "/requests/" file-name))
+      (setq file-name (string-replace "_controller.rb" ".rb" file-name))
+      (list file-name)
+      ))
+
+  (defun rspec-targetize-file-name-advice (args)
+    "request spec からプロダクトコードを探索する時に controller に移動するパッチ"
+    (let ((file-name (nth 0 args)) (extension (nth 1 args)))
+      (setq file-name (string-replace "/requests/" "/controllers/" file-name))
+      (setq file-name (string-replace "_spec" "_controller" file-name))
+      (list file-name extension)
+      ))
+
+  (advice-add 'rspec-specize-file-name :filter-args 'rspec-specize-file-name-advice)
+  (advice-add 'rspec-targetize-file-name :filter-args 'rspec-targetize-file-name-advice)
   )
 
-(leaf rubocop
-  :ensure t
-  :require t
-  :custom
-  ((rubocop-prefer-system-executable . t))
-  :hook
-  ((ruby-mode-hook . rubocop-mode))
-  )
+;; (leaf rubocop
+;;   :ensure t
+;;   :require t
+;;   :custom
+;;   ((rubocop-prefer-system-executable . t))
+;;   :hook
+;;   ((ruby-mode-hook . rubocop-mode))
+;;   )
 
 (with-eval-after-load 'ruby-mode
   (setq ruby-insert-encoding-magic-comment nil)
@@ -1324,6 +1352,14 @@
   :preface
   )
 
+(leaf lua-mode
+  :ensure t
+  :require t
+  :bind
+  :init
+  :custom
+  :hook
+  )
 
 ;; (leaf atomic-chrome
 ;;   :ensure t
@@ -1355,3 +1391,31 @@
 ;;   (setq treesit-auto-install t)
 ;;   (global-treesit-auto-mode)
 ;;   )
+
+(leaf copilot
+  :el-get (copilot
+           :type github
+           :pkgname "zerolfx/copilot.el"
+           )
+  :require t
+  :config
+  (leaf editorconfig
+    :ensure t
+    :require t
+    )
+  (leaf s
+    :ensure t
+    :require t
+    )
+  (leaf dash
+    :ensure t
+    :require t
+    )
+  (defun my/copilot-tab ()
+    (interactive)
+    (or (copilot-accept-completion)
+        (indent-for-tab-command)))
+
+  (with-eval-after-load 'copilot
+    (define-key copilot-mode-map (kbd "<tab>") #'my/copilot-tab))
+  )
