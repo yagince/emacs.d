@@ -480,16 +480,24 @@
   :bind (("C-x n" . neotree-show))
   :config
   (with-eval-after-load 'neotree
-    (setq neo-show-hidden-files t) ;; 隠しファイルをデフォルトで表示
-    (setq neo-keymap-style 'concise)
-    (setq neo-smart-open t)
-    (setq neo-create-file-auto-open t)
-    (setq neo-create-file-auto-open t)
+    ;; (setq neo-show-hidden-files t) ;; 隠しファイルをデフォルトで表示
+    ;; (setq neo-keymap-style 'concise)
+    ;; (setq neo-smart-open t)
+    ;; (setq neo-create-file-auto-open t)
+    ;; (setq neo-create-file-auto-open t)
     (setq neo-theme (if (display-graphic-p)
                         'icons 'arrow)))
   :custom
-  (projectile-switch-project-action . 'neotree-projectile-action)
-  (neo-window-fixed-size . nil)
+  (
+   (neo-show-hidden-files . t) ;; 隠しファイルをデフォルトで表示
+   (neo-keymap-style . 'concise)
+   (neo-smart-open . t)
+   (neo-create-file-auto-open . t)
+   (neo-create-file-auto-open . t)
+   (projectile-switch-project-action . 'neotree-projectile-action)
+   (neo-window-fixed-size . nil)
+   (neo-window-width . 50)
+  )
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
