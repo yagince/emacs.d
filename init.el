@@ -215,7 +215,10 @@
 
 ;; tramp
 (setq tramp-default-method "sshx")
-
+(with-eval-after-load "tramp"
+  (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+  (add-to-list 'tramp-remote-path "/home/natsuki/.cargo/bin")
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 00_keybindings.el
@@ -1133,7 +1136,7 @@
            (rustic-format-on-save    . t)
            (rustic-lsp-format        . t)
            (rustic-format-trigger    . nil)
-           ;; (rustic-rls-pkg           . 'eglot)
+           (rustic-lsp-client        . 'eglot)
            )
   :hook
   ((rustic-mode-hook . company-mode)
@@ -1142,15 +1145,12 @@
    (rustic-mode-hook . rainbow-delimiters-mode)
    )
   :config
+  (remove-hook 'rustic-mode-hook 'flycheck-mode)
+  (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
   (with-eval-after-load 'rustic
     (progn
       (bind-key "C-M-n" #'rustic-end-of-defun rustic-mode-map nil)
       (bind-key "C-M-p" #'rustic-beginning-of-defun rustic-mode-map nil))
-
-    ;; (setq rustic-rls-pkg 'eglot)
-    ;; (setq rustic-format-on-save nil)
-    ;; (setq rustic-lsp-format nil)
-    ;; (setq rustic-format-trigger nil)
     )
   )
 
