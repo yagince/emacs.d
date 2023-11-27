@@ -218,6 +218,7 @@
 (with-eval-after-load "tramp"
   (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
   (add-to-list 'tramp-remote-path "/home/natsuki/.cargo/bin")
+  (add-to-list 'tramp-remote-path "/home/natsuki/.nvm/versions/node/v16.18.0/bin")
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -803,7 +804,7 @@
   ;;                    :remote? t
   ;;                    :server-id 'rust-analyzer-remote))
   :hook
-  (web-mode-hook . lsp-deferred)
+  ;; (web-mode-hook . lsp-deferred)
   (go-mode-hook . lsp-deferred)
   ;; (typescript-mode-hook . lsp-deferred)
    ;; (ruby-mode-hook . lsp-deferred)
@@ -839,8 +840,9 @@
   :config
   ;; (add-to-list 'eglot-server-programs
   ;;            `(terraform-mode . ("terraform-ls" "serve" "--port" :autoport)))
+  (add-to-list 'eglot-server-programs '(web-mode . ("typescript-language-server" "--stdio")))
   :hook
-  ;; (ruby-mode-hook . eglot-ensure)
+  (web-mode-hook . eglot-ensure)
   ;; (go-mode-hook   . eglot-ensure)
   ;; (terraform-mode-hook   . eglot-ensure)
   ;; (web-mode-hook . eglot-ensure)
