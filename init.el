@@ -214,11 +214,16 @@
            (doom-modeline-minor-modes)))
 
 ;; tramp
-(setq tramp-default-method "sshx")
-(with-eval-after-load "tramp"
-  (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
-  (add-to-list 'tramp-remote-path "/home/natsuki/.cargo/bin")
-  (add-to-list 'tramp-remote-path "/home/natsuki/.nvm/versions/node/v16.18.0/bin")
+(leaf tramp
+  :ensure t
+  :custom
+  (tramp-default-method . "sshx")
+  :init
+  (with-eval-after-load "tramp"
+    (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+    (add-to-list 'tramp-remote-path "/home/natsuki/.cargo/bin")
+    (add-to-list 'tramp-remote-path "/home/natsuki/.nvm/versions/node/v16.18.0/bin")
+    )
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
