@@ -786,23 +786,23 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 50_lsp-mode.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+(setq tsserver-args (list "--stdio" "--tsserver-path" (expand-file-name "~/.nvm/versions/node/v16.13.0/lib/node_modules/typescript/lib")))
 (leaf lsp-mode
   :ensure t
-  ;; :custom
-  ;; (
-  ;;  (lsp-eslint-auto-fix-on-save . t)
-  ;;  )
+  :custom
+  (
+   (lsp-clients-typescript-server-args . tsserver-args)
+   )
   :config
   ;; (lsp-register-client
-  ;;   (make-lsp-client :new-connection (lsp-tramp-connection "/home/natsuki/.cargo/bin/rust-analyzer")
+  ;;   (make-lsp-client :new-connection (lsp-tramp-connection "rust-analyzer")
   ;;                    :major-modes '(rustic-mode)
   ;;                    :remote? t
   ;;                    :server-id 'rust-analyzer-remote))
   :hook
   (web-mode-hook . lsp-deferred)
   (go-mode-hook . lsp-deferred)
-  (typescript-mode-hook . lsp-deferred)
+  ;; (typescript-mode-hook . lsp-deferred)
    ;; (ruby-mode-hook . lsp-deferred)
   ;; (go-mode-hook . lsp-deferred)
   ;; (terraform-mode-hook . lsp-deferred)
@@ -1273,26 +1273,15 @@
     (nvm-use "16.13.0")
     )
 
-  ;; (leaf add-node-modules-path
-  ;;   :ensure t
-  ;;   :after nvm
-  ;;   :require t
-  ;;   :hook
-  ;;   ;; (
-  ;;   ;;  (web-mode-hook . add-node-modules-path)
-  ;;   ;;  )
-  ;;   )
-
   (leaf prettier
     :ensure t
-    :after nvm ;;add-node-modules-path
+    :after nvm
     :require t
     :hook
     (
      (web-mode-hook . prettier-mode)
      )
     )
-
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
