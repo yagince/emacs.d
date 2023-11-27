@@ -223,6 +223,7 @@
     (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
     (add-to-list 'tramp-remote-path "/home/natsuki/.cargo/bin")
     (add-to-list 'tramp-remote-path "/home/natsuki/.nvm/versions/node/v16.18.0/bin")
+    (add-to-list 'tramp-remote-path "/home/natsuki/.rbenv/shims")
     )
   )
 
@@ -846,8 +847,10 @@
   ;; (add-to-list 'eglot-server-programs
   ;;            `(terraform-mode . ("terraform-ls" "serve" "--port" :autoport)))
   (add-to-list 'eglot-server-programs '(web-mode . ("typescript-language-server" "--stdio")))
+  ;; (add-to-list 'eglot-server-programs '(ruby-mode . ("bundle" "exec" "rubocop" "--lsp")))
   :hook
   (web-mode-hook . eglot-ensure)
+  (ruby-mode-hook . eglot-ensure)
   ;; (go-mode-hook   . eglot-ensure)
   ;; (terraform-mode-hook   . eglot-ensure)
   ;; (web-mode-hook . eglot-ensure)
