@@ -889,16 +889,29 @@
 ;; 50_markdown-mode.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; (leaf markdown-mode
+;;   :ensure t
+;;   :mode ("\\.markdown\\'" "\\.md\\'"
+;;          ("README\\.md\\'" . gfm-mode))
+;;   :config
+;;   (with-eval-after-load 'markdown-mode
+;;     (add-hook 'markdown-mode-hook
+;;               '(lambda nil
+;;                  (electric-indent-local-mode -1)))
+;;     (setq markdown-preview-stylesheets (list "https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/3.0.1/github-markdown.min.css"))))
+
+
 (leaf markdown-mode
   :ensure t
-  :mode ("\\.markdown\\'" "\\.md\\'"
-         ("README\\.md\\'" . gfm-mode))
-  :config
-  (with-eval-after-load 'markdown-mode
-    (add-hook 'markdown-mode-hook
-              '(lambda nil
-                 (electric-indent-local-mode -1)))
-    (setq markdown-preview-stylesheets (list "https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/3.0.1/github-markdown.min.css"))))
+  :mode ("\\.md\\'" . gfm-mode)
+  :custom
+  (markdown-fontify-code-blocks-natively . t)
+  (markdown-header-scaling . t)
+  (markdown-indent-on-enter . 'indent-and-new-item)
+  (markdown-list-indent-width . 2)
+  :bind-keymap
+  ("<S-tab>" . #'markdown-promote-list-item)
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 50_other-mode.el
@@ -1264,6 +1277,7 @@
    (web-mode-hook . company-mode)
    (web-mode-hook . dumb-jump-mode)
    (web-mode-hook . yas-minor-mode)
+   (web-mode-hook . copilot-mode)
    )
   :config
   (setq-default indent-tabs-mode nil)
