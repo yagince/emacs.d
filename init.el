@@ -1232,10 +1232,11 @@
 (leaf terraform-mode
   :ensure t
   :mode ("\\.tf\\'" "\\.hcl\\'")
+  :require t
   :custom
   (
-   (tab-width                     . 2)
-   (terraform-format-on-save-mode . t)
+   (tab-width                . 2)
+   (terraform-format-on-save . t)
    )
   :config
   (with-eval-after-load 'terraform-mode
