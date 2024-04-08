@@ -500,7 +500,7 @@
   :custom
   (
    (neo-show-hidden-files . t) ;; 隠しファイルをデフォルトで表示
-   (neo-keymap-style . 'concise)
+   ;; (neo-keymap-style . 'concise)
    (neo-smart-open . t)
    (neo-create-file-auto-open . t)
    (neo-create-file-auto-open . t)
@@ -1169,12 +1169,54 @@
    )
   :config
   (remove-hook 'rustic-mode-hook 'flycheck-mode)
-  (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
+  ;; (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
   (with-eval-after-load 'rustic
     (progn
       (bind-key "C-M-n" #'rustic-end-of-defun rustic-mode-map nil)
       (bind-key "C-M-p" #'rustic-beginning-of-defun rustic-mode-map nil))
     )
+
+  (add-to-list 'eglot-server-programs
+               `(rust-mode . ("rust-analyzer" :initializationOptions
+                              ( :procMacro (:enable t)
+                                :cargo ( :buildScripts (:enable t)
+                                         :features "all")
+                                :completion ( :snippets ( :custom
+                                                          ( :Ok ( :postfix "ok"
+                                                                  :body "Ok(${receiver})"
+                                                                  :description "Wrap the expression in a `Result::Ok`"
+                                                                  :scope "expr"
+                                                                  )
+                                                            :Some ( :postfix "some"
+                                                                  :body "Some(${receiver})"
+                                                                  :description "Wrap the expression in a `Option::Some`"
+                                                                  :scope "expr"
+                                                                  )
+                                                            )))
+                                )
+                              )))
+
+  ;; (with-eval-after-load "lsp-rust"
+  ;;   (lsp-register-client
+  ;;    (make-lsp-client
+  ;;     :new-connection (lsp-stdio-connection
+  ;;                      (lambda ()
+  ;;                        `(,(or (executable-find
+  ;;                                (cl-first lsp-rust-analyzer-server-command))
+  ;;                               (lsp-package-path 'rust-analyzer)
+  ;;                               "rust-analyzer")
+  ;;                          ,@(cl-rest lsp-rust-analyzer-server-args))))
+  ;;     :remote? t
+  ;;     :major-modes '(rust-mode rustic-mode)
+  ;;     :initialization-options 'lsp-rust-analyzer--make-init-options
+  ;;     :notification-handlers (ht<-alist lsp-rust-notification-handlers)
+  ;;     :action-handlers (ht ("rust-analyzer.runSingle" #'lsp-rust--analyzer-run-single))
+  ;;     :library-folders-fn (lambda (_workspace) lsp-rust-library-directories)
+  ;;     :after-open-fn (lambda ()
+  ;;                      (when lsp-rust-analyzer-server-display-inlay-hints
+  ;;                        (lsp-rust-analyzer-inlay-hints-mode)))
+  ;;     :ignore-messages nil
+  ;;     :server-id 'rust-analyzer-remote)))
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1211,15 +1253,18 @@
 (leaf terraform-mode
   :ensure t
   :mode ("\\.tf\\'" "\\.hcl\\'")
+  :custom
+  (
+   (tab-width                     . 2)
+   (terraform-format-on-save-mode . t)
+   )
   :config
   (with-eval-after-load 'terraform-mode
     (add-hook 'terraform-mode-hook
               '(lambda nil
                  (company-mode t)
                  (dumb-jump-mode t)
-                 (yas-minor-mode t)
-                 (setq tab-width 2)
-                 (terraform-format-on-save-mode t)))))
+                 (yas-minor-mode t)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 50_vue-mode.el
@@ -1439,4 +1484,9 @@
 
   (with-eval-after-load 'copilot
     (define-key copilot-mode-map (kbd "<tab>") #'my/copilot-tab))
+  )
+
+(leaf string-inflection
+  :ensure t
+  :require t
   )
