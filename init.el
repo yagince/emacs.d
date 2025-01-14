@@ -217,7 +217,9 @@
 (leaf tramp
   :ensure t
   :custom
-  (tramp-default-method . "sshx")
+  (tramp-default-method . "scp")
+  (tramp-persistency-file-name . "~/.emacs.d/tramp")
+  (tramp-verbose . 1)
   :init
   (with-eval-after-load "tramp"
     (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
@@ -485,29 +487,42 @@
 ;; 05_neotree.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(leaf neotree
+;; (leaf neotree
+;;   :ensure t
+;;   :bind (("C-x n" . neotree-show))
+;;   :config
+;;   (with-eval-after-load 'neotree
+;;     ;; (setq neo-show-hidden-files t) ;; 隠しファイルをデフォルトで表示
+;;     ;; (setq neo-keymap-style 'concise)
+;;     ;; (setq neo-smart-open t)
+;;     ;; (setq neo-create-file-auto-open t)
+;;     ;; (setq neo-create-file-auto-open t)
+;;     (setq neo-theme (if (display-graphic-p)
+;;                         'icons 'arrow)))
+;;   :custom
+;;   (
+;;    (neo-show-hidden-files . t) ;; 隠しファイルをデフォルトで表示
+;;    ;; (neo-keymap-style . 'concise)
+;;    (neo-smart-open . t)
+;;    (neo-create-file-auto-open . t)
+;;    (neo-create-file-auto-open . t)
+;;    (projectile-switch-project-action . 'neotree-projectile-action)
+;;    (neo-window-fixed-size . nil)
+;;    (neo-window-width . 50)
+;;   )
+;;   )
+
+(leaf treemacs
   :ensure t
-  :bind (("C-x n" . neotree-show))
-  :config
-  (with-eval-after-load 'neotree
-    ;; (setq neo-show-hidden-files t) ;; 隠しファイルをデフォルトで表示
-    ;; (setq neo-keymap-style 'concise)
-    ;; (setq neo-smart-open t)
-    ;; (setq neo-create-file-auto-open t)
-    ;; (setq neo-create-file-auto-open t)
-    (setq neo-theme (if (display-graphic-p)
-                        'icons 'arrow)))
+  :require t
+  :bind (("C-x n" . treemacs-add-and-display-current-project-exclusively))
   :custom
-  (
-   (neo-show-hidden-files . t) ;; 隠しファイルをデフォルトで表示
-   ;; (neo-keymap-style . 'concise)
-   (neo-smart-open . t)
-   (neo-create-file-auto-open . t)
-   (neo-create-file-auto-open . t)
-   (projectile-switch-project-action . 'neotree-projectile-action)
-   (neo-window-fixed-size . nil)
-   (neo-window-width . 50)
-  )
+  ;; (treemacs-no-png-images . t)
+  ;; (treemacs-resize-icons . 10)
+  (treemacs-hide-dot-git-directory . nil)
+  :config
+  (treemacs-resize-icons 10)
+  (treemacs-follow-mode nil)
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -850,7 +865,7 @@
   ;; (add-to-list 'eglot-server-programs '(ruby-mode . ("bundle" "exec" "rubocop" "--lsp")))
   :hook
   (web-mode-hook . eglot-ensure)
-  (ruby-mode-hook . eglot-ensure)
+  ;; (ruby-mode-hook . eglot-ensure)
   ;; (go-mode-hook   . eglot-ensure)
   ;; (terraform-mode-hook   . eglot-ensure)
   ;; (web-mode-hook . eglot-ensure)
@@ -873,17 +888,17 @@
 ;; 50_magit.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(leaf magit
-  :ensure t
-  :require t
-  :bind (("C-x m" . magit-status))
-  :config
-  (with-eval-after-load 'magit
-    (setq-default magit-auto-revert-mode nil)
-    (setq vc-handled-backends 'nil)
-    (eval-after-load "vc"
-      '(remove-hook 'find-file-hooks 'vc-find-file-hook))
-    ))
+;; (leaf magit
+;;   :ensure t
+;;   :require t
+;;   :bind (("C-x m" . magit-status))
+;;   :config
+;;   (with-eval-after-load 'magit
+;;     (setq-default magit-auto-revert-mode nil)
+;;     (setq vc-handled-backends 'nil)
+;;     (eval-after-load "vc"
+;;       '(remove-hook 'find-file-hooks 'vc-find-file-hook))
+;;     ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 50_markdown-mode.el
@@ -1166,6 +1181,7 @@
    (rustic-mode-hook . dumb-jump-mode)
    (rustic-mode-hook . yas-minor-mode)
    (rustic-mode-hook . rainbow-delimiters-mode)
+   (rustic-mode-hook . copilot-mode)
    )
   :config
   (remove-hook 'rustic-mode-hook 'flycheck-mode)
@@ -1177,25 +1193,22 @@
     )
 
   (add-to-list 'eglot-server-programs
-               `(rust-mode . ("rust-analyzer" :initializationOptions
-                              ( :procMacro (:enable t)
-                                :cargo ( :buildScripts (:enable t)
-                                         :features "all")
-                                :completion ( :snippets ( :custom
-                                                          ( :Ok ( :postfix "ok"
-                                                                  :body "Ok(${receiver})"
-                                                                  :description "Wrap the expression in a `Result::Ok`"
-                                                                  :scope "expr"
-                                                                  )
-                                                            :Some ( :postfix "some"
-                                                                  :body "Some(${receiver})"
-                                                                  :description "Wrap the expression in a `Option::Some`"
-                                                                  :scope "expr"
-                                                                  )
-                                                            )))
-                                )
-                              )))
-
+               `(rustic-mode . ("rust-analyzer" :initializationOptions
+                                ( :procMacro (:enable t)
+                                  :cargo ( :buildScripts (:enable t)
+                                           :features "all")
+                                  :completion ( :snippets ( :custom
+                                                            ( :Ok ( :postfix "ok"
+                                                                    :body "Ok(${receiver})"
+                                                                    :description "Ok($expr)"
+                                                                    :scope "expr"
+                                                                    )
+                                                              :Some ( :postfix "some"
+                                                                      :body "Some(${receiver})"
+                                                                      :description "Some($expr)"
+                                                                      :scope "expr"
+                                                                      )
+                                                              )))))))
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1286,6 +1299,7 @@
          "\\.m?js$"
          "\\.tsx$"
          "\\.ts$"
+         "\\.astro$"
          )
   :custom
   (
@@ -1319,7 +1333,7 @@
     :ensure t
     :require t
     :config
-    (nvm-use "16.13.0")
+    (nvm-use "20.11.1")
     )
 
   (leaf prettier
@@ -1441,7 +1455,7 @@
 (leaf copilot
   :el-get (copilot
            :type github
-           :pkgname "zerolfx/copilot.el"
+           :pkgname "copilot-emacs/copilot.el"
            )
   :require t
   :config
@@ -1465,6 +1479,22 @@
   (with-eval-after-load 'copilot
     (define-key copilot-mode-map (kbd "<tab>") #'my/copilot-tab))
   )
+
+(leaf request
+  :ensure t
+  :require t
+  )
+
+(leaf copilot-chat
+  :doc "Copilot chat interface"
+  :req "request-0.3.2" "markdown-mode-2.6" "emacs-27.1" "chatgpt-shell-1.6.1"
+  :tag "out-of-MELPA" "tools" "convenience" "emacs>=27.1"
+  :url "https://github.com/chep/copilot-chat.el"
+  :added "2024-10-12"
+  :emacs>= 27.1
+  :el-get {{user}}/copilot-chat
+  :after markdown-mode chatgpt-shell
+  :require t)
 
 (leaf string-inflection
   :ensure t
