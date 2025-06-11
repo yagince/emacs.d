@@ -56,7 +56,7 @@
 ;; メニューバーを非表示
 (menu-bar-mode -1)
 ;; C-x M-x などで英語モードに切り替える
-(mac-auto-ascii-mode 1)
+;;(mac-auto-ascii-mode 1)
 
 (prefer-coding-system 'utf-8)
 
