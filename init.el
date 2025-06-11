@@ -22,6 +22,7 @@
     (leaf-keywords-init)))
 ;; </leaf-install-code>
 
+
 (setq gc-cons-threshold (* 128 1024 1024))
 (setq ring-bell-function 'ignore)
 
@@ -738,25 +739,25 @@
 ;; 50_elixir-mode.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(leaf elixir-mode
-  :ensure t
-  :mode ("\\.elixir2\\'" "\\.ex$" "\\.exs$")
-  :config
-  (add-hook 'elixir-mode-hook
-            '(lambda nil
-               (company-mode t)
-               (dumb-jump-mode t)
-               (yas-minor-mode t)))
-  (with-eval-after-load 'elixir-mode
-    (add-to-list 'elixir-mode-hook
-                 (defun auto-activate-ruby-end-mode-for-elixir-mode nil
-                   (set
-                    (make-variable-buffer-local 'ruby-end-expand-keywords-before-re)
-                    "\\(?:^\\|\\s-+\\)\\(?:do\\)")
-                   (set
-                    (make-variable-buffer-local 'ruby-end-check-statement-modifiers)
-                    nil)
-                   (ruby-end-mode 1)))))
+;;(leaf elixir-mode
+;;  :ensure t
+;;  :mode ("\\.elixir2\\'" "\\.ex$" "\\.exs$")
+;;  :config
+;;  (add-hook 'elixir-mode-hook
+;;            '(lambda nil
+;;               (company-mode t)
+;;               (dumb-jump-mode t)
+;;               (yas-minor-mode t)))
+;;  (with-eval-after-load 'elixir-mode
+;;    (add-to-list 'elixir-mode-hook
+;;                 (defun auto-activate-ruby-end-mode-for-elixir-mode nil
+;;                   (set
+;;                    (make-variable-buffer-local 'ruby-end-expand-keywords-before-re)
+;;                    "\\(?:^\\|\\s-+\\)\\(?:do\\)")
+;;                   (set
+;;                    (make-variable-buffer-local 'ruby-end-check-statement-modifiers)
+;;                    nil)
+;;                   (ruby-end-mode 1)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 50_go-mode.el
@@ -1486,15 +1487,13 @@
   )
 
 (leaf copilot-chat
+  :ensure t
+  :require t
   :doc "Copilot chat interface"
   :req "request-0.3.2" "markdown-mode-2.6" "emacs-27.1" "chatgpt-shell-1.6.1"
-  :tag "out-of-MELPA" "tools" "convenience" "emacs>=27.1"
-  :url "https://github.com/chep/copilot-chat.el"
-  :added "2024-10-12"
   :emacs>= 27.1
-  :el-get {{user}}/copilot-chat
   :after markdown-mode chatgpt-shell
-  :require t)
+  )
 
 (leaf string-inflection
   :ensure t
