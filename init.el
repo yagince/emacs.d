@@ -3,7 +3,8 @@
   (customize-set-variable
    'package-archives '(("org" . "https://orgmode.org/elpa/")
                        ("melpa" . "https://melpa.org/packages/")
-                       ("gnu" . "https://elpa.gnu.org/packages/")))
+                       ("gnu" . "https://elpa.gnu.org/packages/")
+                       ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
   (package-initialize)
   (unless (package-installed-p 'leaf)
     (package-refresh-contents)
@@ -157,10 +158,13 @@
 ;; (set-fontset-font t 'japanese-jisx0208 "Migu 2M-17")
 ;; (set-frame-font "Migu 2M-20")
 ;; (set-fontset-font t 'japanese-jisx0208 "Migu 2M-20")
-(set-frame-font "Ricty-17")
-(set-fontset-font t 'japanese-jisx0208 "Ricty Diminished-17")
-(add-to-list 'face-font-rescale-alist
-             '(".*Ricty Diminished.*" . 1.1))
+(set-face-attribute 'default nil :height 170)
+;; (set-frame-font "Ricty")
+(set-frame-font "HackGen")
+;; (set-fontset-font t 'japanese-jisx0208 "Ricty Diminished")
+;; (set-frame-font "Noto Sans Mono CJK JP-11")
+;; (add-to-list 'face-font-rescale-alist
+;;              '(".*Ricty Diminished.*" . 1.1))
 
 (when (eq system-type 'darwin) ; Mac OS X
   (set-fontset-font
@@ -221,14 +225,24 @@
   (tramp-default-method . "scp")
   (tramp-persistency-file-name . "~/.emacs.d/tramp")
   (tramp-verbose . 1)
+  (tramp-use-ssh-controlmaster-options . "")
   :init
   (with-eval-after-load "tramp"
     (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
     (add-to-list 'tramp-remote-path "/home/natsuki/.cargo/bin")
-    (add-to-list 'tramp-remote-path "/home/natsuki/.nvm/versions/node/v16.18.0/bin")
+    (add-to-list 'tramp-remote-path "/home/natsuki/.nvm/versions/node/v24.2.0/bin")
     (add-to-list 'tramp-remote-path "/home/natsuki/.rbenv/shims")
     )
   )
+
+(leaf autorevert
+  :doc "revert buffers when files on disk change"
+  :global-minor-mode global-auto-revert-mode)
+
+(leaf paren
+  :doc "highlight matching paren"
+  :global-minor-mode show-paren-mode)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 00_keybindings.el
@@ -371,22 +385,37 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; タブ, 全角スペース, 行末空白表示
-(defface my-face-b-1 '((t (:background "NavajoWhite4"))) nil) ; 全角スペース
-(defface my-face-b-2 '((t (:background "gray10"))) nil) ; タブ
-(defface my-face-u-1 '((t (:background "SteelBlue" :underline t))) nil) ; 行末空白
-(defvar my-face-b-1 'my-face-b-1)
-(defvar my-face-b-2 'my-face-b-2)
-(defvar my-face-u-1 'my-face-u-1)
+(leaf whitespace
+  :ensure t
+  :custom
+  (whitespace-style . '(face
+                        trailing
+                        tabs
+                        spaces
+                        space-mark
+                        tab-mark))
+  (whitespace-space-regexp . "\\(\u3000+\\)")
+  (whitespace-display-mappings . '((space-mark ?\u3000 [?\u25a1])
+                                   (tab-mark ?\t [?\u00BB ?\t])))
+  ;; ;; 末尾スペースを自動削除
+  ;; (whitespace-action . '(auto-cleanup))
 
-(defadvice font-lock-mode (before my-font-lock-mode ())
-  (font-lock-add-keywords
-   major-mode
-   '(("\t" 0 my-face-b-2 append)
-     ("　" 0 my-face-b-1 append)
-     ("[ \t]+$" 0 my-face-u-1 append)
-     )))
-(ad-enable-advice 'font-lock-mode 'before 'my-font-lock-mode)
-(ad-activate 'font-lock-mode)
+  :hook
+  (prog-mode-hook . whitespace-mode)
+
+  :config
+  ;; フェイス設定
+  (set-face-attribute 'whitespace-space nil
+                      :background 'unspecified
+                      :foreground "gray30")
+  (set-face-attribute 'whitespace-tab nil
+                      :background 'unspecified
+                      :foreground "gray30")
+  (set-face-attribute 'whitespace-trailing nil
+                      :background "red1"
+                      :foreground 'unspecified)
+  (global-whitespace-mode 1)
+  )
 
 ;; デフォルトのインデント
 (setq-default indent-line-function 'tab-to-tab-stop)
@@ -521,10 +550,43 @@
   ;; (treemacs-no-png-images . t)
   ;; (treemacs-resize-icons . 10)
   (treemacs-hide-dot-git-directory . nil)
+  (treemacs-file-watch-mode . nil) ;; ファイルウォッチを無効化（リモートでは重い）
+  (treemacs-file-follow-delay . 2.0) ;; 更新頻度を下げる
   :config
   (treemacs-resize-icons 10)
   (treemacs-follow-mode nil)
   )
+
+;; (leaf dirvish
+;;   :ensure t
+;;   :init
+;;   (dirvish-override-dired-mode)
+
+;;   :custom
+;;   ;; 最小限の設定
+;;   ((dirvish-side-width . 30)
+;;    (dirvish-reuse-session . nil)  ; セッション再利用を無効化
+;;    (dirvish-emerge-groups . nil)  ; グループ化を無効化
+;;    )
+
+;;   :config
+;;   ;; 表示する属性（通常時）
+;;   (setq dirvish-attributes
+;;         '(file-size collapse subtree-state vc-state git-msg))
+
+;;   ;; アイコン設定（オプション）
+;;   ;; all-the-iconsがインストールされている場合
+;;   (when (featurep 'all-the-icons)
+;;     (push 'all-the-icons dirvish-attributes))
+
+;;   ;; プレビュー設定
+;;   (setq dirvish-preview-dispatchers
+;;         '(image gif video audio epub pdf archive))
+
+;;   :bind (("<f5>" . dirvish-side)
+;;          ("C-c d" . dirvish))
+;;   )
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 05_scratch-log.el
@@ -634,7 +696,10 @@
     (with-eval-after-load 'ivy-rich
       (all-the-icons-ivy-rich-mode 1)
       (ivy-rich-mode 1)
-      (setq ivy-use-virtual-buffers t)))
+      (setq ivy-use-virtual-buffers t))
+    ;; :hook
+    ;; (ivy-rich-mode-hook . (lambda () (whitespace-mode -1)))
+    )
 
   (leaf ivy-hydra
     :ensure t
@@ -658,7 +723,10 @@
            ("C-c i" . counsel-imenu))
     :config
     (with-eval-after-load 'counsel
-      (counsel-mode 1)))
+      (counsel-mode 1))
+    :hook
+    (counsel-mode-hook . (lambda () (whitespace-mode -1)))
+    )
 
   (leaf prescient
     :doc "Better sorting and filtering(補完候補の使用履歴が新しいものを上に持ってきてくれる)"
@@ -690,6 +758,11 @@
     :bind (("C-c y" . ivy-yasnippet)
            ("C-c C-y" . ivy-yasnippet)))
   )
+
+;; (leaf vertico
+;;   :doc "VERTical Interactive COmpletion"
+;;   :ensure t
+;;   :global-minor-mode t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 50_company-mode.el
@@ -889,33 +962,20 @@
 ;; 50_magit.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; (leaf magit
-;;   :ensure t
-;;   :require t
-;;   :bind (("C-x m" . magit-status))
-;;   :config
-;;   (with-eval-after-load 'magit
-;;     (setq-default magit-auto-revert-mode nil)
-;;     (setq vc-handled-backends 'nil)
-;;     (eval-after-load "vc"
-;;       '(remove-hook 'find-file-hooks 'vc-find-file-hook))
-;;     ))
+(leaf magit
+  :ensure t
+  :require t
+  :bind (("C-x m" . magit-status))
+  :config
+  (with-eval-after-load 'magit
+    (setq-default magit-auto-revert-mode nil)
+    (eval-after-load "vc"
+      '(remove-hook 'find-file-hooks 'vc-find-file-hook))
+    ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 50_markdown-mode.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; (leaf markdown-mode
-;;   :ensure t
-;;   :mode ("\\.markdown\\'" "\\.md\\'"
-;;          ("README\\.md\\'" . gfm-mode))
-;;   :config
-;;   (with-eval-after-load 'markdown-mode
-;;     (add-hook 'markdown-mode-hook
-;;               '(lambda nil
-;;                  (electric-indent-local-mode -1)))
-;;     (setq markdown-preview-stylesheets (list "https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/3.0.1/github-markdown.min.css"))))
-
 
 (leaf markdown-mode
   :ensure t
@@ -953,7 +1013,10 @@
   :ensure t)
 
 (leaf yaml-mode
-  :ensure t)
+  :ensure t
+  :hook
+  (yaml-mode-hook . whitespace-mode)
+  )
 
 (leaf highlight-indent-guides
   :ensure t
@@ -976,14 +1039,6 @@
         "Pulse the changes."
         (pulse-momentary-highlight-region beg end face))
       (advice-add #'vhl/.make-hl :override #'my-vhl-pulse)))
-  )
-
-(leaf git-gutter+
-  :if (>= emacs-major-version 25)
-  :ensure t
-  :blackout `((git-gutter+-mode
-               . ,(format "%s" (all-the-icons-octicon "git-merge"))))
-  :bind ("C-x G" . global-git-gutter+-mode)
   )
 
 (leaf ansible
@@ -1334,7 +1389,7 @@
     :ensure t
     :require t
     :config
-    (nvm-use "20.11.1")
+    (nvm-use "24.2.0")
     )
 
   (leaf prettier
@@ -1499,3 +1554,53 @@
   :ensure t
   :require t
   )
+
+;; Claude Code
+(leaf vterm
+  ;; requirements: brew install cmake libvterm libtool
+  :ensure t
+  :custom
+  (vterm-shell . "/bin/zsh")
+  (vterm-max-scrollback . 10000)
+  (vterm-buffer-name-string . "vterm: %s")
+  ;; delete "C-h", add <f1> and <f2>
+  (vterm-keymap-exceptions
+   . '("<f1>" "<f2>" "C-c" "C-x" "C-u" "C-g" "C-l" "M-x" "M-o" "C-v" "M-v" "C-y" "M-y"))
+  (vterm-tramp-shells . '(("ssh"  login-shell "/bin/zsh")
+                          ("scp"  login-shell "/bin/zsh")
+                          ("scpx" login-shell "/bin/zsh")
+                          ("sshx" login-shell "/bin/zsh")))
+  :config
+  ;; Workaround of not working counsel-yank-pop
+  ;; https://github.com/akermu/emacs-libvterm#counsel-yank-pop-doesnt-work
+  (advice-add 'counsel-yank-pop-action :around #'my/vterm-counsel-yank-pop-action)
+  :hook
+  (vterm-mode-hook . (lambda () (whitespace-mode -1)))
+  )
+
+(leaf vterm-toggle
+  :ensure t
+  :custom
+  (vterm-toggle-scope . 'project)
+  :config
+  ;; Show vterm buffer in the window located at bottom
+  (add-to-list 'display-buffer-alist
+               '((lambda(bufname _) (with-current-buffer bufname (equal major-mode 'vterm-mode)))
+                 (display-buffer-reuse-window display-buffer-in-direction)
+                 (direction . bottom)
+                 (reusable-frames . visible)
+                 (window-height . 0.4)))
+  ;; Above display config affects all vterm command, not only vterm-toggle
+  (defun my/vterm-new-buffer-in-current-window()
+    (interactive)
+    (let ((display-buffer-alist nil))
+            (vterm)))
+  )
+
+(use-package claude-code-ide
+  :vc (:url "https://github.com/manzaltu/claude-code-ide.el" :rev :newest)
+  :init
+  (setq claude-code-ide-terminal-backend 'vterm)
+  :bind ("C-c m" . claude-code-ide-menu)
+  :config
+  (claude-code-ide-emacs-tools-setup))
