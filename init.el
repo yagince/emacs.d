@@ -985,8 +985,9 @@
   (markdown-header-scaling . t)
   (markdown-indent-on-enter . 'indent-and-new-item)
   (markdown-list-indent-width . 2)
-  :bind-keymap
-  ("<S-tab>" . #'markdown-promote-list-item)
+  :config
+  (with-eval-after-load 'markdown-mode
+    (define-key markdown-mode-map (kbd "<S-tab>") #'markdown-promote-list-item))
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1600,7 +1601,15 @@
 (use-package claude-code-ide
   :vc (:url "https://github.com/manzaltu/claude-code-ide.el" :rev :newest)
   :init
-  (setq claude-code-ide-terminal-backend 'vterm)
-  :bind ("C-c m" . claude-code-ide-menu)
+  :bind
+  (("C-c m" . claude-code-ide-menu)
+   ("C-c c p" . my/claude-code-toggle-plan-mode)
+   )
+  :custom
+  (claude-code-ide-terminal-backend 'vterm)
+  ;; (claude-code-ide-window-side 'bottom)
+  ;; (claude-code-ide-window-hight 30)
+  (claude-code-ide-vterm-anti-flicker t)
   :config
-  (claude-code-ide-emacs-tools-setup))
+  (claude-code-ide-emacs-tools-setup)
+  )
