@@ -167,11 +167,11 @@
 ;;              '(".*Ricty Diminished.*" . 1.1))
 
 (when (eq system-type 'darwin) ; Mac OS X
-  (set-fontset-font
-   t 'symbol (font-spec :family "Apple Color Emoji") nil 'prepend)
+  ;; (set-fontset-font
+  ;;  t 'symbol (font-spec :family "Apple Color Emoji") nil 'prepend)
 
   (add-to-list 'face-font-rescale-alist
-               '(".*Apple Color Emoji.*" . 0.8))
+               '(".*Apple Color Emoji.*" . 0.5))
 )
 
 (when (eq system-type 'gnu/linux) ; linux
