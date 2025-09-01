@@ -160,18 +160,41 @@
 ;; (set-fontset-font t 'japanese-jisx0208 "Migu 2M-20")
 (set-face-attribute 'default nil :height 170)
 ;; (set-frame-font "Ricty")
-(set-frame-font "HackGen")
+(set-frame-font "HackGen-16")
+
 ;; (set-fontset-font t 'japanese-jisx0208 "Ricty Diminished")
 ;; (set-frame-font "Noto Sans Mono CJK JP-11")
 ;; (add-to-list 'face-font-rescale-alist
 ;;              '(".*Ricty Diminished.*" . 1.1))
 
 (when (eq system-type 'darwin) ; Mac OS X
-  ;; (set-fontset-font
-  ;;  t 'symbol (font-spec :family "Apple Color Emoji") nil 'prepend)
+  ;; 日本語フォントを明示的にHackGenに設定
+  (set-fontset-font t 'japanese-jisx0208 "HackGen")
+  (set-fontset-font t 'japanese-jisx0212 "HackGen")
+  (set-fontset-font t 'japanese-jisx0213-1 "HackGen")
+  (set-fontset-font t 'japanese-jisx0213-2 "HackGen")
+  (set-fontset-font t 'katakana-jisx0201 "HackGen")
 
+  ;; 絵文字フォントの設定
+  (when (>= emacs-major-version 28)
+    (set-fontset-font t 'emoji "Apple Color Emoji" nil 'prepend))
+
+  ;; シンボルフォントの設定
+  (set-fontset-font t 'symbol "Apple Color Emoji" nil 'append)
+
+  ;; rescale設定
   (add-to-list 'face-font-rescale-alist
                '(".*Apple Color Emoji.*" . 0.5))
+
+  ;; フォントキャッシュを無効化
+  (setq inhibit-compacting-font-caches t)
+
+  ;; すべての行に統一した高さを設定
+  (setq-default default-text-properties
+                '(line-height (1.3 . 1.3)))
+
+  ;; 行間を広げて絵文字があっても行高さが変わらないようにする
+  (setq-default line-spacing 5)
 )
 
 (when (eq system-type 'gnu/linux) ; linux
@@ -885,7 +908,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 50_lsp-mode.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(setq tsserver-args (list "--stdio" "--tsserver-path" (expand-file-name "~/.nvm/versions/node/v16.13.0/lib/node_modules/typescript/lib")))
+(setq tsserver-args (list "--stdio" "--tsserver-path" (expand-file-name "~/.nvm/versions/node/v24.2.0/lib/node_modules/typescript/lib")))
 (leaf lsp-mode
   :ensure t
   :custom
