@@ -25,6 +25,7 @@ bookmarks
 *.log
 
 elpa
+elpa.backup
 .cache
 eln-cache
 .lsp-session*
