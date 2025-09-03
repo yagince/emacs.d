@@ -533,7 +533,16 @@
   (dumb-jump-selector 'ivy) ;; 候補選択をivyに任せます
   (dumb-jump-use-visible-window nil)
   :config
-  (smart-jump-setup-default-registers))
+  (smart-jump-setup-default-registers)
+  ;; Ruby-modeでdumb-jumpを直接使用
+  (smart-jump-register
+   :modes 'ruby-mode
+   :jump-fn 'dumb-jump-go
+   :pop-fn 'dumb-jump-back
+   :refs-fn 'dumb-jump-quick-look
+   :should-jump t
+   :heuristic 'point
+   :async nil))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 05_linum.el
