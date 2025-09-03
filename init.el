@@ -462,26 +462,12 @@
 (setq-default indent-tabs-mode nil)
 
 ;; theme
-;; (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
-;; (load-theme 'pastels-on-dark t)
-;; (load-theme 'manoj-dark t)
-;; (leaf cyberpunk-theme
-;;   :ensure t
-;;   :config
-;;   (load-theme 'cyberpunk t)
-;;   )
 ;; Migrated to use-package
 (use-package modus-themes
   :ensure t
   :bind ("<f5>" . modus-themes-toggle)
   :init
   (load-theme 'modus-vivendi-deuteranopia :no-confirm))
-
-;; (leaf timu-macos-theme
-;;   :ensure t
-;;   :config
-;;   (load-theme 'timu-macos :no-confirm)
-;;   )
 
 (when (equal system-type 'darwin)
   (setq initial-frame-alist
