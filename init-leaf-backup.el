@@ -1,33 +1,27 @@
-;; Package initialization
+;; <leaf-install-code>
 (eval-and-compile
   (customize-set-variable
    'package-archives '(("org" . "https://orgmode.org/elpa/")
                        ("melpa" . "https://melpa.org/packages/")
                        ("gnu" . "https://elpa.gnu.org/packages/")
                        ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
-  (package-initialize))
+  (package-initialize)
+  (unless (package-installed-p 'leaf)
+    (package-refresh-contents)
+    (package-install 'leaf))
 
-;; use-package setup (built-in for Emacs 29+)
-(require 'use-package)
-(setq use-package-always-ensure t)  ; Always ensure packages are installed
+  (leaf leaf-keywords
+    :ensure t
+    :init
+    ;; optional packages if you want to use :hydra, :el-get, :blackout,,,
+    (leaf hydra :ensure t)
+    (leaf el-get :ensure t)
+    (leaf blackout :ensure t)
 
-;; Keep leaf for now during migration
-(unless (package-installed-p 'leaf)
-  (package-refresh-contents)
-  (package-install 'leaf))
-
-
-(leaf leaf-keywords
-  :ensure t
-  :init
-  ;; optional packages if you want to use :hydra, :el-get, :blackout,,,
-  (leaf hydra :ensure t)
-  (leaf el-get :ensure t)
-  (leaf blackout :ensure t)
-
-  :config
-  ;; initialize leaf-keywords.el
-  (leaf-keywords-init))
+    :config
+    ;; initialize leaf-keywords.el
+    (leaf-keywords-init)))
+;; </leaf-install-code>
 
 ;; custom設定がinit.elに書き込まれないようにする
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -41,21 +35,21 @@
   :custom ((imenu-list-size . 30)
            (imenu-list-position . 'left)))
 
-;; Migrated to use-package
-(use-package macrostep
+(leaf macrostep
   :ensure t
-  :bind ("C-c e" . macrostep-expand))
+  :bind (("C-c e" . macrostep-expand)))
 
-;; Migrated to use-package
-(use-package exec-path-from-shell
+(leaf exec-path-from-shell
   :ensure t
-  :demand t  ; :require t の代替
+  :require t
+  :defun (exec-path-from-shell-initialize)
   :custom
-  (exec-path-from-shell-variables '("RUST_SRC_PATH"
-                                     "GOPATH"
-                                     "PATH"))
+  ((exec-path-from-shell-variables           . '("RUST_SRC_PATH"
+                                                 "GOPATH"
+                                                 "PATH")))
   :config
-  (exec-path-from-shell-initialize))
+  (exec-path-from-shell-initialize)
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 00_base.el
@@ -234,49 +228,44 @@
 ;; 閉じる時に確認
 (setq confirm-kill-emacs 'y-or-n-p)
 
-;; Migrated to use-package
-(use-package all-the-icons
+(leaf all-the-icons
   :ensure t
-  :demand t
-  :custom
-  (all-the-icons-scale-factor 1.0))
+  :custom ((all-the-icons-scale-factor . 1.0))
+  :require t)
 
-;; Migrated to use-package
-(use-package doom-modeline
+(leaf doom-modeline
   :ensure t
   :commands doom-modeline-def-modeline
-  :hook (after-init . doom-modeline-mode)
-  :custom
-  (doom-modeline-buffer-file-name-style 'truncate-with-project)
-  (doom-modeline-icon t)
-  (doom-modeline-major-mode-icon nil)
-  (doom-modeline-minor-modes nil))
+  :hook (after-init-hook)
+  :custom ((doom-modeline-buffer-file-name-style quote truncate-with-project)
+           (doom-modeline-icon . t)
+           (doom-modeline-major-mode-icon)
+           (doom-modeline-minor-modes)))
 
-;; tramp - Migrated to use-package
-(use-package tramp
+;; tramp
+(leaf tramp
   :ensure t
   :custom
-  (tramp-default-method "scp")
-  (tramp-persistency-file-name "~/.emacs.d/tramp")
-  (tramp-verbose 1)
-  (tramp-use-ssh-controlmaster-options "")
-  :config
-  (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
-  (add-to-list 'tramp-remote-path "/home/natsuki/.cargo/bin")
-  (add-to-list 'tramp-remote-path "/home/natsuki/.nvm/versions/node/v24.2.0/bin")
-  (add-to-list 'tramp-remote-path "/home/natsuki/.rbenv/shims"))
-
-;; Migrated to use-package
-(use-package autorevert
-  :ensure t
+  (tramp-default-method . "scp")
+  (tramp-persistency-file-name . "~/.emacs.d/tramp")
+  (tramp-verbose . 1)
+  (tramp-use-ssh-controlmaster-options . "")
   :init
-  (global-auto-revert-mode 1))
+  (with-eval-after-load "tramp"
+    (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+    (add-to-list 'tramp-remote-path "/home/natsuki/.cargo/bin")
+    (add-to-list 'tramp-remote-path "/home/natsuki/.nvm/versions/node/v24.2.0/bin")
+    (add-to-list 'tramp-remote-path "/home/natsuki/.rbenv/shims")
+    )
+  )
 
-;; Migrated to use-package
-(use-package paren
-  :ensure t
-  :init
-  (show-paren-mode 1))
+(leaf autorevert
+  :doc "revert buffers when files on disk change"
+  :global-minor-mode global-auto-revert-mode)
+
+(leaf paren
+  :doc "highlight matching paren"
+  :global-minor-mode show-paren-mode)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -287,12 +276,10 @@
 (define-key global-map [?¥] [?\\])
 (define-key global-map (kbd "C-z") nil)
 
-;; Migrated to use-package
-(use-package bind-key
+(leaf bind-key
   :ensure t)
 
-;; Migrated to use-package
-(use-package goto-chg
+(leaf goto-chg
   :ensure t
   :bind (("<f8>" . goto-last-change)
          ("M-<f8>" . goto-last-change-reverse)))
@@ -386,29 +373,28 @@
 
 (setq ido-enable-flex-matching t)
 
-;; Migrated to use-package
-(use-package multiple-cursors
+(leaf multiple-cursors
   :ensure t
-  :demand t)
+  :require t
+  )
 
-;; Migrated to use-package
-(use-package anzu
+(leaf anzu
   :ensure t
-  :demand t)
+  :require t
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 01_grep.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Migrated to use-package
-(use-package rg
+(leaf rg
   :ensure t
-  :bind ("M-s" . rg))
+  :bind (("M-s" . rg))
+  )
 
-;; Migrated to use-package
-(use-package wgrep
+(leaf wgrep
   :ensure t
-  :custom
-  (wgrep-auto-save-buffer t))
+  :custom ((wgrep-auto-save-buffer . t))
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 02_cua.el
@@ -422,24 +408,24 @@
 ;; 04_visual.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; タブ, 全角スペース, 行末空白表示 - Migrated to use-package
-(use-package whitespace
+;; タブ, 全角スペース, 行末空白表示
+(leaf whitespace
   :ensure t
   :custom
-  (whitespace-style '(face
-                      trailing
-                      tabs
-                      spaces
-                      space-mark
-                      tab-mark))
-  (whitespace-space-regexp "\\(\u3000+\\)")
-  (whitespace-display-mappings '((space-mark ?\u3000 [?\u25a1])
-                                 (tab-mark ?\t [?\u00BB ?\t])))
+  (whitespace-style . '(face
+                        trailing
+                        tabs
+                        spaces
+                        space-mark
+                        tab-mark))
+  (whitespace-space-regexp . "\\(\u3000+\\)")
+  (whitespace-display-mappings . '((space-mark ?\u3000 [?\u25a1])
+                                   (tab-mark ?\t [?\u00BB ?\t])))
   ;; ;; 末尾スペースを自動削除
-  ;; (whitespace-action '(auto-cleanup))
+  ;; (whitespace-action . '(auto-cleanup))
 
   :hook
-  (prog-mode . whitespace-mode)
+  (prog-mode-hook . whitespace-mode)
 
   :config
   ;; フェイス設定
@@ -452,7 +438,8 @@
   (set-face-attribute 'whitespace-trailing nil
                       :background "red1"
                       :foreground 'unspecified)
-  (global-whitespace-mode 1))
+  (global-whitespace-mode 1)
+  )
 
 ;; デフォルトのインデント
 (setq-default indent-line-function 'tab-to-tab-stop)
@@ -470,12 +457,13 @@
 ;;   :config
 ;;   (load-theme 'cyberpunk t)
 ;;   )
-;; Migrated to use-package
-(use-package modus-themes
+(leaf modus-themes
   :ensure t
   :bind ("<f5>" . modus-themes-toggle)
   :init
-  (load-theme 'modus-vivendi-deuteranopia :no-confirm))
+  (load-theme 'modus-vivendi-deuteranopia :no-confirm)
+  :config
+  )
 
 ;; (leaf timu-macos-theme
 ;;   :ensure t
@@ -499,41 +487,40 @@
 (setq default-frame-alist initial-frame-alist)
 (set-frame-parameter nil 'fullscreen 'maximized)
 
-;; Migrated to use-package
-(use-package highlight-symbol
+(leaf highlight-symbol
   :ensure t
-  :hook ((prog-mode . highlight-symbol-mode)
-         (prog-mode . highlight-symbol-nav-mode)))
+  :hook (prog-mode-hook
+         (prog-mode-hook . highlight-symbol-nav-mode)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 05_dumb_jump.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Migrated to use-package
-(use-package dumb-jump
+(leaf dumb-jump
   :ensure t
   :bind (("C-M-g" . dumb-jump-go)
          ("C-M-b" . dumb-jump-back)
          ("C-M-q" . dumb-jump-quick-look))
   :config
-  (setq dumb-jump-selector 'ivy)
-  (bind-keys :map dumb-jump-mode-map
-             ("C-M-p" . nil))
+  (with-eval-after-load 'dumb-jump
+    (setq dumb-jump-selector 'ivy)
+    (bind-keys :map dumb-jump-mode-map
+               ("C-M-p" . nil)))
   :hook
-  (xref-backend-functions . dumb-jump-xref-activate))
+  (xref-backend-functions . dumb-jump-xref-activate)
+  )
 
-;; Migrated to use-package
-(use-package smart-jump
-  :ensure t
-  :after ivy
+(leaf smart-jump
+  :ensure t ivy
   :bind
   ("M-." . smart-jump-go)
   :custom
-  (dumb-jump-mode t)
-  (dumb-jump-selector 'ivy) ;; 候補選択をivyに任せます
-  (dumb-jump-use-visible-window nil)
+  (dumb-jump-mode . t)
+  (dumb-jump-selector . 'ivy) ;; 候補選択をivyに任せます
+  (dumb-jump-use-visible-window . nil)
   :config
-  (smart-jump-setup-default-registers))
+  (smart-jump-setup-default-registers)
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 05_linum.el
@@ -579,20 +566,20 @@
 ;;   )
 ;;   )
 
-;; Migrated to use-package
-(use-package treemacs
+(leaf treemacs
   :ensure t
-  :demand t
+  :require t
   :bind (("C-x n" . treemacs-add-and-display-current-project-exclusively))
   :custom
-  ;; (treemacs-no-png-images t)
-  ;; (treemacs-resize-icons 10)
-  (treemacs-hide-dot-git-directory nil)
-  (treemacs-file-watch-mode nil) ;; ファイルウォッチを無効化（リモートでは重い）
-  (treemacs-file-follow-delay 2.0) ;; 更新頻度を下げる
+  ;; (treemacs-no-png-images . t)
+  ;; (treemacs-resize-icons . 10)
+  (treemacs-hide-dot-git-directory . nil)
+  (treemacs-file-watch-mode . nil) ;; ファイルウォッチを無効化（リモートでは重い）
+  (treemacs-file-follow-delay . 2.0) ;; 更新頻度を下げる
   :config
   (treemacs-resize-icons 10)
-  (treemacs-follow-mode nil))
+  (treemacs-follow-mode nil)
+  )
 
 ;; (leaf dirvish
 ;;   :ensure t
@@ -629,33 +616,35 @@
 ;; 05_scratch-log.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Migrated to use-package
-(use-package scratch-log
+(leaf scratch-log
   :ensure t
-  :demand t)
+  :require t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 05_yasnippet.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Migrated to use-package
-(use-package yasnippet
+(leaf yasnippet
   :ensure t
-  :demand t
+  :require t
   :config
-  (yas-global-mode 1))
+  (yas-global-mode 1)
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 07_undo-tree.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Migrated to use-package
-(use-package undo-tree
+(leaf undo-tree
   :ensure t
-  :bind (("C-M-/" . undo-tree-redo)
-         ("C-/" . undo-tree-undo))
+  :bind (
+         ("C-M-/" . undo-tree-redo)
+         ("C-/" . undo-tree-undo)
+         )
   :custom
-  (undo-tree-auto-save-history nil)
+  (
+   (undo-tree-auto-save-history . nil)
+   )
   :config
   (global-undo-tree-mode t))
 
@@ -663,9 +652,10 @@
 ;; 08_flycheck.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Migrated to use-package
-(use-package flycheck
-  :ensure t)
+(leaf flycheck
+  :ensure t
+  :config
+  )
 
 ;; (leaf flycheck-pos-tip
 ;;   :ensure t
@@ -679,17 +669,15 @@
 ;; 08_quickrun.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Migrated to use-package
-(use-package quickrun
+(leaf quickrun
   :ensure t
-  :bind ("C-q" . quickrun))
+  :bind (("C-q" . quickrun)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 11_expand-region.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Migrated to use-package
-(use-package expand-region
+(leaf expand-region
   :ensure t
   :bind (("C-," . er/expand-region)
          ("C-<" . er/contract-region))
@@ -700,11 +688,10 @@
 ;; 13_rainbow-delimiter.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Migrated to use-package
-(use-package rainbow-delimiters
+(leaf rainbow-delimiters
   :ensure t
-  :hook (prog-mode . rainbow-delimiters-mode)
-  :demand t)
+  :hook (prog-mode-hook)
+  :require t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 14_open-junk-file.el
@@ -719,71 +706,82 @@
 ;; 15_ivy.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Migrated to use-package
-(use-package ivy
-  :ensure t)
-
-(use-package all-the-icons-ivy-rich
-  :ensure t
-  :after ivy)
-
-(use-package ivy-rich
-  :ensure t
-  :after ivy
-  :bind (("C-x b" . ivy-switch-buffer)
-         ("C-;" . ivy-switch-buffer))
-  :config
-  (all-the-icons-ivy-rich-mode 1)
-  (ivy-rich-mode 1)
-  (setq ivy-use-virtual-buffers t))
-
-(use-package ivy-hydra
-  :ensure t
-  :after ivy)
-
-(use-package swiper
-  :ensure t
-  :after ivy
-  :bind (("C-s" . swiper-isearch))
-  :config
-  (ivy-rich-mode 1))
-
-(use-package counsel
-  :ensure t
-  :after ivy
-  :bind (("M-x" . counsel-M-x)
-         ("M-y" . counsel-yank-pop)
-         ("C-M-z" . counsel-fzf)
-         ("C-M-r" . counsel-recentf)
-         ("C-x C-b" . counsel-ibuffer)
-         ("C-M-f" . counsel-rgrubyb)
-         ("C-c i" . counsel-imenu))
-  :config
-  (counsel-mode 1)
-  :hook
-  (counsel-mode . (lambda () (whitespace-mode -1))))
-
-(use-package prescient
+(leaf ivy
   :ensure t
   :config
-  (setq prescient-aggressive-file-save t)
-  (setq prescient-save-file (locate-user-emacs-file "prescient"))
-  (prescient-persist-mode 1))
+  (leaf all-the-icons-ivy-rich
+    :ensure t)
 
-(use-package ivy-prescient
-  :ensure t
-  :after (prescient ivy)
-  :custom
-  (ivy-prescient-retain-classic-highlighting t)
-  :config
-  (ivy-prescient-mode 1))
+  (leaf ivy-rich
+    :ensure t
+    :bind (("C-x b" . ivy-switch-buffer)
+           ("C-;" . ivy-switch-buffer))
+    :config
+    (with-eval-after-load 'ivy-rich
+      (all-the-icons-ivy-rich-mode 1)
+      (ivy-rich-mode 1)
+      (setq ivy-use-virtual-buffers t))
+    ;; :hook
+    ;; (ivy-rich-mode-hook . (lambda () (whitespace-mode -1)))
+    )
 
-(use-package ivy-yasnippet
-  :ensure t
-  :demand t
-  :after yasnippet
-  :bind (("C-c y" . ivy-yasnippet)
-         ("C-c C-y" . ivy-yasnippet)))
+  (leaf ivy-hydra
+    :ensure t
+    )
+
+  (leaf swiper
+    :ensure t
+    :bind (("C-s" . swiper-isearch))
+    :config
+    (with-eval-after-load 'swiper
+      (ivy-rich-mode 1)))
+
+  (leaf counsel
+    :ensure t
+    :bind (("M-x" . counsel-M-x)
+           ("M-y" . counsel-yank-pop)
+           ("C-M-z" . counsel-fzf)
+           ("C-M-r" . counsel-recentf)
+           ("C-x C-b" . counsel-ibuffer)
+           ("C-M-f" . counsel-rgrubyb)
+           ("C-c i" . counsel-imenu))
+    :config
+    (with-eval-after-load 'counsel
+      (counsel-mode 1))
+    :hook
+    (counsel-mode-hook . (lambda () (whitespace-mode -1)))
+    )
+
+  (leaf prescient
+    :doc "Better sorting and filtering(補完候補の使用履歴が新しいものを上に持ってきてくれる)"
+    :req "emacs-25.1"
+    :tag "extensions" "emacs>=25.1"
+    :url "https://github.com/raxod502/prescient.el"
+    :emacs>= 25.1
+    :ensure t
+    :commands (prescient-persist-mode)
+    :custom `((prescient-aggressive-file-save . t)
+              (prescient-save-file . ,(locate-user-emacs-file "prescient")))
+    :global-minor-mode prescient-persist-mode)
+
+  (leaf ivy-prescient
+    :doc "prescient.el + Ivy"
+    :req "emacs-25.1" "prescient-4.0" "ivy-0.11.0"
+    :tag "extensions" "emacs>=25.1"
+    :url "https://github.com/raxod502/prescient.el"
+    :emacs>= 25.1
+    :ensure t
+    :after prescient ivy
+    :custom ((ivy-prescient-retain-classic-highlighting . t))
+    :global-minor-mode t)
+
+  (leaf ivy-yasnippet
+    :ensure t
+    :require t
+    :after (yasnippet)
+    :bind (("C-c y" . ivy-yasnippet)
+           ("C-c C-y" . ivy-yasnippet)))
+  )
 
 ;; (leaf vertico
 ;;   :doc "VERTical Interactive COmpletion"
@@ -794,45 +792,45 @@
 ;; 50_company-mode.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Migrated to use-package
-(use-package company
-  :ensure t
-  :bind ((:map company-active-map
-          ("M-n" . nil)
-          ("M-p" . nil)
-          ("C-s" . company-filter-candidates)
-          ("C-n" . company-select-next)
-          ("C-p" . company-select-previous)
-          ("<tab>" . company-complete-selection))
-         (:map company-search-map
-          ("C-n" . company-select-next)
-          ("C-p" . company-select-previous))
-         )
-  :custom
-  (company-idle-delay 0)
-  (company-minimum-prefix-length 1)
-  (company-transformers '(company-sort-by-occurrence))
+(leaf company-mode-conf
   :config
-  (global-company-mode 1)
-  ;; (add-to-list 'company-backends 'company-yasnippet)
-  )
+  (leaf company
+    :ensure t
+    :bind ((company-active-map
+            ("M-n" . nil)
+            ("M-p" . nil)
+            ("C-s" . company-filter-candidates)
+            ("C-n" . company-select-next)
+            ("C-p" . company-select-previous)
+            ("<tab>" . company-complete-selection))
+           (company-search-map
+            ("C-n" . company-select-next)
+            ("C-p" . company-select-previous))
+           ("C-x y" . company-yasnippet))
+    :custom ((company-idle-delay . 0)
+             (company-minimum-prefix-length . 1)
+             (company-transformers . '(company-sort-by-occurrence)))
+    :global-minor-mode global-company-mode
+    :config
+    ;; (add-to-list 'company-backends 'company-yasnippet)
+    )
 
-;; (use-package company-box
-;;   :ensure t
-;;   :after (all-the-icons company)
-;;   :hook (company-mode . company-box-mode)
-;;   :custom
-;;   (company-box-icons-alist 'company-box-icons-all-the-icons)
-;;   (company-box-doc-enable t))
+  ;; (leaf company-box
+  ;;   :ensure t
+  ;;   :after all-the-icons company
+  ;;   :hook (company-mode-hook)
+  ;;   :custom ((company-box-icons-alist quote company-box-icons-all-the-icons)
+  ;;            (company-box-doc-enable)))
+
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 50_csharp-mode.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Migrated to use-package
-(use-package csharp-mode
+(leaf csharp-mode
   :ensure t
-  :mode ("\\.cs\\'" "\\.csx\\'"))
+  :mode ("\\.cs$'" "\\.csx$"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 50_elixir-mode.el
@@ -862,34 +860,36 @@
 ;; 50_go-mode.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Migrated to use-package
-(use-package go-mode
+(leaf go-mode
   :ensure t
   :mode ("\\.go\\'")
-  :bind (:map go-mode-map
-         ("C-c C-r" . go-remove-unused-imports)
-         ("M-." . godef-jump)
-         ("M-," . pop-tag-mark)
-         ("C-c C-i" . go-import-add))
-  :hook ((go-mode . company-mode)
-         (go-mode . dumb-jump-mode)
-         (go-mode . yas-minor-mode)
-         (go-mode . (lambda () (setq tab-width 2)))
-         (before-save . gofmt-before-save))
   :config
-  (setq gofmt-command "goimports"))
+  (with-eval-after-load 'go-mode
+    (add-hook 'go-mode-hook
+              '(lambda nil
+                 (company-mode t)
+                 (dumb-jump-mode t)
+                 (yas-minor-mode t)
+                 (setq tab-width 2)))
+    (setq gofmt-command "goimports")
+    (progn
+      (bind-key "C-c C-r" #'go-remove-unused-imports go-mode-map nil)
+      (bind-key "M-." #'godef-jump go-mode-map nil)
+      (bind-key "M-," #'pop-tag-mark go-mode-map nil)
+      (bind-key "C-c C-i" #'go-import-add go-mode-map nil)
+      )
 
-(use-package go-eldoc
-  :ensure t
-  :after go-mode
-  :hook (go-mode . go-eldoc-setup))
+    (add-hook 'before-save-hook 'gofmt-before-save)
+    (leaf go-eldoc
+      :ensure t
+      :config
+      (add-hook 'go-mode-hook 'go-eldoc-setup))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 50_graphql-mode.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Migrated to use-package
-(use-package graphql-mode
+(leaf graphql-mode
   :ensure t
   :mode ("\\.graphql\\'"))
 
@@ -897,23 +897,25 @@
 ;; 50_json-mode.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Migrated to use-package
-(use-package json-mode
+(leaf json-mode
   :ensure t
   :mode ("\\.json$")
-  :hook (json-mode . (lambda ()
-                       (make-local-variable 'js-indent-level)
-                       (setq js-indent-level 2))))
+  :config
+  (add-hook 'json-mode-hook
+            (lambda nil
+              (make-local-variable 'js-indent-level)
+              (setq js-indent-level 2))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 50_lsp-mode.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (setq tsserver-args (list "--stdio" "--tsserver-path" (expand-file-name "~/.nvm/versions/node/v24.2.0/lib/node_modules/typescript/lib")))
-;; Migrated to use-package
-(use-package lsp-mode
+(leaf lsp-mode
   :ensure t
   :custom
-  (lsp-clients-typescript-server-args tsserver-args)
+  (
+   (lsp-clients-typescript-server-args . tsserver-args)
+   )
   :config
   ;; (lsp-register-client
   ;;   (make-lsp-client :new-connection (lsp-tramp-connection "rust-analyzer")
@@ -921,47 +923,50 @@
   ;;                    :remote? t
   ;;                    :server-id 'rust-analyzer-remote))
   :hook
-  ;; (web-mode . lsp-deferred)
-  (go-mode . lsp-deferred)
-  ;; (typescript-mode . lsp-deferred)
-  ;; (ruby-mode . lsp-deferred)
-  ;; (terraform-mode . lsp-deferred)
+  ;; (web-mode-hook . lsp-deferred)
+  (go-mode-hook . lsp-deferred)
+  ;; (typescript-mode-hook . lsp-deferred)
+   ;; (ruby-mode-hook . lsp-deferred)
+  ;; (go-mode-hook . lsp-deferred)
+  ;; (terraform-mode-hook . lsp-deferred)
+)
+
+(leaf lsp-ui
+  :ensure t
+  :require t
+  :custom
+  (
+   (lsp-ui-doc-enable            . t)
+   (lsp-ui-doc-header            . t)
+   (lsp-ui-doc-include-signature . t)
+   (lsp-ui-doc-position          . 'at-point)
+   (lsp-ui-doc-use-childframe    . nil)
+   (lsp-ui-doc-use-webkit        . t)
+   ;; (lsp-ui-flycheck-enable       . nil)
+   (lsp-ui-peek-enable           . t)
+   (lsp-ui-peek-fontify          . 'on-demand) ;; never, on-demand, or always
+   (lsp-ui-imenu-enable          . nil)
+   (lsp-ui-imenu-kind-position   . 'top)
+   (lsp-ui-sideline-enable       . nil)
+   (lsp-typescript-format-enable . nil)
+   (lsp-typescript-format-insert-space-after-semicolon-in-for-statements . nil)
+   )
   )
 
-;; Migrated to use-package
-(use-package lsp-ui
+(leaf eglot
   :ensure t
-  :demand t
-  :custom
-  (lsp-ui-doc-enable t)
-  (lsp-ui-doc-header t)
-  (lsp-ui-doc-include-signature t)
-  (lsp-ui-doc-position 'at-point)
-  (lsp-ui-doc-use-childframe nil)
-  (lsp-ui-doc-use-webkit t)
-  ;; (lsp-ui-flycheck-enable nil)
-  (lsp-ui-peek-enable t)
-  (lsp-ui-peek-fontify 'on-demand) ;; never, on-demand, or always
-  (lsp-ui-imenu-enable nil)
-  (lsp-ui-imenu-kind-position 'top)
-  (lsp-ui-sideline-enable nil)
-  (lsp-typescript-format-enable nil)
-  (lsp-typescript-format-insert-space-after-semicolon-in-for-statements nil))
-
-;; Migrated to use-package
-(use-package eglot
-  :ensure t
-  :demand t
+  :require t
   :config
   ;; (add-to-list 'eglot-server-programs
   ;;            `(terraform-mode . ("terraform-ls" "serve" "--port" :autoport)))
   (add-to-list 'eglot-server-programs '(web-mode . ("typescript-language-server" "--stdio")))
   ;; (add-to-list 'eglot-server-programs '(ruby-mode . ("bundle" "exec" "rubocop" "--lsp")))
   :hook
-  (web-mode . eglot-ensure)
-  (ruby-mode . eglot-ensure)
-  ;; (go-mode . eglot-ensure)
-  ;; (terraform-mode . eglot-ensure)
+  (web-mode-hook . eglot-ensure)
+  ;; (ruby-mode-hook . eglot-ensure)
+  ;; (go-mode-hook   . eglot-ensure)
+  ;; (terraform-mode-hook   . eglot-ensure)
+  ;; (web-mode-hook . eglot-ensure)
   )
 
 ;; for python
@@ -981,80 +986,76 @@
 ;; 50_magit.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Migrated to use-package
-(use-package magit
+(leaf magit
   :ensure t
-  :demand t
+  :require t
   :bind (("C-x m" . magit-status))
   :config
-  (setq-default magit-auto-revert-mode nil)
-  (eval-after-load "vc"
-    '(remove-hook 'find-file-hooks 'vc-find-file-hook)))
+  (with-eval-after-load 'magit
+    (setq-default magit-auto-revert-mode nil)
+    (eval-after-load "vc"
+      '(remove-hook 'find-file-hooks 'vc-find-file-hook))
+    ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 50_markdown-mode.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Migrated to use-package
-(use-package markdown-mode
+(leaf markdown-mode
   :ensure t
   :mode ("\\.md\\'" . gfm-mode)
   :custom
-  (markdown-fontify-code-blocks-natively t)
-  (markdown-header-scaling t)
-  (markdown-indent-on-enter 'indent-and-new-item)
-  (markdown-list-indent-width 2)
-  :bind (:map markdown-mode-map
-         ("<S-tab>" . markdown-promote-list-item)))
+  (markdown-fontify-code-blocks-natively . t)
+  (markdown-header-scaling . t)
+  (markdown-indent-on-enter . 'indent-and-new-item)
+  (markdown-list-indent-width . 2)
+  :config
+  (with-eval-after-load 'markdown-mode
+    (define-key markdown-mode-map (kbd "<S-tab>") #'markdown-promote-list-item))
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 50_other-mode.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Migrated to use-package
-(use-package fzf
+(leaf fzf
   :ensure t)
 
-;; Migrated to use-package
-(use-package highlight-symbol
+(leaf highlight-symbol
   :ensure t)
 
-;; Migrated to use-package
-(use-package erlang
+(leaf erlang
   :ensure t)
 
-;; Migrated to use-package
-(use-package nginx-mode
+(leaf nginx-mode
   :ensure t)
 
-;; Migrated to use-package
-(use-package dockerfile-mode
+(leaf dockerfile-mode
   :ensure t
-  :demand t)
+  :require t)
 
-;; Migrated to use-package
-(use-package toml-mode
+(leaf toml-mode
   :ensure t)
 
-;; Migrated to use-package
-(use-package yaml-mode
+(leaf yaml-mode
   :ensure t
-  :hook (yaml-mode . whitespace-mode))
+  :hook
+  (yaml-mode-hook . whitespace-mode)
+  )
 
-;; Migrated to use-package
-(use-package highlight-indent-guides
+(leaf highlight-indent-guides
   :ensure t
   ;; :hook
-  ;; (yaml-mode . highlight-indent-guides-mode)
+  ;; (yaml-mode-hook . highlight-indent-guides-mode)
   :custom
-  (highlight-indent-guides-auto-enabled t)
-  (highlight-indent-guides-responsive t)
-  (highlight-indent-guides-method 'character))
+  (highlight-indent-guides-auto-enabled . t)
+  (highlight-indent-guides-responsive . t)
+  (highlight-indent-guides-method . 'character)
+  )
 
-;; Migrated to use-package
-(use-package volatile-highlights
+(leaf volatile-highlights
   :ensure t
-  :demand t
+  :require t
   :config
   (volatile-highlights-mode)
   (with-no-warnings
@@ -1062,36 +1063,40 @@
       (defun my-vhl-pulse (beg end &optional _buf face)
         "Pulse the changes."
         (pulse-momentary-highlight-region beg end face))
-      (advice-add #'vhl/.make-hl :override #'my-vhl-pulse))))
+      (advice-add #'vhl/.make-hl :override #'my-vhl-pulse)))
+  )
 
-;; Migrated to use-package
-(use-package ansible
+(leaf ansible
   :ensure t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 50_protobuf-mode.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Migrated to use-package
-(use-package protobuf-mode
+(leaf protobuf-mode
   :ensure t
   :mode ("\\.proto\\'")
-  :hook ((protobuf-mode . company-mode)
-         (protobuf-mode . dumb-jump-mode)
-         (protobuf-mode . yas-minor-mode)
-         (protobuf-mode . (lambda () (setq tab-width 2)))))
+  :config
+  (add-hook 'protobuf-mode-hook
+            '(lambda nil
+               (company-mode t)
+               (dumb-jump-mode t)
+               (yas-minor-mode t)
+               (setq tab-width 2)
+               ))
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 50_ruby-mode.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Migrated to use-package
-(use-package ruby-mode
+(leaf ruby-mode
   :ensure t
-  :demand t
-  :init
-  (defun ruby-beautify-buffer ()
+  :require t
+  :preface
+  (defun ruby-beautify-buffer nil
     (interactive)
-    (let (p rb)
+    (let (p
+          rb)
       (setq p (point)
             rb (buffer-string))
       (with-temp-buffer
@@ -1104,6 +1109,7 @@
       (erase-buffer)
       (insert rb)
       (goto-char p)))
+
   :bind (("C-c C-v f" . ruby-beautify-buffer)
          ("C-M-n" . ruby-end-of-block)
          ("C-M-p" . ruby-beginning-of-block))
@@ -1118,36 +1124,41 @@
          "Guardfile$"
          "\\.jbuilder$"
          "Schemafile$")
-  :custom
-  (lsp-diagnostic-package :none)
-  :hook ((ruby-mode . company-mode)
-         (ruby-mode . dumb-jump-mode)
-         (ruby-mode . ruby-end-mode)
-         (ruby-mode . yas-minor-mode)
-         (ruby-mode . rainbow-delimiters-mode)
-         (ruby-mode . copilot-mode)))
+  :setq ((lsp-diagnostic-package . :none))
+  :hook
+  ((ruby-mode-hook . company-mode)
+   (ruby-mode-hook . dumb-jump-mode)
+   (ruby-mode-hook . ruby-end-mode)
+   (ruby-mode-hook . yas-minor-mode)
+   (ruby-mode-hook . rainbow-delimiters-mode)
+   (ruby-mode-hook . copilot-mode)
+   )
+  :config
+)
 
-;; Migrated to use-package
-(use-package rspec-mode
+(leaf rspec-mode
   :ensure t
-  :demand t
+  :require t
   :config
   (defun rspec-specize-file-name-advice (args)
     "controller からテストファイルを探索する時に request spec に移動するパッチ"
     (let ((file-name (nth 0 args)))
       (setq file-name (string-replace "/controllers/" "/requests/" file-name))
       (setq file-name (string-replace "_controller.rb" ".rb" file-name))
-      (list file-name)))
+      (list file-name)
+      ))
 
   (defun rspec-targetize-file-name-advice (args)
     "request spec からプロダクトコードを探索する時に controller に移動するパッチ"
     (let ((file-name (nth 0 args)) (extension (nth 1 args)))
       (setq file-name (string-replace "/requests/" "/controllers/" file-name))
       (setq file-name (string-replace "_spec" "_controller" file-name))
-      (list file-name extension)))
+      (list file-name extension)
+      ))
 
   (advice-add 'rspec-specize-file-name :filter-args 'rspec-specize-file-name-advice)
-  (advice-add 'rspec-targetize-file-name :filter-args 'rspec-targetize-file-name-advice))
+  (advice-add 'rspec-targetize-file-name :filter-args 'rspec-targetize-file-name-advice)
+  )
 
 ;; (leaf rubocop
 ;;   :ensure t
@@ -1184,27 +1195,26 @@
         (when (> offset 0)
           (forward-char offset))))))
 
-;; Migrated to use-package
-(use-package ruby-end
+(leaf ruby-end
   :ensure t
-  :demand t)
-
-(use-package slim-mode
-  :ensure t
+  :require t
+  )
+(leaf slim-mode
   :mode ("\\.slim$"
-         "\\.slime$"))
-
-(use-package haml-mode
+         "\\.slime$")
+  :ensure t)
+(leaf haml-mode
   :ensure t
-  :demand t)
-
-(use-package ruby-hash-syntax
+  :require t
+  )
+(leaf ruby-hash-syntax
   :ensure t
-  :demand t)
-
-(use-package ruby-refactor
+  :require t
+  )
+(leaf ruby-refactor
   :ensure t
-  :demand t)
+  :require t
+  )
 
 ;; (leaf rvm
 ;;   :ensure t
@@ -1214,51 +1224,55 @@
 ;;   (rvm-use-default)
 ;;   )
 
-;; Migrated to use-package
-(use-package rbenv
+(leaf rbenv
   :ensure t
-  :demand t
+  :require t
   ;; :if (eq system-type 'gnu/linux)
   :config
   (global-rbenv-mode)
-  :custom
-  (rbenv-installation-dir "~/.rbenv"))
+  :custom (
+           (rbenv-installation-dir . "~/.rbenv")
+           )
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 50_rust-mode.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Migrated to use-package
-(use-package rustic
+(leaf rustic
   :ensure t
   :mode ("\\.rs$")
-  :custom
-  ;; debug
-  (lsp-print-io nil)
-  (lsp-trace nil)
-  (lsp-print-performance nil)
-  ;; general
-  ;; (lsp-auto-guess-root t)
-  ;; (lsp-document-sync-method 'incremental) ;; always send incremental document
-  (lsp-response-timeout 5)
-  (lsp-prefer-flymake 'flymake)
-  ;; (lsp-enable-completion-at-point nil)
-  (rustic-format-on-save t)
-  (rustic-lsp-format t)
-  (rustic-format-trigger nil)
-  (rustic-lsp-client 'eglot)
+  :custom (;; debug
+           (lsp-print-io          . nil)
+           (lsp-trace             . nil)
+           (lsp-print-performance . nil)
+           ;; general
+           ;; (lsp-auto-guess-root      . t)
+           ;; (lsp-document-sync-method . 'incremental) ;; always send incremental document
+           (lsp-response-timeout     . 5)
+           (lsp-prefer-flymake       . 'flymake)
+           ;; (lsp-enable-completion-at-point . nil)
+           (rustic-format-on-save    . t)
+           (rustic-lsp-format        . t)
+           (rustic-format-trigger    . nil)
+           (rustic-lsp-client        . 'eglot)
+           )
   :hook
-  ((rustic-mode . company-mode)
-   (rustic-mode . dumb-jump-mode)
-   (rustic-mode . yas-minor-mode)
-   (rustic-mode . rainbow-delimiters-mode)
-   (rustic-mode . copilot-mode))
-  :bind (:map rustic-mode-map
-         ("C-M-n" . rustic-end-of-defun)
-         ("C-M-p" . rustic-beginning-of-defun))
+  ((rustic-mode-hook . company-mode)
+   (rustic-mode-hook . dumb-jump-mode)
+   (rustic-mode-hook . yas-minor-mode)
+   (rustic-mode-hook . rainbow-delimiters-mode)
+   (rustic-mode-hook . copilot-mode)
+   )
   :config
   (remove-hook 'rustic-mode-hook 'flycheck-mode)
   ;; (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
+  (with-eval-after-load 'rustic
+    (progn
+      (bind-key "C-M-n" #'rustic-end-of-defun rustic-mode-map nil)
+      (bind-key "C-M-p" #'rustic-beginning-of-defun rustic-mode-map nil))
+    )
+
   (add-to-list 'eglot-server-programs
                `(rustic-mode . ("rust-analyzer" :initializationOptions
                                 ( :procMacro (:enable t)
@@ -1268,47 +1282,63 @@
                                                             ( :Ok ( :postfix "ok"
                                                                     :body "Ok(${receiver})"
                                                                     :description "Ok($expr)"
-                                                                    :scope "expr")
+                                                                    :scope "expr"
+                                                                    )
                                                               :Some ( :postfix "some"
                                                                       :body "Some(${receiver})"
                                                                       :description "Some($expr)"
-                                                                      :scope "expr")))))))))
+                                                                      :scope "expr"
+                                                                      )
+                                                              )))))))
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 50_scss-mode.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Migrated to use-package
-(use-package scss-mode
+(leaf scss-mode
   :ensure t
-  :mode ("\\.scss$")
-  :init
-  (defun scss-custom ()
+  :preface
+  (defun scss-custom nil
     "scss-mode-hook"
-    (setq-local css-indent-offset 2)
-    (setq-local scss-compile-at-save nil))
-  :hook (scss-mode . scss-custom))
+    (and
+     (set (make-local-variable 'css-indent-offset) 2)
+     (set (make-local-variable 'scss-compile-at-save) nil)
+     )
+    )
 
-;; Migrated to use-package
-(use-package rainbow-mode
+  :mode ("\\.scss$")
+  :config
+  (with-eval-after-load 'scss-mode
+    (add-hook 'scss-mode-hook
+              '(lambda nil
+                 (scss-custom)))))
+
+(leaf rainbow-mode
   :ensure t
-  :demand t)
+  :require t
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 50_terraform-mode.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Migrated to use-package
-(use-package terraform-mode
+(leaf terraform-mode
   :ensure t
   :mode ("\\.tf\\'" "\\.hcl\\'")
-  :demand t
+  :require t
   :custom
-  (tab-width 2)
-  (terraform-format-on-save t)
-  :hook ((terraform-mode . company-mode)
-         (terraform-mode . dumb-jump-mode)
-         (terraform-mode . yas-minor-mode)))
+  (
+   (tab-width                . 2)
+   (terraform-format-on-save . t)
+   )
+  :config
+  (with-eval-after-load 'terraform-mode
+    (add-hook 'terraform-mode-hook
+              '(lambda nil
+                 (company-mode t)
+                 (dumb-jump-mode t)
+                 (yas-minor-mode t)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 50_vue-mode.el
@@ -1331,15 +1361,14 @@
 ;; 50_web-mode.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Migrated to use-package
-(use-package typescript-mode
+(leaf typescript-mode
   :ensure t
-  :demand t)
+  :require t
+  )
 
-;; Migrated to use-package
-(use-package web-mode
+(leaf web-mode
   :ensure t
-  :demand t
+  :require t
   :mode ("\\.phtml$"
          "\\.tpl\\.php$"
          "\\.jsp$"
@@ -1351,19 +1380,25 @@
          "\\.m?js$"
          "\\.tsx$"
          "\\.ts$"
-         "\\.astro$")
+         "\\.astro$"
+         )
   :custom
-  (auto-save-default nil)
-  (web-mode-markup-indent-offset 2)
-  (web-mode-css-indent-offset 2)
-  (web-mode-code-indent-offset 2)
-  (web-mode-attr-indent-offset 2)
-  (web-mode-enable-auto-pairing t)
-  (web-mode-enable-auto-closing t)
-  :hook ((web-mode . company-mode)
-         (web-mode . dumb-jump-mode)
-         (web-mode . yas-minor-mode)
-         (web-mode . copilot-mode))
+  (
+   (auto-save-default . nil)
+   (web-mode-markup-indent-offset . 2)
+   (web-mode-css-indent-offset . 2)
+   (web-mode-code-indent-offset . 2)
+   (web-mode-attr-indent-offset . 2)
+   (web-mode-enable-auto-pairing . t)
+   (web-mode-enable-auto-closing . t)
+   )
+  :hook
+  (
+   (web-mode-hook . company-mode)
+   (web-mode-hook . dumb-jump-mode)
+   (web-mode-hook . yas-minor-mode)
+   (web-mode-hook . copilot-mode)
+   )
   :config
   (setq-default indent-tabs-mode nil)
   ;; (setq-default web-mode-comment-formats (remove '("javascript" . "/*") web-mode-comment-formats))
@@ -1373,91 +1408,130 @@
   (add-to-list 'web-mode-indentation-params '("lineup-args" . nil))
   (add-to-list 'web-mode-indentation-params '("lineup-calls" . nil))
   (add-to-list 'web-mode-indentation-params '("lineup-concats" . nil))
-  (add-to-list 'web-mode-indentation-params '("lineup-ternary" . nil)))
+  (add-to-list 'web-mode-indentation-params '("lineup-ternary" . nil))
 
-(use-package nvm
-  :ensure t
-  :demand t
-  :config
-  (nvm-use "24.2.0"))
+  (leaf nvm
+    :ensure t
+    :require t
+    :config
+    (nvm-use "24.2.0")
+    )
 
-(use-package prettier
-  :ensure t
-  :after (nvm web-mode)
-  :demand t
-  :hook (web-mode . prettier-mode))
+  (leaf prettier
+    :ensure t
+    :after nvm
+    :require t
+    :hook
+    (
+     (web-mode-hook . prettier-mode)
+     )
+    )
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Migrated to use-package
-(use-package ace-jump-mode
+(leaf ace-jump-mode
   :ensure t
-  :demand t)
-;; Migrated to use-package
-(use-package ace-window
+  :require t
+  )
+(leaf ace-window
   :ensure t
-  :demand t
-  :bind ("C-x a" . ace-window)
+  :require t
+  :bind (
+         ("C-x a" . ace-window)
+         )
   :custom
-  (aw-keys '(?a ?b ?k ?l ?g ?h ?j ?k)))
+  (aw-keys . '(?a ?b ?k ?l ?g ?h ?j ?k))
+  )
 
-;; Migrated to use-package
-(use-package projectile
+(leaf projectile
   :ensure t
-  :demand t
-  :config
-  (projectile-mode +1))
+  :require t
+  :custom
+  (projectile-mode . +1)
+  )
 
-;; Migrated to use-package
-(use-package ddskk
+(leaf ddskk
   :ensure t
-  :bind (("C-x C-j" . skk-mode)
-         ("C-x j"   . skk-mode))
+  :bind
+  (("C-x C-j" . skk-mode)
+   ("C-x j"   . skk-mode))
   :init
   (defvar dired-bind-jump nil)  ; dired-xがC-xC-jを奪うので対処しておく
+  :custom
+  (skk-use-azik                     . nil)      ; AZIKを使用する
+  (skk-azik-keyboard-type           . 'jp106)
+  (skk-tut-file                     . nil)
+  (skk-server-host                  . "localhost")
+  (skk-server-portnum               . 1178)   ;
+  (skk-egg-like-newline             . t)      ; 変換時にリターンでは改行しない
+  (skk-japanese-message-and-error   . t)      ; メッセージを日本語にする
+  (skk-auto-insert-paren            . t)      ; 対応する括弧を自動挿入
+  (skk-check-okurigana-on-touroku   . t)      ;
+  (skk-show-annotation              . t)      ; アノテーションを表示
+  (skk-anotation-show-wikipedia-url . t)      ;
+  (skk-show-tooltip                 . nil)    ; 変換候補をインライン表示しない
+  (skk-isearch-start-mode           . 'latin) ; isearch時にSKKをオフ
+  (skk-henkan-okuri-strictly        . nil)    ; 送り仮名を考慮した変換候補
+  (skk-process-okuri-early          . nil)
+  (skk-status-indicator             . 'minor-mode)
+  :hook
+  (skk-azik-load-hook . my/skk-azik-disable-tU)
+  :preface
   (defun my/skk-azik-disable-tU ()
     "ddskkのazikモードが`tU'を`っ'として扱うのを抑制する."
     (setq skk-rule-tree (skk-compile-rule-list
                          skk-rom-kana-base-rule-list
-                         (skk-del-alist "tU" skk-rom-kana-rule-list))))
+                         (skk-del-alist "tU" skk-rom-kana-rule-list)))))
+(leaf csv-mode
+  :ensure t
+  :require t
+  :bind
+  :init
   :custom
-  (skk-use-azik nil)      ; AZIKを使用する
-  (skk-azik-keyboard-type 'jp106)
-  (skk-tut-file nil)
-  (skk-server-host "localhost")
-  (skk-server-portnum 1178)
-  (skk-egg-like-newline t)      ; 変換時にリターンでは改行しない
-  (skk-japanese-message-and-error t)      ; メッセージを日本語にする
-  (skk-auto-insert-paren t)      ; 対応する括弧を自動挿入
-  (skk-check-okurigana-on-touroku t)
-  (skk-show-annotation t)      ; アノテーションを表示
-  (skk-anotation-show-wikipedia-url t)
-  (skk-show-tooltip nil)    ; 変換候補をインライン表示しない
-  (skk-isearch-start-mode 'latin) ; isearch時にSKKをオフ
-  (skk-henkan-okuri-strictly nil)    ; 送り仮名を考慮した変換候補
-  (skk-process-okuri-early nil)
-  (skk-status-indicator 'minor-mode)
   :hook
-  (skk-azik-load . my/skk-azik-disable-tU))
-;; Migrated to use-package
-(use-package csv-mode
-  :ensure t
-  :demand t)
+  :preface
+  )
 
-;; Migrated to use-package
-(use-package lua-mode
+(leaf lua-mode
   :ensure t
-  :demand t)
+  :require t
+  :bind
+  :init
+  :custom
+  :hook
+  )
 
-;; Migrated to use-package
-(use-package tree-sitter
+;; (leaf atomic-chrome
+;;   :ensure t
+;;   :require t
+;;   :bind
+;;   :init
+;;   (atomic-chrome-start-server)
+;;   )
+
+(leaf tree-sittter
   ;; :hook
-  ;; (tree-sitter-after-on . tree-sitter-hl-mode)
+  ;; (tree-sitter-after-on-hook . tree-sitter-hl-mode)
   ;; :config
   ;; (global-tree-sitter-mode)
   ;; (tree-sitter-require 'tsx)
   :custom
-  (treesit-extra-load-path '("~/.emacs.d/tree-sitter/")))
+  (treesit-extra-load-path . '("~/.emacs.d/tree-sitter/"))
+  )
+
+;; (leaf tree-sitter-langs
+;;   :ensure t
+;;   :after tree-sitter
+;;   :config
+;;   )
+
+;; (leaf treesit-auto
+;;   :ensure t
+;;   :config
+;;   (setq treesit-auto-install t)
+;;   (global-treesit-auto-mode)
+;;   )
 
 (leaf copilot
   :el-get (copilot
@@ -1487,53 +1561,55 @@
     (define-key copilot-mode-map (kbd "<tab>") #'my/copilot-tab))
   )
 
-;; Migrated to use-package
-(use-package request
+(leaf request
   :ensure t
-  :demand t)
+  :require t
+  )
 
-;; Migrated to use-package
-(use-package copilot-chat
+(leaf copilot-chat
   :ensure t
-  :demand t
-  :after (markdown-mode chatgpt-shell))
+  :require t
+  :doc "Copilot chat interface"
+  :req "request-0.3.2" "markdown-mode-2.6" "emacs-27.1" "chatgpt-shell-1.6.1"
+  :emacs>= 27.1
+  :after markdown-mode chatgpt-shell
+  )
 
-;; Migrated to use-package
-(use-package string-inflection
+(leaf string-inflection
   :ensure t
-  :demand t)
+  :require t
+  )
 
 ;; Claude Code
-;; Migrated to use-package
-;; Claude Code
-(use-package vterm
+(leaf vterm
   ;; requirements: brew install cmake libvterm libtool
   :ensure t
   :custom
-  (vterm-shell "/bin/zsh")
-  (vterm-max-scrollback 10000)
-  (vterm-buffer-name-string "vterm: %s")
+  (vterm-shell . "/bin/zsh")
+  (vterm-max-scrollback . 10000)
+  (vterm-buffer-name-string . "vterm: %s")
   ;; delete "C-h", add <f1> and <f2>
   (vterm-keymap-exceptions
-   '("<f1>" "<f2>" "C-c" "C-x" "C-u" "C-g" "C-l" "M-x" "M-o" "C-v" "M-v" "M-y"))
-  (vterm-tramp-shells '(("ssh"  login-shell "/bin/zsh")
-                        ("scp"  login-shell "/bin/zsh")
-                        ("scpx" login-shell "/bin/zsh")
-                        ("sshx" login-shell "/bin/zsh")))
+   . '("<f1>" "<f2>" "C-c" "C-x" "C-u" "C-g" "C-l" "M-x" "M-o" "C-v" "M-v" "M-y"))
+  (vterm-tramp-shells . '(("ssh"  login-shell "/bin/zsh")
+                          ("scp"  login-shell "/bin/zsh")
+                          ("scpx" login-shell "/bin/zsh")
+                          ("sshx" login-shell "/bin/zsh")))
   :config
   ;; Workaround of not working counsel-yank-pop
   ;; https://github.com/akermu/emacs-libvterm#counsel-yank-pop-doesnt-work
   (advice-add 'counsel-yank-pop-action :around #'my/vterm-counsel-yank-pop-action)
   :hook
-  (vterm-mode . (lambda () (whitespace-mode -1)))
-  :bind (:map vterm-mode-map
-         ("C-y" . vterm-yank)))
+  (vterm-mode-hook . (lambda () (whitespace-mode -1)))
+  :bind
+  (:vterm-mode-map
+   ("C-y" . vterm-yank))
+  )
 
-;; Migrated to use-package
-(use-package vterm-toggle
+(leaf vterm-toggle
   :ensure t
   :custom
-  (vterm-toggle-scope 'project)
+  (vterm-toggle-scope . 'project)
   :config
   ;; Show vterm buffer in the window located at bottom
   (add-to-list 'display-buffer-alist
@@ -1546,7 +1622,8 @@
   (defun my/vterm-new-buffer-in-current-window()
     (interactive)
     (let ((display-buffer-alist nil))
-      (vterm))))
+            (vterm)))
+  )
 
 (use-package claude-code-ide
   :vc (:url "https://github.com/manzaltu/claude-code-ide.el" :rev :newest)
