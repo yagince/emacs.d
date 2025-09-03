@@ -23,7 +23,8 @@
     (leaf-keywords-init)))
 ;; </leaf-install-code>
 
-
+;; custom設定がinit.elに書き込まれないようにする
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (setq gc-cons-threshold (* 128 1024 1024))
 (setq ring-bell-function 'ignore)
 
