@@ -194,7 +194,7 @@
                 '(line-height (1.3 . 1.3)))
 
   ;; 行間を広げて絵文字があっても行高さが変わらないようにする
-  (setq-default line-spacing 5)
+  (setq-default line-spacing 3)
 )
 
 (when (eq system-type 'gnu/linux) ; linux
@@ -814,12 +814,12 @@
     ;; (add-to-list 'company-backends 'company-yasnippet)
     )
 
-  (leaf company-box
-    :ensure t
-    :after all-the-icons company
-    :hook (company-mode-hook)
-    :custom ((company-box-icons-alist quote company-box-icons-all-the-icons)
-             (company-box-doc-enable)))
+  ;; (leaf company-box
+  ;;   :ensure t
+  ;;   :after all-the-icons company
+  ;;   :hook (company-mode-hook)
+  ;;   :custom ((company-box-icons-alist quote company-box-icons-all-the-icons)
+  ;;            (company-box-doc-enable)))
 
   )
 
@@ -1589,7 +1589,7 @@
   (vterm-buffer-name-string . "vterm: %s")
   ;; delete "C-h", add <f1> and <f2>
   (vterm-keymap-exceptions
-   . '("<f1>" "<f2>" "C-c" "C-x" "C-u" "C-g" "C-l" "M-x" "M-o" "C-v" "M-v" "C-y" "M-y"))
+   . '("<f1>" "<f2>" "C-c" "C-x" "C-u" "C-g" "C-l" "M-x" "M-o" "C-v" "M-v" "M-y"))
   (vterm-tramp-shells . '(("ssh"  login-shell "/bin/zsh")
                           ("scp"  login-shell "/bin/zsh")
                           ("scpx" login-shell "/bin/zsh")
@@ -1600,6 +1600,9 @@
   (advice-add 'counsel-yank-pop-action :around #'my/vterm-counsel-yank-pop-action)
   :hook
   (vterm-mode-hook . (lambda () (whitespace-mode -1)))
+  :bind
+  (:vterm-mode-map
+   ("C-y" . vterm-yank))
   )
 
 (leaf vterm-toggle
