@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-This is a personal Emacs configuration repository that has been migrated from Leaf to use-package (built into Emacs 29+). The configuration is heavily modularized with extensive customization for various programming languages and development tools. A small number of packages remain using Leaf for technical compatibility reasons.
+This is a personal Emacs configuration repository fully migrated from Leaf to use-package (built into Emacs 29+). The configuration is heavily modularized with extensive customization for various programming languages and development tools. GitHub packages are installed via package-vc using use-package's `:vc` keyword.
 
 ## Key Files and Structure
 
@@ -14,7 +14,7 @@ This is a personal Emacs configuration repository that has been migrated from Le
 - **custom.el**: Auto-generated custom variables (not tracked in git)
 - **snippets/**: YASnippet templates organized by mode (web-mode, vue-mode, rustic-mode, etc.)
 - **themes/**: Custom theme files (pastels-on-dark-theme.el, githublike-theme.el)
-- **el-get/**: El-get managed packages (still used for copilot integration)
+- **el-get/**: Legacy directory from pre-migration (not used by current config)
 
 ## Common Development Tasks
 
@@ -30,20 +30,15 @@ C-x C-e            # Evaluate expression at point
 ```
 
 ### Package management
-- Uses **use-package** as the primary package management system (built into Emacs 29+)
+- Uses **use-package** as the primary package management system (Emacs 29+)
 - Packages are installed from MELPA, GNU, NonGNU, and Org archives
-- **Leaf** remains for specific packages requiring el-get integration (copilot) and Linux-only packages (mozc)
-- **El-get** is used for packages not available in standard repositories (e.g., copilot.el from GitHub)
+- **package-vc** via `use-package :vc` is used for GitHub packages (e.g., copilot.el, mozc-el-extensions)
 
 ## Configuration Architecture
 
 ### Package Management
-- **use-package**: Main package declaration and configuration system (86+ packages migrated)
-- **Leaf**: Retained for el-get integration and Linux-specific packages (6 packages)
-  - leaf-keywords, leaf-convert, leaf-tree (infrastructure)
-  - mozc, *user-mozc-tool (Linux-only Japanese input)
-  - copilot (requires el-get integration)
-- **El-get**: Used for packages from GitHub (e.g., mozc-el-extensions, copilot.el)
+- **use-package**: Main package declaration and configuration system (all packages)
+- **package-vc**: Fetch GitHub packages via `:vc` (no el-get/Leaf)
 
 ### Key Bindings Philosophy
 - `C-h` remapped to backward-delete-char
@@ -78,7 +73,7 @@ Primary language modes configured:
 - Modeline: doom-modeline
 
 ### Special Integrations
-- **Copilot**: GitHub Copilot integration via el-get
+- **Copilot**: GitHub Copilot integration via `use-package :vc`
 - **Claude Code IDE**: Integration for Claude Code with vterm backend
 - **Mozc**: Japanese input method (Linux only)
 - **DDskk**: Alternative Japanese input method
@@ -106,11 +101,10 @@ Add a new use-package declaration in init.el following the existing pattern:
   ("key" . command))  ; key bindings
 ```
 
-For packages requiring el-get, continue using Leaf:
+For packages hosted on GitHub, use `:vc` with use-package:
 ```elisp
-(leaf package-name
-  :el-get (package-spec)
-  :require t)
+(use-package package-name
+  :vc (:fetcher github :repo "owner/repo" :rev :newest))
 ```
 
 ### Debugging
@@ -130,10 +124,7 @@ For packages requiring el-get, continue using Leaf:
 | `:preface` | `:init` | Code before package loads |
 
 ### Packages Still Using Leaf
-The following packages remain on Leaf for technical reasons:
-1. **leaf-keywords, leaf-convert, leaf-tree**: Infrastructure for el-get support
-2. **mozc, *user-mozc-tool**: Linux-only, not used on macOS
-3. **copilot**: Requires el-get to fetch from GitHub
+None. Leaf has been fully removed from the active configuration.
 
 ### Testing After Changes
 After making configuration changes:

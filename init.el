@@ -11,35 +11,12 @@
 (require 'use-package)
 (setq use-package-always-ensure t)  ; Always ensure packages are installed
 
-;; Keep leaf for now during migration
-(unless (package-installed-p 'leaf)
-  (package-refresh-contents)
-  (package-install 'leaf))
-
-
-(leaf leaf-keywords
-  :ensure t
-  :init
-  ;; optional packages if you want to use :hydra, :el-get, :blackout,,,
-  (leaf hydra :ensure t)
-  (leaf el-get :ensure t)
-  (leaf blackout :ensure t)
-
-  :config
-  ;; initialize leaf-keywords.el
-  (leaf-keywords-init))
-
 ;; custom設定がinit.elに書き込まれないようにする
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (setq gc-cons-threshold (* 128 1024 1024))
 (setq ring-bell-function 'ignore)
 
-;; Now you can use leaf!
-(leaf leaf-convert :ensure t)
-(leaf leaf-tree
-  :ensure t
-  :custom ((imenu-list-size . 30)
-           (imenu-list-position . 'left)))
+
 
 ;; Migrated to use-package
 (use-package macrostep
@@ -297,16 +274,15 @@
   :bind (("<f8>" . goto-last-change)
          ("M-<f8>" . goto-last-change-reverse)))
 
-(leaf mozc
-  :ensure t
+(use-package mozc
   :if (eq system-type 'gnu/linux)
-  :bind* ("M-SPC" . toggle-input-method)
-  :config
-  (setq default-input-method "japanese-mozc"
-        mozc-helper-program-name "mozc_emacs_helper"
-        mozc-leim-title "Mozc"
-        )
-  :preface
+  :ensure t
+  :bind* (("M-SPC" . toggle-input-method))
+  :custom
+  (default-input-method "japanese-mozc")
+  (mozc-helper-program-name "mozc_emacs_helper")
+  (mozc-leim-title "Mozc")
+  :init
   (defadvice toggle-input-method (around toggle-input-method-around activate)
     "Input method function in key-chord.el not to be nil."
     (let ((input-method-function-save input-method-function))
@@ -318,35 +294,35 @@
     (toggle-input-method)
     (insert str)
     (toggle-input-method))
-  (add-hook 'mozc-mode-hook
-            (lambda ()
-              (define-key mozc-mode-map "?" '(lambda () (interactive) (mozc-insert-str "？")))
-              (define-key mozc-mode-map "," '(lambda () (interactive) (mozc-insert-str "、")))
-              (define-key mozc-mode-map "." '(lambda () (interactive) (mozc-insert-str "。")))))
-  :init
-  ;; (leaf mozc-temp
-  ;;   :ensure t
-  ;;   :bind* ("C-M-n" . mozc-temp-convert))
-  (leaf mozc-cursor-color
-    :el-get iRi-E/mozc-el-extensions
-    :require t
-    :config
-    (setq mozc-cursor-color-alist
-          '((direct . "#BD93F9")
-            (read-only . "#84A0C6")
-            (hiragana . "#CC3333"))))
-  (leaf mozc-cand-posframe
-    :ensure t
-    :require t
-    :config
-    (setq mozc-candidate-style 'posframe)
-    :init
-    (leaf posframe :ensure t)))
+  :hook
+  (mozc-mode . (lambda ()
+                 (define-key mozc-mode-map "?" (lambda () (interactive) (mozc-insert-str "？")))
+                 (define-key mozc-mode-map "," (lambda () (interactive) (mozc-insert-str "、")))
+                 (define-key mozc-mode-map "." (lambda () (interactive) (mozc-insert-str "。"))))))
 
-
-(leaf *user-mozc-tool
+(use-package posframe
   :if (eq system-type 'gnu/linux)
-  :init
+  :ensure t)
+
+(use-package mozc-cursor-color
+  :if (eq system-type 'gnu/linux)
+  :vc (:url "https://github.com/iRi-E/mozc-el-extensions" :main-file "mozc-cursor-color.el")
+  :after mozc
+  :config
+  (setq mozc-cursor-color-alist
+        '((direct . "#BD93F9")
+          (read-only . "#84A0C6")
+          (hiragana . "#CC3333"))))
+
+(use-package mozc-cand-posframe
+  :if (eq system-type 'gnu/linux)
+  :ensure t
+  :after (mozc posframe)
+  :custom
+  (mozc-candidate-style 'posframe))
+
+
+(when (eq system-type 'gnu/linux)
   (defun my:select-mozc-tool ()
     "Narrow the only espy command in M-x."
     (interactive)
@@ -530,49 +506,8 @@
    :heuristic 'point
    :async nil))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 05_linum.el
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; (leaf linum
-;;   :ensure t
-;;   :require t
-;;   :config
-;;   (global-linum-mode t)
-;;   (setq linum-format "%4d ")
-;;   )
-
 (when (version<= "26.0.50" emacs-version )
   (global-display-line-numbers-mode))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 05_neotree.el
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; (leaf neotree
-;;   :ensure t
-;;   :bind (("C-x n" . neotree-show))
-;;   :config
-;;   (with-eval-after-load 'neotree
-;;     ;; (setq neo-show-hidden-files t) ;; 隠しファイルをデフォルトで表示
-;;     ;; (setq neo-keymap-style 'concise)
-;;     ;; (setq neo-smart-open t)
-;;     ;; (setq neo-create-file-auto-open t)
-;;     ;; (setq neo-create-file-auto-open t)
-;;     (setq neo-theme (if (display-graphic-p)
-;;                         'icons 'arrow)))
-;;   :custom
-;;   (
-;;    (neo-show-hidden-files . t) ;; 隠しファイルをデフォルトで表示
-;;    ;; (neo-keymap-style . 'concise)
-;;    (neo-smart-open . t)
-;;    (neo-create-file-auto-open . t)
-;;    (neo-create-file-auto-open . t)
-;;    (projectile-switch-project-action . 'neotree-projectile-action)
-;;    (neo-window-fixed-size . nil)
-;;    (neo-window-width . 50)
-;;   )
-;;   )
 
 ;; Migrated to use-package
 (use-package treemacs
@@ -588,37 +523,6 @@
   :config
   (treemacs-resize-icons 10)
   (treemacs-follow-mode nil))
-
-;; (leaf dirvish
-;;   :ensure t
-;;   :init
-;;   (dirvish-override-dired-mode)
-
-;;   :custom
-;;   ;; 最小限の設定
-;;   ((dirvish-side-width . 30)
-;;    (dirvish-reuse-session . nil)  ; セッション再利用を無効化
-;;    (dirvish-emerge-groups . nil)  ; グループ化を無効化
-;;    )
-
-;;   :config
-;;   ;; 表示する属性（通常時）
-;;   (setq dirvish-attributes
-;;         '(file-size collapse subtree-state vc-state git-msg))
-
-;;   ;; アイコン設定（オプション）
-;;   ;; all-the-iconsがインストールされている場合
-;;   (when (featurep 'all-the-icons)
-;;     (push 'all-the-icons dirvish-attributes))
-
-;;   ;; プレビュー設定
-;;   (setq dirvish-preview-dispatchers
-;;         '(image gif video audio epub pdf archive))
-
-;;   :bind (("<f5>" . dirvish-side)
-;;          ("C-c d" . dirvish))
-;;   )
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 05_scratch-log.el
@@ -662,14 +566,6 @@
 (use-package flycheck
   :ensure t)
 
-;; (leaf flycheck-pos-tip
-;;   :ensure t
-;;   :require t
-;;   :after flycheck
-;;   :config
-;;   (flycheck-pos-tip-mode)
-;;   )
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 08_quickrun.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -700,15 +596,6 @@
   :ensure t
   :hook (prog-mode . rainbow-delimiters-mode)
   :demand t)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 14_open-junk-file.el
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; (leaf open-junk-file
-;;   :ensure t
-;;   :bind (("C-x C-j" . open-junk-file))
-;;   :setq ((open-junk-file-format . "~/.emacs.d/junk/%Y/%m/%Y-%m-%d-%H%M%S.")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 15_ivy.el
@@ -780,11 +667,6 @@
   :bind (("C-c y" . ivy-yasnippet)
          ("C-c C-y" . ivy-yasnippet)))
 
-;; (leaf vertico
-;;   :doc "VERTical Interactive COmpletion"
-;;   :ensure t
-;;   :global-minor-mode t)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 50_company-mode.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -828,30 +710,6 @@
 (use-package csharp-mode
   :ensure t
   :mode ("\\.cs\\'" "\\.csx\\'"))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 50_elixir-mode.el
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;;(leaf elixir-mode
-;;  :ensure t
-;;  :mode ("\\.elixir2\\'" "\\.ex$" "\\.exs$")
-;;  :config
-;;  (add-hook 'elixir-mode-hook
-;;            '(lambda nil
-;;               (company-mode t)
-;;               (dumb-jump-mode t)
-;;               (yas-minor-mode t)))
-;;  (with-eval-after-load 'elixir-mode
-;;    (add-to-list 'elixir-mode-hook
-;;                 (defun auto-activate-ruby-end-mode-for-elixir-mode nil
-;;                   (set
-;;                    (make-variable-buffer-local 'ruby-end-expand-keywords-before-re)
-;;                    "\\(?:^\\|\\s-+\\)\\(?:do\\)")
-;;                   (set
-;;                    (make-variable-buffer-local 'ruby-end-check-statement-modifiers)
-;;                    nil)
-;;                   (ruby-end-mode 1)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 50_go-mode.el
@@ -958,19 +816,6 @@
   ;; (go-mode . eglot-ensure)
   ;; (terraform-mode . eglot-ensure)
   )
-
-;; for python
-;; (leaf lsp-pyright
-;;   :ensure t
-;;   :hook
-;;   (python-mode-hook . lsp-deferred)
-;; )
-
-;; (leaf lsp-pyright
-;;   :ensure t
-;;   :hook (python-mode-hook . (lambda ()
-;;                               (require 'lsp-pyright)
-;;                               (lsp-deferred))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 50_magit.el
@@ -1144,15 +989,6 @@
   (advice-add 'rspec-specize-file-name :filter-args 'rspec-specize-file-name-advice)
   (advice-add 'rspec-targetize-file-name :filter-args 'rspec-targetize-file-name-advice))
 
-;; (leaf rubocop
-;;   :ensure t
-;;   :require t
-;;   :custom
-;;   ((rubocop-prefer-system-executable . t))
-;;   :hook
-;;   ((ruby-mode-hook . rubocop-mode))
-;;   )
-
 (with-eval-after-load 'ruby-mode
   (setq ruby-insert-encoding-magic-comment nil)
   (setq ruby-deep-indent-paren-style nil)
@@ -1200,14 +1036,6 @@
 (use-package ruby-refactor
   :ensure t
   :demand t)
-
-;; (leaf rvm
-;;   :ensure t
-;;   :if (eq system-type 'darwin)
-;;   :commands rvm-use-default
-;;   :config
-;;   (rvm-use-default)
-;;   )
 
 ;; Migrated to use-package
 (use-package rbenv
@@ -1304,23 +1132,6 @@
   :hook ((terraform-mode . company-mode)
          (terraform-mode . dumb-jump-mode)
          (terraform-mode . yas-minor-mode)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 50_vue-mode.el
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; (leaf vue-mode
-;;   :ensure t
-;;   :mode ("\\.vue\\'")
-;;   :config
-;;   (with-eval-after-load 'vue-mode
-;;     (setq mmm-submode-decoration-level 0)
-;;     (setq indent-tabs-mode nil
-;;           js-indent-level 2
-;;           typescript-indent-level 2)
-;;     (add-hook 'vue-mode-hook #'add-node-modules-path)
-;;     (add-hook 'vue-mode-hook 'yas-minor-mode)
-;;     (add-hook 'vue-mode-hook 'flycheck-mode)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 50_web-mode.el
@@ -1454,33 +1265,19 @@
   :custom
   (treesit-extra-load-path '("~/.emacs.d/tree-sitter/")))
 
-(leaf copilot
-  :el-get (copilot
-           :type github
-           :pkgname "copilot-emacs/copilot.el"
-           )
-  :require t
-  :config
-  (leaf editorconfig
-    :ensure t
-    :require t
-    )
-  (leaf s
-    :ensure t
-    :require t
-    )
-  (leaf dash
-    :ensure t
-    :require t
-    )
+(use-package editorconfig :ensure t)
+(use-package s :ensure t)
+(use-package dash :ensure t)
+(use-package copilot
+  :vc (:url "https://github.com/copilot-emacs/copilot.el" :branch "main")
+  :commands (copilot-mode)
+  :init
   (defun my/copilot-tab ()
     (interactive)
     (or (copilot-accept-completion)
         (indent-for-tab-command)))
-
-  (with-eval-after-load 'copilot
-    (define-key copilot-mode-map (kbd "<tab>") #'my/copilot-tab))
-  )
+  :config
+  (define-key copilot-mode-map (kbd "<tab>") #'my/copilot-tab))
 
 ;; Migrated to use-package
 (use-package request
@@ -1544,7 +1341,7 @@
       (vterm))))
 
 (use-package claude-code-ide
-  :vc (:url "https://github.com/manzaltu/claude-code-ide.el" :rev :newest)
+  :vc (:url "https://github.com/manzaltu/claude-code-ide.el")
   :init
   :bind
   (("C-c m" . claude-code-ide-menu)
