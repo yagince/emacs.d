@@ -324,7 +324,8 @@
   (defun my:select-mozc-tool ()
     "Narrow the only espy command in M-x."
     (interactive)
-    (counsel-M-x "^my:mozc "))
+    (minibuffer-with-setup-hook (lambda () (insert "my:mozc "))
+      (consult-M-x)))
 
   (defun my:mozc-config-dialog ()
     "Run the mozc-tool in the background."
@@ -443,6 +444,88 @@
   :init
   (load-theme 'modus-vivendi-deuteranopia :no-confirm))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Vertico stack (vertico, orderless, marginalia, consult)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Persist minibuffer history
+(use-package savehist
+  :ensure t
+  :init (savehist-mode 1))
+
+;; Vertical interactive completion UI
+(use-package vertico
+  :ensure t
+  :init (vertico-mode 1))
+
+;; Flexible matching for completion
+(use-package orderless
+  :ensure t
+  :init
+  (setq completion-styles '(orderless)
+        completion-category-defaults nil
+        completion-category-overrides '((file (styles partial-completion)))))
+
+;; Rich annotations in minibuffer
+(use-package marginalia
+  :ensure t
+  :init (marginalia-mode 1))
+
+;; Consult: commands replacing Counsel/Swiper
+(use-package consult
+  :ensure t
+  :bind (("M-x"   . consult-M-x)
+         ("C-x b" . consult-buffer)
+         ("C-s"   . consult-line)
+         ("M-y"   . consult-yank-pop)
+         ("C-M-r" . consult-recent-file)
+         ("C-c i" . consult-imenu))
+  :init
+  (with-eval-after-load 'projectile
+    (setq consult-project-function (lambda (_) (projectile-project-root)))))
+
+;; affe: async fast find/grep (fd/rg)
+(use-package affe
+  :ensure t
+  :bind (("C-M-z" . affe-find)
+         ("C-M-f" . affe-grep))
+  :config
+  (require 'orderless)
+  (defun my/affe-orderless-regexp-compiler (input _type _ignore)
+    (setq input (orderless-pattern-compiler input))
+    (cons input (lambda (str) (orderless--highlight input str))))
+  (setq affe-regexp-compiler #'my/affe-orderless-regexp-compiler))
+
+;; Embark: act on candidates
+(use-package embark
+  :ensure t
+  :bind (("C-." . embark-act)
+         ("C-;" . embark-dwim)
+         ("C-h B" . embark-bindings))
+  :init
+  (setq prefix-help-command #'embark-prefix-help-command))
+
+(use-package embark-consult
+  :ensure t
+  :after (embark consult)
+  :hook (embark-collect-mode . consult-preview-at-point-mode))
+
+;; Corfu/Cape (initially not enabled globally to avoid conflict with Company)
+(use-package corfu
+  :ensure t
+  :custom (corfu-auto t)
+  (corfu-auto-delay 0)
+  (corfu-auto-prefix 1))
+
+(use-package cape
+  :ensure t
+  :init
+  (defun my/setup-cape-capfs ()
+    (add-hook 'completion-at-point-functions #'cape-file 90 t)
+    (add-hook 'completion-at-point-functions #'cape-dabbrev 95 t)
+    (add-hook 'completion-at-point-functions #'cape-keyword 95 t)
+    (add-hook 'completion-at-point-functions #'cape-symbol 95 t)))
+
 (when (equal system-type 'darwin)
   (setq initial-frame-alist
         (append (list '(alpha . 80))
@@ -476,7 +559,7 @@
          ("C-M-b" . dumb-jump-back)
          ("C-M-q" . dumb-jump-quick-look))
   :config
-  (setq dumb-jump-selector 'ivy)
+  (setq dumb-jump-selector 'completing-read)
   (bind-keys :map dumb-jump-mode-map
              ("C-M-p" . nil))
   :hook
@@ -485,12 +568,11 @@
 ;; Migrated to use-package
 (use-package smart-jump
   :ensure t
-  :after ivy
   :bind
   ("M-." . smart-jump-go)
   :custom
   (dumb-jump-mode t)
-  (dumb-jump-selector 'ivy) ;; 候補選択をivyに任せます
+  (dumb-jump-selector 'completing-read) ;; completing-readに移行
   (dumb-jump-use-visible-window nil)
   :config
   (smart-jump-setup-default-registers)
@@ -609,8 +691,6 @@
 (use-package ivy-rich
   :ensure t
   :after ivy
-  :bind (("C-x b" . ivy-switch-buffer)
-         ("C-;" . ivy-switch-buffer))
   :config
   (all-the-icons-ivy-rich-mode 1)
   (ivy-rich-mode 1)
@@ -623,24 +703,12 @@
 (use-package swiper
   :ensure t
   :after ivy
-  :bind (("C-s" . swiper-isearch))
   :config
   (ivy-rich-mode 1))
 
 (use-package counsel
   :ensure t
-  :after ivy
-  :bind (("M-x" . counsel-M-x)
-         ("M-y" . counsel-yank-pop)
-         ("C-M-z" . counsel-fzf)
-         ("C-M-r" . counsel-recentf)
-         ("C-x C-b" . counsel-ibuffer)
-         ("C-M-f" . counsel-rgrubyb)
-         ("C-c i" . counsel-imenu))
-  :config
-  (counsel-mode 1)
-  :hook
-  (counsel-mode . (lambda () (whitespace-mode -1))))
+  :after ivy)
 
 (use-package prescient
   :ensure t
@@ -1310,9 +1378,10 @@
                         ("scpx" login-shell "/bin/zsh")
                         ("sshx" login-shell "/bin/zsh")))
   :config
-  ;; Workaround of not working counsel-yank-pop
+  ;; Counsel-specific workaround (guarded)
   ;; https://github.com/akermu/emacs-libvterm#counsel-yank-pop-doesnt-work
-  (advice-add 'counsel-yank-pop-action :around #'my/vterm-counsel-yank-pop-action)
+  (with-eval-after-load 'counsel
+    (advice-add 'counsel-yank-pop-action :around #'my/vterm-counsel-yank-pop-action))
   :hook
   (vterm-mode . (lambda () (whitespace-mode -1)))
   :bind (:map vterm-mode-map
