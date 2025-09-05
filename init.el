@@ -16,8 +16,6 @@
 (setq gc-cons-threshold (* 128 1024 1024))
 (setq ring-bell-function 'ignore)
 
-
-
 ;; Migrated to use-package
 (use-package macrostep
   :ensure t
@@ -512,7 +510,6 @@
 ;; Migrated to use-package
 (use-package treemacs
   :ensure t
-  :demand t
   :bind (("C-x n" . treemacs-add-and-display-current-project-exclusively))
   :custom
   ;; (treemacs-no-png-images t)
@@ -784,7 +781,6 @@
 ;; Migrated to use-package
 (use-package lsp-ui
   :ensure t
-  :demand t
   :custom
   (lsp-ui-doc-enable t)
   (lsp-ui-doc-header t)
@@ -804,7 +800,6 @@
 ;; Migrated to use-package
 (use-package eglot
   :ensure t
-  :demand t
   :config
   ;; (add-to-list 'eglot-server-programs
   ;;            `(terraform-mode . ("terraform-ls" "serve" "--port" :autoport)))
@@ -824,7 +819,6 @@
 ;; Migrated to use-package
 (use-package magit
   :ensure t
-  :demand t
   :bind (("C-x m" . magit-status))
   :config
   (setq-default magit-auto-revert-mode nil)
@@ -870,7 +864,7 @@
 ;; Migrated to use-package
 (use-package dockerfile-mode
   :ensure t
-  :demand t)
+  )
 
 ;; Migrated to use-package
 (use-package toml-mode
@@ -927,7 +921,6 @@
 ;; Migrated to use-package
 (use-package ruby-mode
   :ensure t
-  :demand t
   :init
   (defun ruby-beautify-buffer ()
     (interactive)
@@ -970,7 +963,6 @@
 ;; Migrated to use-package
 (use-package rspec-mode
   :ensure t
-  :demand t
   :config
   (defun rspec-specize-file-name-advice (args)
     "controller からテストファイルを探索する時に request spec に移動するパッチ"
@@ -1018,7 +1010,7 @@
 ;; Migrated to use-package
 (use-package ruby-end
   :ensure t
-  :demand t)
+  )
 
 (use-package slim-mode
   :ensure t
@@ -1027,23 +1019,21 @@
 
 (use-package haml-mode
   :ensure t
-  :demand t)
+  :mode ("\\.haml\\'"))
 
 (use-package ruby-hash-syntax
   :ensure t
-  :demand t)
+  )
 
 (use-package ruby-refactor
   :ensure t
-  :demand t)
+  )
 
 ;; Migrated to use-package
 (use-package rbenv
   :ensure t
-  :demand t
   ;; :if (eq system-type 'gnu/linux)
-  :config
-  (global-rbenv-mode)
+  :hook (ruby-mode . rbenv-use-corresponding)
   :custom
   (rbenv-installation-dir "~/.rbenv"))
 
@@ -1125,7 +1115,6 @@
 (use-package terraform-mode
   :ensure t
   :mode ("\\.tf\\'" "\\.hcl\\'")
-  :demand t
   :custom
   (tab-width 2)
   (terraform-format-on-save t)
@@ -1140,12 +1129,11 @@
 ;; Migrated to use-package
 (use-package typescript-mode
   :ensure t
-  :demand t)
+  )
 
 ;; Migrated to use-package
 (use-package web-mode
   :ensure t
-  :demand t
   :mode ("\\.phtml$"
          "\\.tpl\\.php$"
          "\\.jsp$"
@@ -1169,6 +1157,7 @@
   :hook ((web-mode . company-mode)
          (web-mode . dumb-jump-mode)
          (web-mode . yas-minor-mode)
+         (web-mode . my/nvm-use-24)
          (web-mode . copilot-mode))
   :config
   (setq-default indent-tabs-mode nil)
@@ -1183,14 +1172,15 @@
 
 (use-package nvm
   :ensure t
-  :demand t
-  :config
-  (nvm-use "24.2.0"))
+  :commands (nvm-use)
+  :init
+  (defun my/nvm-use-24 ()
+    (interactive)
+    (ignore-errors (nvm-use "24.2.0"))))
 
 (use-package prettier
   :ensure t
   :after (nvm web-mode)
-  :demand t
   :hook (web-mode . prettier-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1248,12 +1238,12 @@
 ;; Migrated to use-package
 (use-package csv-mode
   :ensure t
-  :demand t)
+  )
 
 ;; Migrated to use-package
 (use-package lua-mode
   :ensure t
-  :demand t)
+  )
 
 ;; Migrated to use-package
 (use-package tree-sitter
@@ -1282,18 +1272,17 @@
 ;; Migrated to use-package
 (use-package request
   :ensure t
-  :demand t)
+  )
 
 ;; Migrated to use-package
 (use-package copilot-chat
   :ensure t
-  :demand t
   :after (markdown-mode chatgpt-shell))
 
 ;; Migrated to use-package
 (use-package string-inflection
   :ensure t
-  :demand t)
+  )
 
 ;; Claude Code
 ;; Migrated to use-package
