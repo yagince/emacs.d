@@ -325,7 +325,7 @@
     "Narrow the only espy command in M-x."
     (interactive)
     (minibuffer-with-setup-hook (lambda () (insert "my:mozc "))
-      (consult-M-x)))
+      (call-interactively #'execute-extended-command)))
 
   (defun my:mozc-config-dialog ()
     "Run the mozc-tool in the background."
@@ -471,11 +471,18 @@
   :ensure t
   :init (marginalia-mode 1))
 
+;; Recent files for consult-recent-file
+(use-package recentf
+  :ensure t
+  :init (recentf-mode 1)
+  :custom
+  (recentf-max-saved-items 2000)
+  (recentf-auto-cleanup 'never))
+
 ;; Consult: commands replacing Counsel/Swiper
 (use-package consult
   :ensure t
-  :bind (("M-x"   . consult-M-x)
-         ("C-x b" . consult-buffer)
+  :bind (("C-x b" . consult-buffer)
          ("C-s"   . consult-line)
          ("M-y"   . consult-yank-pop)
          ("C-M-r" . consult-recent-file)
