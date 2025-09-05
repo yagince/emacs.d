@@ -618,8 +618,7 @@
 
 ;; Migrated to use-package
 (use-package scratch-log
-  :ensure t
-  :demand t)
+  :ensure t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 05_yasnippet.el
@@ -836,6 +835,7 @@
   :hook
   (web-mode . eglot-ensure)
   (ruby-mode . eglot-ensure)
+  (rustic-mode . eglot-ensure)
   ;; (go-mode . eglot-ensure)
   ;; (terraform-mode . eglot-ensure)
   )
@@ -1069,6 +1069,10 @@
 ;; 50_rust-mode.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; 一部のファイルが "-*- mode: rustic; -*-" を使う場合に備えてエイリアスを定義
+;; rustic はメジャーモード関数名ではなく、実体は rustic-mode
+(defalias 'rustic 'rustic-mode)
+
 ;; Migrated to use-package
 (use-package rustic
   :ensure t
@@ -1100,20 +1104,21 @@
   :config
   (remove-hook 'rustic-mode-hook 'flycheck-mode)
   ;; (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
-  (add-to-list 'eglot-server-programs
-               `(rustic-mode . ("rust-analyzer" :initializationOptions
-                                ( :procMacro (:enable t)
-                                  :cargo ( :buildScripts (:enable t)
-                                           :features "all")
-                                  :completion ( :snippets ( :custom
-                                                            ( :Ok ( :postfix "ok"
-                                                                    :body "Ok(${receiver})"
-                                                                    :description "Ok($expr)"
-                                                                    :scope "expr")
-                                                              :Some ( :postfix "some"
-                                                                      :body "Some(${receiver})"
-                                                                      :description "Some($expr)"
-                                                                      :scope "expr")))))))))
+  (with-eval-after-load 'eglot
+    (add-to-list 'eglot-server-programs
+                 `(rustic-mode . ("rust-analyzer" :initializationOptions
+                                  ( :procMacro (:enable t)
+                                    :cargo ( :buildScripts (:enable t)
+                                             :features "all")
+                                    :completion ( :snippets ( :custom
+                                                              ( :Ok ( :postfix "ok"
+                                                                      :body "Ok(${receiver})"
+                                                                      :description "Ok($expr)"
+                                                                      :scope "expr")
+                                                                :Some ( :postfix "some"
+                                                                        :body "Some(${receiver})"
+                                                                        :description "Some($expr)"
+                                                                        :scope "expr"))))))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 50_scss-mode.el
@@ -1213,10 +1218,6 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Migrated to use-package
-(use-package ace-jump-mode
-  :ensure t
-  :demand t)
 ;; Migrated to use-package
 (use-package ace-window
   :ensure t
