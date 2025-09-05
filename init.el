@@ -690,56 +690,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Migrated to use-package
-(use-package ivy
-  :ensure t)
-
-(use-package all-the-icons-ivy-rich
-  :ensure t
-  :after ivy)
-
-(use-package ivy-rich
-  :ensure t
-  :after ivy
-  :config
-  (all-the-icons-ivy-rich-mode 1)
-  (ivy-rich-mode 1)
-  (setq ivy-use-virtual-buffers t))
-
-(use-package ivy-hydra
-  :ensure t
-  :after ivy)
-
-(use-package swiper
-  :ensure t
-  :after ivy
-  :config
-  (ivy-rich-mode 1))
-
-(use-package counsel
-  :ensure t
-  :after ivy)
-
-(use-package prescient
-  :ensure t
-  :config
-  (setq prescient-aggressive-file-save t)
-  (setq prescient-save-file (locate-user-emacs-file "prescient"))
-  (prescient-persist-mode 1))
-
-(use-package ivy-prescient
-  :ensure t
-  :after (prescient ivy)
-  :custom
-  (ivy-prescient-retain-classic-highlighting t)
-  :config
-  (ivy-prescient-mode 1))
-
-(use-package ivy-yasnippet
-  :ensure t
-  :demand t
-  :after yasnippet
-  :bind (("C-c y" . ivy-yasnippet)
-         ("C-c C-y" . ivy-yasnippet)))
+;; Ivy/Counsel/Swiper stack removed (migrated to Vertico/Consult)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 50_company-mode.el
