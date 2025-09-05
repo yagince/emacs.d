@@ -508,7 +508,9 @@
   :ensure t
   :bind (("C-." . embark-act)
          ("C-;" . embark-dwim)
-         ("C-h B" . embark-bindings))
+         ;; C-h はプレフィックスではない設定のため別キーに退避
+         ("C-c B" . embark-bindings)
+         ("C-c h" . embark-prefix-help-command))
   :init
   (setq prefix-help-command #'embark-prefix-help-command))
 
