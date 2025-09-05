@@ -500,7 +500,12 @@
     (add-hook 'completion-at-point-functions #'cape-file 90 t)
     (add-hook 'completion-at-point-functions #'cape-dabbrev 95 t)
     (add-hook 'completion-at-point-functions #'cape-keyword 95 t)
-    (add-hook 'completion-at-point-functions #'cape-symbol 95 t)))
+    (add-hook 'completion-at-point-functions #'cape-symbol 95 t)
+    (when (fboundp 'cape-yasnippet)
+      (add-hook 'completion-at-point-functions #'cape-yasnippet 90 t)))
+  ;; すべてのテキスト/プログラミングバッファで CAPF を補強
+  :hook ((prog-mode . my/setup-cape-capfs)
+         (text-mode . my/setup-cape-capfs)))
 
 (when (equal system-type 'darwin)
   (setq initial-frame-alist
@@ -659,31 +664,20 @@
 ;; Ivy/Counsel/Swiper stack removed (migrated to Vertico/Consult)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 50_company-mode.el
+;; 50_completion (corfu)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Migrated to use-package
-(use-package company
+;; Corfu をグローバル有効化（company の代替）
+(use-package corfu
   :ensure t
-  :bind ((:map company-active-map
-          ("M-n" . nil)
-          ("M-p" . nil)
-          ("C-s" . company-filter-candidates)
-          ("C-n" . company-select-next)
-          ("C-p" . company-select-previous)
-          ("<tab>" . company-complete-selection))
-         (:map company-search-map
-          ("C-n" . company-select-next)
-          ("C-p" . company-select-previous))
-         )
+  :init
+  (global-corfu-mode 1)
   :custom
-  (company-idle-delay 0)
-  (company-minimum-prefix-length 1)
-  (company-transformers '(company-sort-by-occurrence))
-  :config
-  (global-company-mode 1)
-  ;; (add-to-list 'company-backends 'company-yasnippet)
-  )
+  (corfu-auto t)
+  (corfu-auto-delay 0)
+  (corfu-auto-prefix 1)
+  (corfu-cycle t))
 
 ;; (use-package company-box
 ;;   :ensure t
@@ -715,9 +709,8 @@
          ("M-." . godef-jump)
          ("M-," . pop-tag-mark)
          ("C-c C-i" . go-import-add))
-  :hook ((go-mode . company-mode)
+  :hook ((go-mode . yas-minor-mode)
          (go-mode . dumb-jump-mode)
-         (go-mode . yas-minor-mode)
          (go-mode . (lambda () (setq tab-width 2)))
          (before-save . gofmt-before-save))
   :config
@@ -758,6 +751,7 @@
   :ensure t
   :custom
   (lsp-clients-typescript-server-args tsserver-args)
+  (lsp-completion-provider :capf)
   :config
   ;; (lsp-register-client
   ;;   (make-lsp-client :new-connection (lsp-tramp-connection "rust-analyzer")
@@ -905,9 +899,8 @@
 (use-package protobuf-mode
   :ensure t
   :mode ("\\.proto\\'")
-  :hook ((protobuf-mode . company-mode)
+  :hook ((protobuf-mode . yas-minor-mode)
          (protobuf-mode . dumb-jump-mode)
-         (protobuf-mode . yas-minor-mode)
          (protobuf-mode . (lambda () (setq tab-width 2)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -948,8 +941,7 @@
          "Schemafile$")
   :custom
   (lsp-diagnostic-package :none)
-  :hook ((ruby-mode . company-mode)
-         (ruby-mode . dumb-jump-mode)
+  :hook ((ruby-mode . dumb-jump-mode)
          (ruby-mode . ruby-end-mode)
          (ruby-mode . yas-minor-mode)
          (ruby-mode . rainbow-delimiters-mode)
@@ -1118,9 +1110,8 @@
   :custom
   (tab-width 2)
   (terraform-format-on-save t)
-  :hook ((terraform-mode . company-mode)
-         (terraform-mode . dumb-jump-mode)
-         (terraform-mode . yas-minor-mode)))
+  :hook ((terraform-mode . yas-minor-mode)
+         (terraform-mode . dumb-jump-mode)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 50_web-mode.el
@@ -1154,9 +1145,8 @@
   (web-mode-attr-indent-offset 2)
   (web-mode-enable-auto-pairing t)
   (web-mode-enable-auto-closing t)
-  :hook ((web-mode . company-mode)
+  :hook ((web-mode . yas-minor-mode)
          (web-mode . dumb-jump-mode)
-         (web-mode . yas-minor-mode)
          (web-mode . my/nvm-use-24)
          (web-mode . copilot-mode))
   :config
