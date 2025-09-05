@@ -679,13 +679,19 @@
   (corfu-auto-prefix 1)
   (corfu-cycle t))
 
-;; (use-package company-box
-;;   :ensure t
-;;   :after (all-the-icons company)
-;;   :hook (company-mode . company-box-mode)
-;;   :custom
-;;   (company-box-icons-alist 'company-box-icons-all-the-icons)
-;;   (company-box-doc-enable t))
+;; 候補ドキュメントのポップアップ表示
+(use-package corfu-popupinfo
+  :ensure nil
+  :after corfu
+  :hook (corfu-mode . corfu-popupinfo-mode)
+  :custom
+  (corfu-popupinfo-delay 0.2)
+  (corfu-popupinfo-max-width 80)
+  (corfu-popupinfo-max-height 20)
+  :bind (:map corfu-map
+              ("M-n" . corfu-popupinfo-scroll-up)
+              ("M-p" . corfu-popupinfo-scroll-down)
+              ("M-d" . corfu-popupinfo-toggle)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 50_csharp-mode.el
@@ -1052,8 +1058,7 @@
   (rustic-format-trigger nil)
   (rustic-lsp-client 'eglot)
   :hook
-  ((rustic-mode . company-mode)
-   (rustic-mode . dumb-jump-mode)
+  ((rustic-mode . dumb-jump-mode)
    (rustic-mode . yas-minor-mode)
    (rustic-mode . rainbow-delimiters-mode)
    (rustic-mode . copilot-mode))
