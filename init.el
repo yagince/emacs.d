@@ -1284,6 +1284,14 @@
   :ensure t
   )
 
+;; Structured editing for pairs
+(use-package puni
+  :ensure t
+  :defer t
+  :init
+  (puni-global-mode)
+  (add-hook 'term-mode-hook #'puni-disable-puni-mode))
+
 ;; Claude Code
 ;; Migrated to use-package
 ;; Claude Code
