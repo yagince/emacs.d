@@ -118,36 +118,10 @@
 ;; "yes or no" の選択を "y or n" にする
 (fset 'yes-or-no-p 'y-or-n-p)
 
-;; ;; 英語
-;; (set-face-attribute 'default nil
-;;                     :family "Menlo" ;; font
-;;                     )    ;; font size
-
-;; ;; 日本語
-;; (set-fontset-font
-;;  nil 'japanese-jisx0208
-;;  (font-spec :family "Hiragino Kaku Gothic ProN")) ;; font
-
-;; ;; 半角と全角の比を1:2にしたければ
-;; ;; (setq face-font-rescale-alist
-;; ;;       '((".*Hiragino_Kaku_Gothic_ProN.*" . 1.2)));; Mac用フォント設定
-;; (add-to-list 'face-font-rescale-alist
-;;              '(".*Hiragino Kaku Gothic ProN.*" . 1.2))
-
 ;; font
-;; (set-default-font "Noto Sans Mono CJK JP-11")
-;; (set-frame-font "Migu 2M-17")
-;; (set-fontset-font t 'japanese-jisx0208 "Migu 2M-17")
-;; (set-frame-font "Migu 2M-20")
-;; (set-fontset-font t 'japanese-jisx0208 "Migu 2M-20")
 (set-face-attribute 'default nil :height 170)
-;; (set-frame-font "Ricty")
 (set-frame-font "HackGen-16")
 
-;; (set-fontset-font t 'japanese-jisx0208 "Ricty Diminished")
-;; (set-frame-font "Noto Sans Mono CJK JP-11")
-;; (add-to-list 'face-font-rescale-alist
-;;              '(".*Ricty Diminished.*" . 1.1))
 
 (when (eq system-type 'darwin) ; Mac OS X
   ;; 日本語フォントを明示的にHackGenに設定
@@ -182,13 +156,6 @@
 (when (eq system-type 'gnu/linux) ; linux
   (set-fontset-font nil '(#x1F000 . #x1FAFF) "Noto Color Emoji")
 )
-
-;; (set-fontset-font nil '(#x1F000 . #x1FAFF) "Apple Color Emoji")
-;; (set-default-font "Ricty Diminished-11")
-;; (set-default-font "MigMix 1M-11")
-
-;; (set-default-font "Fira Code-11")
-;; (set-default-font "Myrica M-11")
 
 ;;; ずれ確認用 半角40字、全角20字
 ;;; AIfUEaiueoAIUEOaiueoAIUEOaiueoAIUEOaiueo ASCII英字
