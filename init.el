@@ -578,12 +578,26 @@
   :custom
   (dirvish-hide-details t)
   (dirvish-mode-line-format '(:left (sort symlink) :right (omit yank index)))
+  ;; アイコン + サブツリー表示（サイドも同様に最小構成）
+  (dirvish-attributes '(subtree-state nerd-icons collapse file-time file-size))
+  (dirvish-side-attributes '(subtree-state nerd-icons))
+  (dirvish-subtree-state-style 'nerd)
+  (dirvish-nerd-icons-height 0.9)
+  ;; よく使う場所へのクイックアクセス
+  (dirvish-quick-access-entries
+   `(("h" "~/"                  "Home")
+     ("e" ,user-emacs-directory "Emacs user directory")
+     ("p" "/sshx:server:~/workspace/lecto/primeape" "primeape")))
   ;; 左側に固定表示
   (dirvish-side-display-alist '((side . left)))
   :config
   ;; カーソル位置のファイルに追随
   (dirvish-side-follow-mode 1)
-  :bind (("C-x n" . dirvish-side)))
+  :bind (("C-x n" . dirvish-side)
+         :map dirvish-mode-map
+         ("TAB" . dirvish-subtree-toggle)
+         ("<backtab>" . dirvish-subtree-up)
+         ("<mouse-1>" . dirvish-subtree-toggle-or-open)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 05_scratch-log.el
