@@ -595,8 +595,30 @@
   :config
   ;; カーソル位置のファイルに追随
   (dirvish-side-follow-mode 1)
+  ;; Treemacs の "W" 相当: サイドバー幅をトグル
+  (defcustom my/dirvish-side-widths '(30 50 70)
+    "Toggle 候補にする Dirvish サイドバーの幅（カラム数）。"
+    :type '(repeat integer))
+
+  (defun my/dirvish-side-toggle-width ()
+    "Dirvish サイドウィンドウの幅を `my/dirvish-side-widths' でトグルする。"
+    (interactive)
+    (let ((win (ignore-errors (with-no-warnings (dirvish-side--session-visible-p)))))
+      (unless win (user-error "No visible dirvish-side window"))
+      (with-selected-window win
+        (let* ((cur (window-width))
+               (cands (or my/dirvish-side-widths (list cur)))
+               (next (or (seq-find (lambda (w) (> w cur)) cands)
+                         (car cands)))
+               (delta (- next cur)))
+          (let ((window-size-fixed nil))
+            (ignore-errors (enlarge-window-horizontally delta)))
+          ;; 新規オープン時の既定幅も合わせておく
+          (setq dirvish-side-width next)
+          (message "Dirvish side width: %d" next)))))
   :bind (("C-x n" . dirvish-side)
          :map dirvish-mode-map
+         ("W" . my/dirvish-side-toggle-width)
          ("TAB" . dirvish-subtree-toggle)
          ("<backtab>" . dirvish-subtree-up)
          ("<mouse-1>" . dirvish-subtree-toggle-or-open)))
