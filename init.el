@@ -937,6 +937,35 @@
   :ensure t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Git hunk highlight (diff-hl)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use-package diff-hl
+  :ensure t
+  :hook ((prog-mode . diff-hl-mode)
+         (text-mode . diff-hl-mode)
+         ;; Dirvish/Diredでは無効化して追随ループを防止
+         (dirvish-mode . my/diff-hl-disable-in-dirvish)
+         (dired-mode   . my/diff-hl-disable-in-dired))
+  :custom
+  (diff-hl-draw-borders nil)
+  :config
+  (defun my/diff-hl-disable-in-dirvish ()
+    (diff-hl-mode -1)
+    (ignore-errors (diff-hl-dired-mode -1)))
+  (defun my/diff-hl-disable-in-dired ()
+    (diff-hl-mode -1)
+    (ignore-errors (diff-hl-dired-mode -1)))
+  ;; 編集中に自動で差分を更新
+  (diff-hl-flydiff-mode 1)
+  ;; 端末ではマージンに表示
+  (unless (display-graphic-p)
+    (diff-hl-margin-mode 1))
+  ;; Magit リフレッシュ時に反映
+  (with-eval-after-load 'magit
+    (add-hook 'magit-post-refresh-hook #'diff-hl-magit-post-refresh)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 50_protobuf-mode.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
