@@ -596,7 +596,7 @@
   ;; カーソル位置のファイルに追随
   (dirvish-side-follow-mode 1)
   ;; Treemacs の "W" 相当: サイドバー幅をトグル
-  (defcustom my/dirvish-side-widths '(30 50 70)
+  (defcustom my/dirvish-side-widths '(30 50 70 100)
     "Toggle 候補にする Dirvish サイドバーの幅（カラム数）。"
     :type '(repeat integer))
 
