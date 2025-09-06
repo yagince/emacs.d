@@ -513,16 +513,36 @@
 (use-package cape
   :ensure t
   :init
-  (defun my/setup-cape-capfs ()
-    (add-hook 'completion-at-point-functions #'cape-file 90 t)
-    (add-hook 'completion-at-point-functions #'cape-dabbrev 95 t)
-    (add-hook 'completion-at-point-functions #'cape-keyword 95 t)
-    (add-hook 'completion-at-point-functions #'cape-symbol 95 t)
-    (when (fboundp 'cape-yasnippet)
-      (add-hook 'completion-at-point-functions #'cape-yasnippet 90 t)))
-  ;; すべてのテキスト/プログラミングバッファで CAPF を補強
-  :hook ((prog-mode . my/setup-cape-capfs)
-         (text-mode . my/setup-cape-capfs)))
+  (add-hook 'completion-at-point-functions #'cape-file)
+  (add-hook 'completion-at-point-functions #'cape-dabbrev)
+  (add-hook 'completion-at-point-functions #'cape-keyword)
+  (add-hook 'completion-at-point-functions #'cape-symbol)
+  (add-hook 'completion-at-point-functions #'cape-yasnippet)
+  )
+
+;; Consult frontend for YASnippet selection
+(use-package consult-yasnippet
+  :ensure t
+  :after (consult yasnippet)
+  :bind (("C-c y" . consult-yasnippet)))
+
+(use-package kind-icon
+  :after corfu
+  :custom (kind-icon-default-face 'corfu-default) ; to compute blended backgrounds correctly
+  :config
+  (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
+
+(use-package prescient
+  :config
+  (setq prescient-aggressive-file-save t)
+  (prescient-persist-mode +1))
+
+(use-package corfu-prescient
+  :after corfu
+  :config
+  (with-eval-after-load 'orderless
+    (setq corfu-prescient-enable-filtering nil))
+  (corfu-prescient-mode +1))
 
 (when (equal system-type 'darwin)
   (setq initial-frame-alist
@@ -1337,7 +1357,6 @@
 (use-package copilot
   :vc (:url "https://github.com/copilot-emacs/copilot.el" :branch "main")
   :commands (copilot-mode)
-  :hook (prog-mode . copilot-mode)
   :init
   (defun my/copilot-tab ()
     (interactive)
@@ -1360,14 +1379,6 @@
 (use-package string-inflection
   :ensure t
   )
-
-;; Structured editing for pairs
-(use-package puni
-  :ensure t
-  :defer t
-  :init
-  (puni-global-mode)
-  (add-hook 'term-mode-hook #'puni-disable-puni-mode))
 
 ;; Claude Code
 ;; Migrated to use-package
