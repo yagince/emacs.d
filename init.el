@@ -42,7 +42,7 @@
 ;; メニューバーを非表示
 (menu-bar-mode -1)
 ;; C-x M-x などで英語モードに切り替える
-;;(mac-auto-ascii-mode 1)
+;; (mac-auto-ascii-mode 1)
 
 (prefer-coding-system 'utf-8)
 
@@ -325,10 +325,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (setq initial-major-mode 'org-mode)
 
-(ido-mode 1)
-(ido-everywhere 1)
+;; Disable legacy Ido (conflicts with Vertico/Consult stack)
+;; (ido-mode 1)
+;; (ido-everywhere 1)
 
-(setq ido-enable-flex-matching t)
+;; (setq ido-enable-flex-matching t)
 
 ;; Migrated to use-package
 (use-package multiple-cursors
@@ -434,6 +435,20 @@
   (setq completion-styles '(orderless)
         completion-category-defaults nil
         completion-category-overrides '((file (styles partial-completion)))))
+
+(defun my-marginalia-annotate-mode-status (cand)
+  "モードの有効/無効状態をアノテーションとして表示"
+  (when (string-match "-mode\\'" cand)
+    (let ((mode-symbol (intern cand)))
+      (if (and (boundp mode-symbol)
+               (symbol-value mode-symbol))
+          (propertize " [ON]" 'face 'success)
+        (propertize " [OFF]" 'face 'shadow)))))
+
+;; Marginaliaに追加
+(with-eval-after-load 'marginalia
+  (add-to-list 'marginalia-annotator-registry
+               '(command my-marginalia-annotate-mode-status builtin none)))
 
 ;; Rich annotations in minibuffer
 (use-package marginalia
