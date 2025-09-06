@@ -8,6 +8,8 @@
   (package-initialize))
 
 ;; use-package setup (built-in for Emacs 29+)
+;; Imenuでuse-package宣言を拾う（consult-imenu対応）
+(setq use-package-enable-imenu-support t)
 (require 'use-package)
 (setq use-package-always-ensure t)  ; Always ensure packages are installed
 
