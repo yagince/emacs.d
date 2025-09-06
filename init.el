@@ -570,19 +570,20 @@
 (when (version<= "26.0.50" emacs-version )
   (global-display-line-numbers-mode))
 
-;; Migrated to use-package
-(use-package treemacs
+;; Dirvish（Dired強化）をサイドバーとして利用（Treemacs 代替）
+(use-package dirvish
   :ensure t
-  :bind (("C-x n" . treemacs-add-and-display-current-project-exclusively))
+  :init
+  (dirvish-override-dired-mode)
   :custom
-  ;; (treemacs-no-png-images t)
-  ;; (treemacs-resize-icons 10)
-  (treemacs-hide-dot-git-directory nil)
-  (treemacs-file-watch-mode nil) ;; ファイルウォッチを無効化（リモートでは重い）
-  (treemacs-file-follow-delay 2.0) ;; 更新頻度を下げる
+  (dirvish-hide-details t)
+  (dirvish-mode-line-format '(:left (sort symlink) :right (omit yank index)))
+  ;; 左側に固定表示
+  (dirvish-side-display-alist '((side . left)))
   :config
-  (treemacs-resize-icons 10)
-  (treemacs-follow-mode nil))
+  ;; カーソル位置のファイルに追随
+  (dirvish-side-follow-mode 1)
+  :bind (("C-x n" . dirvish-side)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 05_scratch-log.el
