@@ -1040,10 +1040,12 @@
 ;; Migrated to use-package
 (use-package rbenv
   :ensure t
-  ;; :if (eq system-type 'gnu/linux)
-  :hook (ruby-mode . rbenv-use-corresponding)
+  :init
+  (global-rbenv-mode 1)                        ;; モードライン/環境切替を有効化
+  :hook (ruby-mode . rbenv-use-corresponding)  ;; プロジェクトの .ruby-version を優先
   :custom
-  (rbenv-installation-dir "~/.rbenv"))
+  (rbenv-installation-dir "~/.rbenv")
+  (rbenv-show-active-ruby-in-modeline t))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 50_rust-mode.el
