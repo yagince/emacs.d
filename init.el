@@ -1337,6 +1337,7 @@
 (use-package copilot
   :vc (:url "https://github.com/copilot-emacs/copilot.el" :branch "main")
   :commands (copilot-mode)
+  :hook (prog-mode . copilot-mode)
   :init
   (defun my/copilot-tab ()
     (interactive)
