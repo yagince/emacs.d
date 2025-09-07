@@ -43,7 +43,7 @@ C-x C-e            # Evaluate expression at point
 ### Key Bindings Philosophy
 - `C-h`: backward-delete-char
 - `C-x m`: Magit status
-- `C-x n`: Treemacs
+- `C-x n`: Dirvish side (file explorer)
 - `C-c y`: consult-yasnippet (search/insert snippets)
 - `M-SPC`: input method toggle (Mozc on Linux)
 - Completion stack: Vertico + Orderless + Consult + Embark
@@ -64,7 +64,7 @@ Primary language modes configured:
   - Extras: corfu-popupinfo, kind-icon, corfu-prescient
 - **Navigation**: dumb-jump, smart-jump
 - **Version Control**: Magit
-- **File Explorer**: Treemacs
+- **File Explorer**: Dirvish (enhanced Dired)
 - **Fuzzy Finding**: Consult, Affe (fd/rg)
 - **Linting**: Flycheck
 - **LSP**: Both lsp-mode and eglot configured (eglot preferred for Rust)
