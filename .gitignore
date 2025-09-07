@@ -40,3 +40,4 @@ kkcrc
 projectile-*
 custom.el
 history
+node_modules/
