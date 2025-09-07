@@ -41,11 +41,12 @@ C-x C-e            # Evaluate expression at point
 - **package-vc**: Fetch GitHub packages via `:vc` (no el-get/Leaf)
 
 ### Key Bindings Philosophy
-- `C-h` remapped to backward-delete-char
-- `C-x m` for Magit status
-- `C-x n` for Treemacs
-- `M-SPC` for input method toggle (Mozc on Linux)
-- Heavy use of Ivy/Counsel for completion
+- `C-h`: backward-delete-char
+- `C-x m`: Magit status
+- `C-x n`: Treemacs
+- `C-c y`: consult-yasnippet (search/insert snippets)
+- `M-SPC`: input method toggle (Mozc on Linux)
+- Completion stack: Vertico + Orderless + Consult + Embark
 
 ### Language Support
 Primary language modes configured:
@@ -57,11 +58,14 @@ Primary language modes configured:
 - **Markdown**: gfm-mode with native code block highlighting
 
 ### IDE Features
-- **Completion**: Company-mode globally enabled
+- **Completion**: Corfu globally with CAPE backends
+  - CAPE sources include `yasnippet`, `dabbrev`, `keyword`, `symbol`, `file`
+  - Snippets appear inline in Corfu candidates; browse via `C-c y`
+  - Extras: corfu-popupinfo, kind-icon, corfu-prescient
 - **Navigation**: dumb-jump, smart-jump
 - **Version Control**: Magit
 - **File Explorer**: Treemacs
-- **Fuzzy Finding**: Ivy, Counsel, FZF
+- **Fuzzy Finding**: Consult, Affe (fd/rg)
 - **Linting**: Flycheck
 - **LSP**: Both lsp-mode and eglot configured (eglot preferred for Rust)
 
@@ -73,10 +77,13 @@ Primary language modes configured:
 - Modeline: doom-modeline
 
 ### Special Integrations
-- **Copilot**: GitHub Copilot integration via `use-package :vc`
+- **Copilot**: GitHub Copilot via `use-package :vc`, enabled in `prog-mode`
 - **Claude Code IDE**: Integration for Claude Code with vterm backend
 - **Mozc**: Japanese input method (Linux only)
 - **DDskk**: Alternative Japanese input method
+
+### Repository Hygiene
+- `node_modules/` is ignored via `.gitignore` and not tracked
 
 ## Development Workflow
 
