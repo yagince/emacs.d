@@ -200,7 +200,7 @@
 (use-package tramp
   :ensure t
   :custom
-  (tramp-default-method "scp")
+  (tramp-default-method "ssh")
   (tramp-persistency-file-name "~/.emacs.d/tramp")
   (tramp-verbose 1)
   (tramp-use-ssh-controlmaster-options "")
@@ -208,7 +208,11 @@
   (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
   (add-to-list 'tramp-remote-path "/home/natsuki/.cargo/bin")
   (add-to-list 'tramp-remote-path "/home/natsuki/.nvm/versions/node/v24.2.0/bin")
-  (add-to-list 'tramp-remote-path "/home/natsuki/.rbenv/shims"))
+  (add-to-list 'tramp-remote-path "/home/natsuki/.rbenv/shims")
+  ;; リモートの ls のソート順を安定化（'.' を無視しない）
+  ;; 例: .git, .yarn を上に並べたい場合に有効
+  (add-to-list 'tramp-remote-process-environment "LC_ALL=C")
+  (add-to-list 'tramp-remote-process-environment "LC_COLLATE=C"))
 
 ;; Migrated to use-package
 (use-package autorevert
@@ -661,7 +665,68 @@
          ("TAB" . dirvish-subtree-toggle)
          ("<backtab>" . dirvish-subtree-up)
          ;; Mouse click handler provided by dirvish-subtree expects a mouse event
-         ("<mouse-1>" . dirvish-subtree-toggle-or-open)))
+  ("<mouse-1>" . dirvish-subtree-toggle-or-open)))
+
+;; リモートでも「ディレクトリ先頭＋ドット付き優先」の並び順に近づける
+(defvar my/remote-ls-support-cache (make-hash-table :test 'equal))
+(defun my/remote-gnu-ls-p ()
+  "現在の TRAMP 接続先で GNU ls が使えるか判定（結果をホスト単位でキャッシュ）。"
+  (when (file-remote-p default-directory)
+    (let* ((id (tramp-dissect-file-name default-directory))
+           (key (format "%s@%s" (or (tramp-file-name-user id) "-") (tramp-file-name-host id)))
+           (cached (gethash key my/remote-ls-support-cache 'unset)))
+      (if (not (eq cached 'unset))
+          cached
+        (with-temp-buffer
+          (let ((ok (eq 0 (ignore-errors (process-file "ls" nil (current-buffer) nil "--version")))))
+            (puthash key ok my/remote-ls-support-cache)
+            ok))))))
+
+(defun my/dired-ensure-dirs-first ()
+  "Dirvish/Dired バッファでディレクトリを先頭に。リモートは能力で分岐。"
+  (when (derived-mode-p 'dired-mode)
+    (cond
+     ;; ローカル: 既存の gls/ls-lisp 設定が効く
+     ((not (file-remote-p default-directory)) nil)
+     ;; リモート + GNU ls: --group-directories-first を付与（ロケールは TRAMP 側で C 固定）
+     ((my/remote-gnu-ls-p)
+      (setq-local dired-actual-switches
+                  (string-join (delete-dups (append (split-string (or dired-actual-switches dired-listing-switches))
+                                                   (list "--group-directories-first")))
+                               " "))
+      (revert-buffer))
+     ;; リモート + 非 GNU: Dirvish Emerge でディレクトリ/ファイルを擬似グループ化
+     (t
+      (when (require 'dirvish-emerge nil t)
+        (setq-local dirvish-emerge-groups '((:name "Directories" :predicate directories)
+                                            (:name "Files"       :predicate files)))
+        (dirvish-emerge-mode 1))))))
+
+(add-hook 'dirvish-setup-hook #'my/dired-ensure-dirs-first)
+
+;; Dirvish: リモート(TRAMP)では GNU ls の `--group-directories-first` が使えない環境がある。
+;; その場合でもディレクトリを上に集約するために emerge を利用する。
+(use-package dirvish-emerge
+  :ensure nil
+  :after dirvish
+  :init
+  ;; ドットで始まるディレクトリ用の述語を定義
+  (with-eval-after-load 'dirvish-emerge
+    (dirvish-emerge-define-predicate dot-directories
+      "Name が '.' で始まるディレクトリ"
+      (and (eq (car f-type) 'dir)
+           (string-prefix-p "." f-name))))
+  (defun my/dirvish-remote-dirs-first ()
+    "TRAMP バッファでは (1) ドット付きディレクトリ、(2) それ以外のディレクトリ、(3) ファイル の順にグループ化。"
+    (when (and (derived-mode-p 'dired-mode)
+               (file-remote-p default-directory))
+      (setq-local dirvish-emerge-groups
+                  '((:name ".dot-dirs" :predicate dot-directories)
+                    (:name "Directories" :predicate directories)
+                    (:name "Files"       :predicate files)))
+      (dirvish-emerge-mode 1)))
+  :config
+  (add-hook 'dirvish-setup-hook #'my/dirvish-remote-dirs-first))
 
 ;; Dirvish helper: open file or toggle subtree depending on entry type (keyboard RET)
 (defun my/dirvish-open-or-toggle-subtree ()
