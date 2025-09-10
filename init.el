@@ -658,6 +658,25 @@
          ("<backtab>" . dirvish-subtree-up)
          ("<mouse-1>" . dirvish-subtree-toggle-or-open)))
 
+;; Dired/Dirvish: sorting and visibility
+;; - Directories first
+;; - Hide "." and ".." but keep other dotfiles (use -A)
+(use-package dired
+  :ensure nil
+  :init
+  (setq dired-listing-switches "-Alh")
+  :config
+  (cond
+   ;; Prefer GNU coreutils `gls` when available for directories-first
+   ((executable-find "gls")
+    (setq insert-directory-program "gls")
+    (setq dired-listing-switches "-Al --group-directories-first"))
+   ;; Fallback: use Emacs' built-in ls-lisp to put dirs first
+   (t
+    (require 'ls-lisp)
+    (setq ls-lisp-use-insert-directory-program nil)
+    (setq ls-lisp-dirs-first t))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 05_scratch-log.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
