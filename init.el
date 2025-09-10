@@ -654,9 +654,24 @@
   :bind (("C-x n" . dirvish-side)
          :map dirvish-mode-map
          ("W" . my/dirvish-side-toggle-width)
+         ;; Keyboard RET should open files, or toggle subtree when on a directory
+         ("RET" . my/dirvish-open-or-toggle-subtree)
+         ("<return>" . my/dirvish-open-or-toggle-subtree)
+         ("<kp-enter>" . my/dirvish-open-or-toggle-subtree)
          ("TAB" . dirvish-subtree-toggle)
          ("<backtab>" . dirvish-subtree-up)
+         ;; Mouse click handler provided by dirvish-subtree expects a mouse event
          ("<mouse-1>" . dirvish-subtree-toggle-or-open)))
+
+;; Dirvish helper: open file or toggle subtree depending on entry type (keyboard RET)
+(defun my/dirvish-open-or-toggle-subtree ()
+  "If on a directory, toggle Dirvish subtree; otherwise open the file."
+  (interactive)
+  (let ((entry (dired-get-filename nil t)))
+    (unless entry (user-error "No file at point"))
+    (if (file-directory-p entry)
+        (dirvish-subtree-toggle)
+      (dired-find-file))))
 
 ;; Dired/Dirvish: sorting and visibility
 ;; - Directories first
