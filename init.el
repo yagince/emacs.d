@@ -667,42 +667,7 @@
          ;; Mouse click handler provided by dirvish-subtree expects a mouse event
   ("<mouse-1>" . dirvish-subtree-toggle-or-open)))
 
-;; リモートでも「ディレクトリ先頭＋ドット付き優先」の並び順に近づける
-(defvar my/remote-ls-support-cache (make-hash-table :test 'equal))
-(defun my/remote-gnu-ls-p ()
-  "現在の TRAMP 接続先で GNU ls が使えるか判定（結果をホスト単位でキャッシュ）。"
-  (when (file-remote-p default-directory)
-    (let* ((id (tramp-dissect-file-name default-directory))
-           (key (format "%s@%s" (or (tramp-file-name-user id) "-") (tramp-file-name-host id)))
-           (cached (gethash key my/remote-ls-support-cache 'unset)))
-      (if (not (eq cached 'unset))
-          cached
-        (with-temp-buffer
-          (let ((ok (eq 0 (ignore-errors (process-file "ls" nil (current-buffer) nil "--version")))))
-            (puthash key ok my/remote-ls-support-cache)
-            ok))))))
-
-(defun my/dired-ensure-dirs-first ()
-  "Dirvish/Dired バッファでディレクトリを先頭に。リモートは能力で分岐。"
-  (when (derived-mode-p 'dired-mode)
-    (cond
-     ;; ローカル: 既存の gls/ls-lisp 設定が効く
-     ((not (file-remote-p default-directory)) nil)
-     ;; リモート + GNU ls: --group-directories-first を付与（ロケールは TRAMP 側で C 固定）
-     ((my/remote-gnu-ls-p)
-      (setq-local dired-actual-switches
-                  (string-join (delete-dups (append (split-string (or dired-actual-switches dired-listing-switches))
-                                                   (list "--group-directories-first")))
-                               " "))
-      (revert-buffer))
-     ;; リモート + 非 GNU: Dirvish Emerge でディレクトリ/ファイルを擬似グループ化
-     (t
-      (when (require 'dirvish-emerge nil t)
-        (setq-local dirvish-emerge-groups '((:name "Directories" :predicate directories)
-                                            (:name "Files"       :predicate files)))
-        (dirvish-emerge-mode 1))))))
-
-(add-hook 'dirvish-setup-hook #'my/dired-ensure-dirs-first)
+;; （旧）TRAMPのGNU ls判定＋擬似グループ化フォールバックは不要になったため削除
 
 ;; Dirvish: リモート(TRAMP)では GNU ls の `--group-directories-first` が使えない環境がある。
 ;; その場合でもディレクトリを上に集約するために emerge を利用する。
