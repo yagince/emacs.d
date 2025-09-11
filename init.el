@@ -1355,10 +1355,11 @@
     (interactive)
     (ignore-errors (nvm-use "24.2.0"))))
 
-(use-package prettier
+(use-package prettier-js
   :ensure t
-  :after (nvm web-mode)
-  :hook (web-mode . prettier-mode))
+  ;; nvm の読み込みに依存させると :after が満たされず hook 登録されないため外す
+  :after web-mode
+  :hook (web-mode . prettier-js-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
