@@ -889,19 +889,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 50_lsp-mode.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(setq tsserver-args (list "--stdio" "--tsserver-path" (expand-file-name "~/.nvm/versions/node/v24.2.0/lib/node_modules/typescript/lib")))
 ;; Migrated to use-package
 (use-package lsp-mode
   :ensure t
   :custom
-  (lsp-clients-typescript-prefer-use-project-ts-server t)
+  (lsp-clients-typescript-server-args tsserver-args)
   (lsp-completion-provider :capf)
-  :init
-  ;; web-mode では deno-ls を無効化し、ts-ls を優先
-(defun my/web-mode-prefer-ts-ls ()
-  ;; deno は明示的に無効化（TRAMP では *_-tramp が付くため両方ケア）
-  (setq-local lsp-disabled-clients '(deno-ls deno-ls-tramp))
-  ;; lsp-enabled-clients は触らない（nilのまま）ことで ts-ls/ts-ls-tramp が候補に入る
-  )
   :config
   ;; (lsp-register-client
   ;;   (make-lsp-client :new-connection (lsp-tramp-connection "rust-analyzer")
@@ -909,15 +903,12 @@
   ;;                    :remote? t
   ;;                    :server-id 'rust-analyzer-remote))
   :hook
-  ((web-mode . my/web-mode-prefer-ts-ls)
-   (web-mode . lsp-deferred)
-   (go-mode . lsp-deferred))
+  ;; (web-mode . lsp-deferred)
+  (go-mode . lsp-deferred)
   ;; (typescript-mode . lsp-deferred)
   ;; (ruby-mode . lsp-deferred)
   ;; (terraform-mode . lsp-deferred)
   )
-
-;; web-mode 用のフックは lsp-mode の :hook で登録済み
 
 ;; Migrated to use-package
 (use-package lsp-ui
@@ -938,29 +929,16 @@
   (lsp-typescript-format-enable nil)
   (lsp-typescript-format-insert-space-after-semicolon-in-for-statements nil))
 
-;; Biome LSP クライアント
-(use-package lsp-biome
-  :vc (:url "https://github.com/cxa/lsp-biome")
-  :after lsp-mode
-  :init
-  ;; 保存時フォーマット/自動修正は lsp-mode の標準フックで対応
-  (defun my/lsp-biome-format-on-save ()
-    (when (and (bound-and-true-p lsp-mode)
-               (derived-mode-p 'web-mode 'typescript-mode 'js-mode 'json-mode 'css-mode))
-      (add-hook 'before-save-hook #'lsp-format-buffer nil t)))
-  :hook
-  ((lsp-mode . my/lsp-biome-format-on-save)))
-
 ;; Migrated to use-package
 (use-package eglot
   :ensure t
   :config
   ;; (add-to-list 'eglot-server-programs
   ;;            `(terraform-mode . ("terraform-ls" "serve" "--port" :autoport)))
-  ;; web-mode は lsp-mode + Biome に移行
+  (add-to-list 'eglot-server-programs '(web-mode . ("typescript-language-server" "--stdio")))
   ;; (add-to-list 'eglot-server-programs '(ruby-mode . ("bundle" "exec" "rubocop" "--lsp")))
   :hook
-  ;; (web-mode . eglot-ensure)
+  (web-mode . eglot-ensure)
   (ruby-mode . eglot-ensure)
   (rustic-mode . eglot-ensure)
   ;; (go-mode . eglot-ensure)
@@ -1367,9 +1345,7 @@
 (use-package prettier
   :ensure t
   :after (nvm web-mode)
-  ;; Biome (lsp-biome) に切り替えるため web-mode 自動有効化は外す
-  ;; 必要時に手動で prettier-mode を有効化してください
-  )
+  :hook (web-mode . prettier-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
