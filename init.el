@@ -432,6 +432,19 @@
   :ensure t
   :init (vertico-mode 1))
 
+;; Find File で Backspace=1階層上へ（Vertico拡張）
+(use-package vertico-directory
+  :ensure nil
+  :after vertico
+  :hook
+  (rfn-eshadow-update-overlay . vertico-directory-tidy)
+  :bind
+  (:map vertico-map
+        ("RET" . vertico-directory-enter)
+        ;; Backspace でディレクトリセグメントを1つ削除（上位に上がる）
+        ("DEL" . vertico-directory-delete-word)
+        ("M-DEL" . vertico-directory-delete-word)))
+
 ;; Flexible matching for completion
 (use-package orderless
   :ensure t
