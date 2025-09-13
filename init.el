@@ -1359,7 +1359,8 @@
   :ensure t
   ;; nvm の読み込みに依存させると :after が満たされず hook 登録されないため外す
   :after web-mode
-  :hook (web-mode . prettier-js-mode))
+  ;; :hook (web-mode . prettier-js-mode)
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
