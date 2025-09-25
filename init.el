@@ -1360,8 +1360,6 @@
   (let* ((file (buffer-file-name))
          (content (buffer-string))
          (is-remote (file-remote-p file))
-         (node-path "/home/natsuki/.nvm/versions/node/v24.2.0/bin/node")
-         (biome-path "/home/natsuki/.nvm/versions/node/v24.2.0/lib/node_modules/@biomejs/biome/bin/biome")
          (output-buffer (get-buffer-create "*Biome Format Debug*")))
     (if is-remote
         ;; リモートファイルの場合: リモートで一時ファイルを作成・処理
@@ -1373,8 +1371,8 @@
           (unwind-protect
               (progn
                 (write-region content nil remote-temp-file nil 'silent)
-                (let ((exit-code (process-file node-path nil output-buffer t
-                                               biome-path "format" "--write"
+                (let ((exit-code (process-file "biome" nil output-buffer t
+                                               "format" "--write"
                                                (file-local-name remote-temp-file))))
                   (with-current-buffer output-buffer
                     (goto-char (point-max))
@@ -1382,10 +1380,19 @@
                     (insert (format "  File: %s\n" file))
                     (insert (format "  Remote temp file: %s\n" remote-temp-file))
                     (insert (format "  Local name: %s\n" (file-local-name remote-temp-file)))
-                    (insert (format "  Node path: %s\n" node-path))
-                    (insert (format "  Biome path: %s\n" biome-path))
+                    (insert (format "  Command: biome format --write %s\n" (file-local-name remote-temp-file)))
                     (insert (format "  Exit code: %d\n" exit-code))
                     (insert (format "  Default directory: %s\n" default-directory))
+                    ;; PATH確認のデバッグ情報追加
+                    (insert "\n  === PATH Debug ===\n")
+                    (insert (format "  TRAMP remote path: %s\n" tramp-remote-path))
+                    (insert "  Remote which node: ")
+                    (process-file "which" nil output-buffer t "node")
+                    (insert "  Remote which biome: ")
+                    (process-file "which" nil output-buffer t "biome")
+                    (insert "  Remote echo $PATH: ")
+                    (process-file "sh" nil output-buffer t "-c" "echo $PATH")
+                    (insert "  === End PATH Debug ===\n")
                     (insert "  Output above ^^^\n"))
                   (if (zerop exit-code)
                       (let ((point-before (point)))
