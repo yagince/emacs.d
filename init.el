@@ -949,6 +949,8 @@
 ;; Migrated to use-package
 (use-package eglot
   :ensure t
+  :custom
+  (eglot-connect-timeout 120)
   :config
   ;; (add-to-list 'eglot-server-programs
   ;;            `(terraform-mode . ("terraform-ls" "serve" "--port" :autoport)))
