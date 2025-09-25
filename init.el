@@ -1353,6 +1353,80 @@
   (add-to-list 'web-mode-indentation-params '("lineup-concats" . nil))
   (add-to-list 'web-mode-indentation-params '("lineup-ternary" . nil)))
 
+;; Custom Biome formatter with TRAMP support
+(defun my/biome-format-buffer ()
+  "Format current buffer with Biome (TRAMP compatible)."
+  (interactive)
+  (let* ((file (buffer-file-name))
+         (content (buffer-string))
+         (is-remote (file-remote-p file))
+         (node-path "/home/natsuki/.nvm/versions/node/v24.2.0/bin/node")
+         (biome-path "/home/natsuki/.nvm/versions/node/v24.2.0/lib/node_modules/@biomejs/biome/bin/biome")
+         (output-buffer (get-buffer-create "*Biome Format Debug*")))
+    (if is-remote
+        ;; リモートファイルの場合: リモートで一時ファイルを作成・処理
+        (let* ((remote-dir (file-name-directory file))
+               (remote-temp-file (concat remote-dir ".biome-tmp-"
+                                        (format-time-string "%Y%m%d%H%M%S")
+                                        (and file (file-name-extension file t))))
+               (default-directory remote-dir))  ; TRAMPコンテキストを設定
+          (unwind-protect
+              (progn
+                (write-region content nil remote-temp-file nil 'silent)
+                (let ((exit-code (process-file node-path nil output-buffer t
+                                               biome-path "format" "--write"
+                                               (file-local-name remote-temp-file))))
+                  (with-current-buffer output-buffer
+                    (goto-char (point-max))
+                    (insert (format "\n[%s] TRAMP formatting:\n" (current-time-string)))
+                    (insert (format "  File: %s\n" file))
+                    (insert (format "  Remote temp file: %s\n" remote-temp-file))
+                    (insert (format "  Local name: %s\n" (file-local-name remote-temp-file)))
+                    (insert (format "  Node path: %s\n" node-path))
+                    (insert (format "  Biome path: %s\n" biome-path))
+                    (insert (format "  Exit code: %d\n" exit-code))
+                    (insert (format "  Default directory: %s\n" default-directory))
+                    (insert "  Output above ^^^\n"))
+                  (if (zerop exit-code)
+                      (let ((point-before (point)))
+                        (erase-buffer)
+                        (insert-file-contents remote-temp-file)
+                        (goto-char (min point-before (point-max)))
+                        (message "Biome format successful (TRAMP)"))
+                    (message "Biome format failed (TRAMP). Check *Biome Format Debug* buffer"))))
+            (ignore-errors (delete-file remote-temp-file))))
+      ;; ローカルファイルの場合
+      (let ((temp-file (make-temp-file "biome-format" nil
+                                       (and file (file-name-extension file t))))
+            (point-before (point)))
+        (unwind-protect
+            (progn
+              (write-region content nil temp-file nil 'silent)
+              (let ((exit-code (call-process "biome" nil output-buffer t
+                                             "format" "--write" temp-file)))
+                (with-current-buffer output-buffer
+                  (goto-char (point-max))
+                  (insert (format "\n[%s] Local formatting:\n" (current-time-string)))
+                  (insert (format "  File: %s\n" file))
+                  (insert (format "  Temp file: %s\n" temp-file))
+                  (insert (format "  Exit code: %d\n" exit-code))
+                  (insert "  Output above ^^^\n"))
+                (if (zerop exit-code)
+                    (progn
+                      (erase-buffer)
+                      (insert-file-contents temp-file)
+                      (goto-char (min point-before (point-max)))
+                      (message "Biome format successful (local)"))
+                  (message "Biome format failed (local). Check *Biome Format Debug* buffer"))))
+          (delete-file temp-file))))))
+
+;; Auto-format on save for TypeScript/TSX files
+(add-hook 'web-mode-hook
+          (lambda ()
+            (when (and (buffer-file-name)
+                       (string-match-p "\\.\\(ts\\|tsx\\)\\'" (buffer-file-name)))
+              (add-hook 'before-save-hook #'my/biome-format-buffer nil t))))
+
 (use-package nvm
   :ensure t
   :commands (nvm-use)
