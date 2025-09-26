@@ -245,6 +245,16 @@
   :bind (("<f8>" . goto-last-change)
          ("M-<f8>" . goto-last-change-reverse)))
 
+;; which-key (Emacs 30標準搭載)
+(use-package which-key
+  :init
+  (which-key-mode)
+  :custom
+  (which-key-idle-delay 0.5)
+  (which-key-sort-order 'which-key-key-order-alpha)
+  (which-key-separator " → ")
+  (which-key-prefix-prefix "+"))
+
 (use-package mozc
   :if (eq system-type 'gnu/linux)
   :ensure t
@@ -1459,12 +1469,12 @@
   :custom
   (aw-keys '(?a ?b ?k ?l ?g ?h ?j ?k)))
 
-;; Migrated to use-package
-(use-package projectile
-  :ensure t
-  :demand t
+;; project.el (標準パッケージ)
+(use-package project
+  :custom
+  (project-vc-extra-root-markers '(".project" "go.mod" "Cargo.toml" "package.json" "Gemfile" "biome.json"))
   :config
-  (projectile-mode +1))
+  (setq project-list-file (expand-file-name "projects" user-emacs-directory)))
 
 ;; Migrated to use-package
 (use-package ddskk
