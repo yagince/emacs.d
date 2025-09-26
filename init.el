@@ -15,7 +15,6 @@
 
 ;; custom設定がinit.elに書き込まれないようにする
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-(setq gc-cons-threshold (* 128 1024 1024))
 (setq ring-bell-function 'ignore)
 
 ;; Migrated to use-package
@@ -37,10 +36,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 00_base.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; ツールバーを非表示
-(tool-bar-mode -1)
-;; メニューバーを非表示
-(menu-bar-mode -1)
+;; UI要素の無効化はearly-init.elで実行済み
 ;; C-x M-x などで英語モードに切り替える
 ;; (mac-auto-ascii-mode 1)
 
