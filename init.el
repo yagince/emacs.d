@@ -52,8 +52,6 @@
 (setq backup-inhibited t)
 (setq make-backup-files nil)
 (setq create-lockfiles nil)
-(setq auto-save-default nil)
-(setq delete-auto-save-files t)
 (setq inhibit-startup-message t)
 (setq initial-scratch-message "")
 
@@ -93,9 +91,10 @@
 (setq scroll-conservatively 1)
 (setq scroll-margin 3)
 
-;; disabled auto-save
-(setq auto-save-mode nil)
-(setq buffer-auto-save-file-name nil)
+;; 自動保存設定（バックアップディレクトリに保存）
+(setq auto-save-default t)
+(setq auto-save-timeout 30)  ; 30秒操作なしで自動保存
+(setq auto-save-interval 200) ; 200文字入力で自動保存
 
 ;; M-x display-splash-screen で表示。
 (setq inhibit-startup-message t)
@@ -254,6 +253,11 @@
   (which-key-sort-order 'which-key-key-order-alpha)
   (which-key-separator " → ")
   (which-key-prefix-prefix "+"))
+
+;; vundo - アンドゥの可視化
+(use-package vundo
+  :ensure t
+  :bind ("C-x u" . vundo))
 
 (use-package mozc
   :if (eq system-type 'gnu/linux)
@@ -557,6 +561,14 @@
   :after (consult yasnippet)
   :bind (("C-c y" . consult-yasnippet)))
 
+;; consult-dir - ディレクトリジャンプ強化
+(use-package consult-dir
+  :ensure t
+  :bind (("C-x C-d" . consult-dir)
+         :map vertico-map
+         ("C-x C-d" . consult-dir)
+         ("C-x C-j" . consult-dir-jump-file)))
+
 (use-package kind-icon
   :after corfu
   :custom (kind-icon-default-face 'corfu-default) ; to compute blended backgrounds correctly
@@ -613,6 +625,14 @@
              ("C-M-p" . nil))
   :hook
   (xref-backend-functions . dumb-jump-xref-activate))
+
+;; avy - 高速カーソル移動
+(use-package avy
+  :ensure t
+  :bind (("C-:" . avy-goto-char)
+         ("C-'" . avy-goto-char-2)
+         ("M-g g" . avy-goto-line)
+         ("M-g w" . avy-goto-word-1)))
 
 ;; Migrated to use-package
 (use-package smart-jump

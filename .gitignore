@@ -1,4 +1,5 @@
 auto-save-list/*
+backup/
 .scratch*
 ac-comphist.dat
 var/*
