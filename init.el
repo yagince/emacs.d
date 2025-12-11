@@ -198,7 +198,7 @@
   (tramp-default-method "ssh")
   (tramp-persistency-file-name "~/.emacs.d/tramp")
   (tramp-verbose 1)
-  (tramp-use-ssh-controlmaster-options "")
+  (tramp-use-ssh-controlmaster-options nil)  ; 完全に無効化
   :config
   (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
   (add-to-list 'tramp-remote-path "/home/natsuki/.cargo/bin")
@@ -543,12 +543,12 @@
   (add-hook 'completion-at-point-functions #'cape-file)
   (add-hook 'completion-at-point-functions #'cape-dabbrev)
   (add-hook 'completion-at-point-functions #'cape-keyword)
-  (add-hook 'completion-at-point-functions #'cape-elisp-symbol)
+  ;; (add-hook 'completion-at-point-functions #'cape-elisp-symbol)
   (add-hook 'completion-at-point-functions #'cape-history)
-  (add-hook 'completion-at-point-functions #'cape-emoji)
+  ;; (add-hook 'completion-at-point-functions #'cape-emoji)
   ;; (add-hook 'completion-at-point-functions #'cape-line)
-  (add-hook 'completion-at-point-functions #'cape-tex)
-  (add-hook 'completion-at-point-functions #'cape-sgml)
+  ;; (add-hook 'completion-at-point-functions #'cape-tex)
+  ;; (add-hook 'completion-at-point-functions #'cape-sgml)
   )
 
 ;; Consult frontend for YASnippet selection
@@ -976,11 +976,12 @@
 (use-package eglot
   :ensure t
   :custom
-  (eglot-connect-timeout 120)
+  (eglot-connect-timeout 120)  ; TRAMP経由での接続でも十分な時間
   :config
   ;; (add-to-list 'eglot-server-programs
   ;;            `(terraform-mode . ("terraform-ls" "serve" "--port" :autoport)))
-  (add-to-list 'eglot-server-programs '(web-mode . ("typescript-language-server" "--stdio")))
+  ;; typescript-language-serverのログレベルを下げて起動負荷を軽減
+  (add-to-list 'eglot-server-programs '(web-mode . ("typescript-language-server" "--stdio" "--log-level" "1")))
   ;; (add-to-list 'eglot-server-programs '(ruby-mode . ("bundle" "exec" "rubocop" "--lsp")))
   :hook
   (web-mode . eglot-ensure)
