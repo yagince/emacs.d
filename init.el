@@ -452,7 +452,7 @@
   (:map vertico-map
         ("RET" . vertico-directory-enter)
         ;; Backspace でディレクトリセグメントを1つ削除（上位に上がる）
-        ("DEL" . vertico-directory-delete-word)
+        ;; ("DEL" . vertico-directory-delete-word)
         ("M-DEL" . vertico-directory-delete-word)))
 
 ;; Flexible matching for completion
@@ -1356,7 +1356,9 @@
          "\\.m?js$"
          "\\.tsx$"
          "\\.ts$"
-         "\\.astro$")
+         "\\.astro$"
+         "\\.liquid\\'"
+         "\\.liquid\\.tftpl\\'")
   :custom
   (auto-save-default nil)
   (web-mode-markup-indent-offset 2)
