@@ -1270,8 +1270,9 @@
   ;; (lsp-enable-completion-at-point nil)
   (rustic-format-on-save t)
   (rustic-lsp-format t)
-  (rustic-format-trigger nil)
+  (rustic-format-trigger 'on-save)
   (rustic-lsp-client 'eglot)
+  (rustic-rustfmt-config-alist '((edition . "2021")))
   :hook
   ((rustic-mode . dumb-jump-mode)
    (rustic-mode . yas-minor-mode)
