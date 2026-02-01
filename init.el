@@ -13,6 +13,11 @@
 (require 'use-package)
 (setq use-package-always-ensure t)  ; Always ensure packages are installed
 
+;; emacsclient から接続できるようにサーバー起動
+(require 'server)
+(unless (server-running-p)
+  (server-start))
+
 ;; custom設定がinit.elに書き込まれないようにする
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (setq ring-bell-function 'ignore)
