@@ -63,7 +63,7 @@ Primary language modes configured:
   - Snippets appear inline in Corfu candidates; browse via `C-c y`
   - Extras: corfu-popupinfo, kind-icon, corfu-prescient
 - **Navigation**: dumb-jump, smart-jump
-- **Version Control**: Magit
+- **Version Control**: Magit, jj (Jujutsu)
 - **File Explorer**: Dirvish (enhanced Dired)
 - **Fuzzy Finding**: Consult, Affe (fd/rg)
 - **Linting**: Flycheck
@@ -86,6 +86,15 @@ Primary language modes configured:
 - `node_modules/` is ignored via `.gitignore` and not tracked
 
 ## Development Workflow
+
+### Committing Changes
+Use **jj** (Jujutsu) for version control instead of git:
+```bash
+jj status              # Show current changes
+jj diff                # Show diff
+jj commit -m "message" # Create a commit
+jj log                 # Show commit history
+```
 
 ### Testing Configuration Changes
 1. Edit init.el
