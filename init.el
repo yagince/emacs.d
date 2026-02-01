@@ -472,15 +472,14 @@
           (propertize " [ON]" 'face 'success)
         (propertize " [OFF]" 'face 'shadow)))))
 
-;; Marginaliaに追加
-(with-eval-after-load 'marginalia
-  (add-to-list 'marginalia-annotator-registry
-               '(command my-marginalia-annotate-mode-status builtin none)))
-
 ;; Rich annotations in minibuffer
 (use-package marginalia
   :ensure t
-  :init (marginalia-mode 1))
+  :config
+  (marginalia-mode 1)
+  ;; カスタムアノテーター追加（v2.1でmarginalia-annotator-registryからmarginalia-annotatorsに改名）
+  (add-to-list 'marginalia-annotators
+               '(command my-marginalia-annotate-mode-status builtin none)))
 
 ;; Recent files for consult-recent-file
 (use-package recentf
