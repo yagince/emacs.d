@@ -1641,3 +1641,7 @@
   :config
   (claude-code-ide-emacs-tools-setup)
   )
+
+(use-package kdl-mode
+  :ensure t
+  )
