@@ -269,10 +269,10 @@
   (mozc-helper-program-name "mozc_emacs_helper")
   (mozc-leim-title "Mozc")
   :init
-  (defadvice toggle-input-method (around toggle-input-method-around activate)
+  (define-advice toggle-input-method (:around (orig-fn &rest args) preserve-input-method-function)
     "Input method function in key-chord.el not to be nil."
     (let ((input-method-function-save input-method-function))
-      ad-do-it
+      (apply orig-fn args)
       (setq input-method-function input-method-function-save)))
   (defun mozc-insert-str (str)
     "If punctuation marks, immediately confirm."
@@ -1196,7 +1196,7 @@
   (setq ruby-insert-encoding-magic-comment nil)
   (setq ruby-deep-indent-paren-style nil)
   (setq ruby-deep-indent-paren-style nil)
-  (defadvice ruby-indent-line (after unindent-closing-paren activate)
+  (define-advice ruby-indent-line (:after (&rest _) unindent-closing-paren)
     (let ((column (current-column))
           indent
           offset)
