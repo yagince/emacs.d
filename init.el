@@ -1022,7 +1022,8 @@
   (markdown-indent-on-enter 'indent-and-new-item)
   (markdown-list-indent-width 2)
   :bind (:map markdown-mode-map
-         ("<S-tab>" . markdown-promote-list-item)))
+         ("<S-tab>" . markdown-promote-list-item)
+         ("C-x n" . dirvish-side)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 50_other-mode.el
