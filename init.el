@@ -445,7 +445,14 @@
 ;; Vertical interactive completion UI
 (use-package vertico
   :ensure t
-  :init (vertico-mode 1))
+  :init (vertico-mode 1)
+  :config
+  ;; Vertico ミニバッファにキーヒントを表示
+  (define-advice vertico--setup (:after (&rest _) show-key-hints)
+    (let ((ov (make-overlay (point-min) (point-min) nil t t)))
+      (overlay-put ov 'before-string
+                   (propertize " [M-RET:入力確定 C-.:embark]\n"
+                               'face 'font-lock-comment-face)))))
 
 ;; Find File で Backspace=1階層上へ（Vertico拡張）
 (use-package vertico-directory
@@ -456,6 +463,8 @@
   :bind
   (:map vertico-map
         ("RET" . vertico-directory-enter)
+        ;; 補完候補を無視して入力値そのままで確定（dired コピー/リネーム時に有用）
+        ("M-RET" . vertico-exit-input)
         ;; Backspace でディレクトリセグメントを1つ削除（上位に上がる）
         ;; ("DEL" . vertico-directory-delete-word)
         ("M-DEL" . vertico-directory-delete-word)))
@@ -1501,37 +1510,6 @@
   :config
   (setq project-list-file (expand-file-name "projects" user-emacs-directory)))
 
-;; Migrated to use-package
-(use-package ddskk
-  :ensure t
-  :bind (("C-x C-j" . skk-mode)
-         ("C-x j"   . skk-mode))
-  :init
-  (defvar dired-bind-jump nil)  ; dired-xがC-xC-jを奪うので対処しておく
-  (defun my/skk-azik-disable-tU ()
-    "ddskkのazikモードが`tU'を`っ'として扱うのを抑制する."
-    (setq skk-rule-tree (skk-compile-rule-list
-                         skk-rom-kana-base-rule-list
-                         (skk-del-alist "tU" skk-rom-kana-rule-list))))
-  :custom
-  (skk-use-azik nil)      ; AZIKを使用する
-  (skk-azik-keyboard-type 'jp106)
-  (skk-tut-file nil)
-  (skk-server-host "localhost")
-  (skk-server-portnum 1178)
-  (skk-egg-like-newline t)      ; 変換時にリターンでは改行しない
-  (skk-japanese-message-and-error t)      ; メッセージを日本語にする
-  (skk-auto-insert-paren t)      ; 対応する括弧を自動挿入
-  (skk-check-okurigana-on-touroku t)
-  (skk-show-annotation t)      ; アノテーションを表示
-  (skk-anotation-show-wikipedia-url t)
-  (skk-show-tooltip nil)    ; 変換候補をインライン表示しない
-  (skk-isearch-start-mode 'latin) ; isearch時にSKKをオフ
-  (skk-henkan-okuri-strictly nil)    ; 送り仮名を考慮した変換候補
-  (skk-process-okuri-early nil)
-  (skk-status-indicator 'minor-mode)
-  :hook
-  (skk-azik-load . my/skk-azik-disable-tU))
 ;; Migrated to use-package
 (use-package csv-mode
   :ensure t
