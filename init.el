@@ -1513,7 +1513,47 @@
 ;; Migrated to use-package
 (use-package csv-mode
   :ensure t
-  )
+  :hook ((csv-mode . csv-header-line)
+         (csv-mode . my/csv-rainbow))
+  :config
+  (defvar my/csv-rainbow-faces
+    '(font-lock-keyword-face font-lock-type-face font-lock-string-face
+      font-lock-builtin-face font-lock-constant-face font-lock-function-name-face
+      font-lock-variable-name-face font-lock-warning-face)
+    "CSV カラム色分けに使うフェイスのリスト。")
+
+  (defun my/csv-rainbow-colorize (beg end)
+    "BEG から END の範囲で CSV カラムごとに overlay で色付けする。"
+    (remove-overlays beg end 'my/csv-rainbow t)
+    (save-excursion
+      (goto-char beg)
+      (beginning-of-line)
+      (let ((nfaces (length my/csv-rainbow-faces)))
+        (while (< (point) end)
+          (let ((col 0)
+                (line-end (line-end-position)))
+            (while (< (point) line-end)
+              (skip-chars-forward " \t")
+              (let ((start (point)))
+                (if (eq (char-after) ?\")
+                    ;; 引用符付きフィールド
+                    (progn (forward-char 1)
+                           (search-forward "\"" line-end t))
+                  ;; 通常フィールド
+                  (skip-chars-forward "^,\n"))
+                (let ((ov (make-overlay start (point))))
+                  (overlay-put ov 'my/csv-rainbow t)
+                  (overlay-put ov 'face (nth (mod col nfaces) my/csv-rainbow-faces)))
+                (setq col (1+ col))
+                ;; カンマをスキップ
+                (when (eq (char-after) ?,)
+                  (forward-char 1)))))
+          (forward-line 1)))))
+
+  (defun my/csv-rainbow ()
+    "CSV のカラムごとに異なる色を付ける（jit-lock で表示範囲のみ処理）。"
+    (jit-lock-register #'my/csv-rainbow-colorize)))
+
 
 ;; Migrated to use-package
 (use-package lua-mode
@@ -1548,6 +1588,9 @@
 (use-package request
   :ensure t
   )
+
+(use-package polymode
+  :ensure t)
 
 ;; Migrated to use-package
 (use-package copilot-chat
@@ -1604,6 +1647,9 @@
     (interactive)
     (let ((display-buffer-alist nil))
       (vterm))))
+
+(use-package websocket
+  :ensure t)
 
 (use-package claude-code-ide
   :vc (:url "https://github.com/manzaltu/claude-code-ide.el")
